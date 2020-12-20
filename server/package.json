@@ -1,0 +1,17 @@
+{
+  "name": "blockchain-voting",
+  "version": "0.0.0",
+  "description": "Blockchain Poll Node.js server component",
+  "scripts": {
+    "node": "nodemon --watch dev -e js serverNode.js 3000 http://localhost:3000"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "nodemon": "^1.17.3",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "sha256": "^0.2.0",
+    "uuid": "^3.2.1"
+  }
+}
