@@ -25,19 +25,36 @@ app.get('/', function(req, res) {
 	res.sendFile('./dist/index.html', { root: __dirname });
 });
 
-app.get('/mongodb', function(req, res) {
+app.get('/insert', function(req, res) {
 
 	MongoClient.connect(url, function(err, db) {
 		if (err) throw err;
 		const dbo = db.db("mydb");
-			dbo.createCollection("polls", function(err, res) {
-				if (err) throw err;
-				console.log("Collection created!");
+		const myobj = { businessId: '1', name: "Company Inc 3", address: "Highway 39" };
+
+			dbo.collection("polls").insertOne(myobj, function(err2, result) {
+				if (err2) throw err2;
+				console.log("Inserted.");
+				res.send('Inserted');
 				db.close();
 			  });	
-		  });
+		  });	
+});
 
-	res.send('Mongo DB');
+app.get('/query', function(req, res) {
+
+	MongoClient.connect(url, function(err, db) {
+		if (err) throw err;
+		const dbo = db.db("mydb");
+		const query = { address: "Highway 39" };
+
+			dbo.collection("polls").find(query).toArray(function(err2, result) {
+				if (err2) throw err;
+				console.log(result);
+				db.close();
+				res.send(result);
+			  });	
+		  });
 });
 
 
