@@ -5,7 +5,9 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const uuid = require('uuid/v1');
 const rp = require('request-promise');
+const BlockchainPoll = require('../core/BlockchainPoll.js')
 const { static } = require('express');
+
 
 const MongoClient = mongo.MongoClient;
 const url = "mongodb://root:example@localhost:27017/mydb?authSource=admin";
@@ -28,9 +30,9 @@ app.get('/', function(req, res) {
 app.get('/insert', function(req, res) {
 	const db = req.app.locals.db;
 	const dbo = db.db("mydb");
-	const myobj = { businessId: '1', name: "Company Inc 3", address: "Highway 39" };
+	let bp = new BlockchainPoll('21', 'First Poll', ['1','2']) 
 
-	dbo.collection("polls").insertOne(myobj, function(err, result) {
+	dbo.collection("polls").insertOne(bp, function(err, result) {
 		if (err) throw err;
         console.log("Inserted.");
 		res.send('Inserted');
@@ -41,7 +43,7 @@ app.get('/query', function(req, res) {
 
 	    const db = req.app.locals.db;	
 		const dbo = db.db("mydb");
-		const query = { address: "Highway 39" };
+		const query = { id: "21" };
 
 		dbo.collection("polls").find(query).toArray(function(err, result) {
 			if (err) throw err;
