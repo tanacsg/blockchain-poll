@@ -26,43 +26,48 @@ app.get('/', function(req, res) {
 });
 
 app.get('/insert', function(req, res) {
+	const db = req.app.locals.db;
+	const dbo = db.db("mydb");
+	const myobj = { businessId: '1', name: "Company Inc 3", address: "Highway 39" };
 
-	MongoClient.connect(url, function(err, db) {
+	dbo.collection("polls").insertOne(myobj, function(err, result) {
 		if (err) throw err;
-		const dbo = db.db("mydb");
-		const myobj = { businessId: '1', name: "Company Inc 3", address: "Highway 39" };
-
-			dbo.collection("polls").insertOne(myobj, function(err2, result) {
-				if (err2) throw err2;
-				console.log("Inserted.");
-				res.send('Inserted');
-				db.close();
-			  });	
-		  });	
-});
+        console.log("Inserted.");
+		res.send('Inserted');
+	 });	
+});	
 
 app.get('/query', function(req, res) {
 
-	MongoClient.connect(url, function(err, db) {
-		if (err) throw err;
+	    const db = req.app.locals.db;	
 		const dbo = db.db("mydb");
 		const query = { address: "Highway 39" };
 
-			dbo.collection("polls").find(query).toArray(function(err2, result) {
-				if (err2) throw err;
-				console.log(result);
-				db.close();
-				res.send(result);
-			  });	
-		  });
+		dbo.collection("polls").find(query).toArray(function(err, result) {
+			if (err) throw err;
+			console.log(result);
+			res.send(result);
+		});		 
 });
 
 
 app.use(express.static(staticRoot));
 
-app.listen(port, function() {
-	console.log(`Listening on port ${port}...`);
-});
+MongoClient.connect(url, function(err, db) {
+	if (err) {
+        console.log(`Failed to connect to the database. ${err.stack}`);
+		throw err;
+	}
+	const dbo = db.db("mydb");
+	app.locals.db = db;
+	app.listen(port, function() {
+		console.log(`Listening on port ${port}...`);
+	});	
+
+});	
+
+
+
 
 
 
