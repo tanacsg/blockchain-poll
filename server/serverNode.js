@@ -15,7 +15,7 @@ const url = "mongodb://root:example@localhost:27017/mydb?authSource=admin";
 const app = express();
 
 const port = process.argv[2];
-const staticRoot = __dirname + '/dist/';
+const staticRoot = __dirname + '/dist/blockchain-poll-frontend';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,7 +24,7 @@ app.get('/', function(req, res) {
 
 	console.log(__dirname)
 	console.log(staticRoot)
-	res.sendFile('./dist/index.html', { root: __dirname });
+	res.sendFile('./dist/blockchain-poll-frontend/index.html', { root: __dirname });
 });
 
 app.get('/insert', function(req, res) {
