@@ -5,12 +5,20 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const uuid = require('uuid/v1');
 const rp = require('request-promise');
+const cors = require("cors");
 const BlockchainPoll = require('../core/BlockchainPoll.js')
 const { static } = require('express');
 
 
 const MongoClient = mongo.MongoClient;
 const url = "mongodb://root:example@localhost:27017/mydb?authSource=admin";
+
+const corsOptions = {
+	//origin: "http://localhost:8081"
+	origin: "*"
+  };
+  
+  
 
 const app = express();
 
@@ -19,6 +27,7 @@ const staticRoot = __dirname + '/dist/blockchain-poll-frontend';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors(corsOptions));
 
 app.get('/', function(req, res) {
 

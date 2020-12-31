@@ -1,2 +1,5 @@
 <p>poll works!</p>
-{{polls}}
+
+<li *ngFor="let poll of polls">
+    {{poll.id}}  -- {{poll.name}} 
+</li>
