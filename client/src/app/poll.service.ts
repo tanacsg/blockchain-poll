@@ -10,7 +10,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class PollService {
 
-  private pollUrl = 'http://localhost:3000/query';  
+  private pollUrl = 'http://localhost:3000';  
   
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -21,11 +21,17 @@ export class PollService {
 
   /** GET polls from the server */
   getPolls(): Observable<any[]> {
-    return this.http.get<any[]>(this.pollUrl)
+    return this.http.get<any[]>(this.pollUrl + '/query')
       .pipe(
         tap(_ => this.log('fetched polls')),
         catchError(this.handleError<any[]>('getPolls', []))
       );
+  }
+
+    /** POST: add a new hero to the server */
+  vote(vote: any): Observable<any> {
+      console.log('Vote in Angular Service');
+      return this.http.post<any>(this.pollUrl + '/vote', vote, this.httpOptions);      
   }
 
     /**

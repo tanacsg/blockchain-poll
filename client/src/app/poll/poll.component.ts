@@ -20,4 +20,14 @@ export class PollComponent implements OnInit {
     .subscribe(polls => this.polls = polls);
   }
 
+  vote(): void {
+    this.pollService.vote({'pollId': this.polls[0].id, 'votes': ["Trump", "Biden"]})
+    .subscribe(o => {
+
+      console.log(o);
+    }, err => {
+      console.log(err)
+    });
+  }
+
 }

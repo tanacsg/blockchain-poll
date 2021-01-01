@@ -1,5 +1,13 @@
 <p>poll works!</p>
 
-<li *ngFor="let poll of polls">
-    {{poll.id}}  -- {{poll.name}} 
-</li>
+<ul>
+    <li *ngFor="let poll of polls">
+        {{poll.id}} -- {{poll.name}}
+        <ul>
+            <li *ngFor="let vote of poll.votes">
+                {{vote}}
+            </li>
+        </ul>
+        <button title="Vote" (click)="vote()">Vote</button>
+    </li>
+</ul>

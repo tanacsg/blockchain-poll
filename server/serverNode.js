@@ -48,6 +48,24 @@ app.get('/insert', function(req, res) {
 	 });	
 });	
 
+app.post('/vote', function(req, res) {
+	const pollId = req.body.pollId;
+	const votes = req.body.votes;
+	const db = req.app.locals.db;
+	const dbo = db.db("mydb");
+
+	const query = { id: pollId };
+
+	const newvalues = { $set: {votes: votes } };
+
+
+	dbo.collection("polls").updateOne(query, newvalues, function(err, result) {
+		if (err) throw err;
+        console.log("Voted - Updated.");
+		res.send({'status': 'Voted - Updated.'});
+	 });	
+});	
+
 app.get('/query', function(req, res) {
 
 	    const db = req.app.locals.db;	
