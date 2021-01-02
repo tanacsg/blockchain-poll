@@ -70,14 +70,27 @@ app.get('/query', function(req, res) {
 
 	    const db = req.app.locals.db;	
 		const dbo = db.db("mydb");
-		const query = { id: "21" };
 
-		dbo.collection("polls").find(query).toArray(function(err, result) {
+		dbo.collection("polls").find({}).toArray(function(err, result) {
 			if (err) throw err;
 			console.log(result);
 			res.send(result);
 		});		 
 });
+
+app.get('/poll/:id', function(req, res) {
+
+	const db = req.app.locals.db;	
+	const dbo = db.db("mydb");
+	const query = { id: req.params.id };
+
+	dbo.collection("polls").find(query).toArray(function(err, result) {
+		if (err) throw err;
+		console.log(result);
+		res.send(result);
+	});		 
+});
+
 
 
 app.use(express.static(staticRoot));
