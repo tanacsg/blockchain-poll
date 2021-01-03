@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { BlockchainPoll } from '../../../core/BlockchainPoll';
 
 
 @Injectable({
@@ -28,9 +29,17 @@ export class PollService {
       );
   }
 
+    /** GET polls from the server */
+  getPoll(id: string): Observable<BlockchainPoll> {
+      return this.http.get<BlockchainPoll>(this.pollUrl + '/poll/' + id)
+        .pipe(
+          tap(_ => this.log('fetched poll')),
+          catchError(this.handleError<BlockchainPoll>('getPoll', null))
+        );
+  }
+
     /** POST: add a new hero to the server */
   vote(vote: any): Observable<any> {
-      console.log('Vote in Angular Service');
       return this.http.post<any>(this.pollUrl + '/vote', vote, this.httpOptions);      
   }
 

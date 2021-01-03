@@ -1,3 +1,4 @@
+import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { PollService } from '../poll.service';
 
@@ -8,6 +9,8 @@ import { PollService } from '../poll.service';
 })
 export class PollComponent implements OnInit {
   polls: any[];
+  myText: string[] = ["Alma", "KOrte"];
+  text: any;
 
   constructor(private pollService: PollService) { }
 
@@ -20,8 +23,8 @@ export class PollComponent implements OnInit {
     .subscribe(polls => this.polls = polls);
   }
 
-  vote(): void {
-    this.pollService.vote({'pollId': this.polls[0].id, 'votes': ["Trump", "Biden"]})
+  vote(pollId: string, votes: string ): void {
+    this.pollService.vote({'pollId': pollId, 'votes': votes.split(',')})
     .subscribe(o => {
 
       console.log(o);

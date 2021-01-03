@@ -1,0 +1,18 @@
+<div *ngIf="poll">
+    <h2>Vote on poll: {{poll.name }} -- {{poll.id}} </h2>
+    <div>
+        <ul>
+            <li *ngFor="let vote of poll.votes">
+                {{vote}}
+            </li>
+        </ul>
+    </div>
+    <div>
+      <label>My Vote:
+        <input [(ngModel)]="currentVote"/>
+        {{currentVote}}
+      </label>
+    </div>
+    <button (click)="vote()">Vote</button>
+  </div>
+  

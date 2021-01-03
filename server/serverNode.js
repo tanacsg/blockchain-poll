@@ -87,7 +87,11 @@ app.get('/poll/:id', function(req, res) {
 	dbo.collection("polls").find(query).toArray(function(err, result) {
 		if (err) throw err;
 		console.log(result);
-		res.send(result);
+		if (result.length && result.length > 0) {
+			res.send(result[0]);	
+		} else {
+			res.send(null);
+		}		
 	});		 
 });
 
