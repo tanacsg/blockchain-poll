@@ -56,7 +56,7 @@ app.post('/vote', function(req, res) {
 
 	const query = { id: pollId };
 
-	const newvalues = { $set: {votes: votes } };
+	const newvalues = { $push: {votes: votes } };
 
 
 	dbo.collection("polls").updateOne(query, newvalues, function(err, result) {

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
 import { BlockchainPoll } from '../../../../core/BlockchainPoll';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-vote',
@@ -10,7 +12,7 @@ import { BlockchainPoll } from '../../../../core/BlockchainPoll';
 })
 export class VoteComponent implements OnInit {
   poll: BlockchainPoll;
-  currentVote: string = 'My Vote 2';
+  currentVote: string;
 
   constructor(
     private pollService: PollService,
@@ -31,7 +33,7 @@ export class VoteComponent implements OnInit {
   
   vote(): void {    
     this.pollService.vote({'pollId': this.poll.id , 'votes': [this.currentVote]}).subscribe(
-      r => console.log(r)
+      r => this.getPoll()
     )
   }
 
