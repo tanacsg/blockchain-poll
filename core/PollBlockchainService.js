@@ -12,6 +12,11 @@ module.exports = class PollBlockchainService{
     return hash;
   }  
 
+  createNewBlock(pollBlockchain) {
+      let p = pollBlockchain;
+      console.log("Newer: " + p)
+  }
+
 }
 
 
