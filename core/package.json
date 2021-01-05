@@ -1,0 +1,13 @@
+{
+  "name": "blockchain-voting-core",
+  "version": "0.0.1",
+  "description": "Core module for Blockchain Poll",
+  "main": "BlockChainPollService.js",
+  "scripts": {
+    "test": "node test/PollBlockchainServiceTest.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "sha256": "^0.2.0"
+  }
+}

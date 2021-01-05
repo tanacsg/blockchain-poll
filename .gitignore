@@ -47,3 +47,4 @@ testem.log
 .DS_Store
 Thumbs.db
 debug.log
+core/node_modules/*
