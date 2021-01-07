@@ -1,7 +1,3 @@
-module.exports = class BlockchainPoll {
-    constructor(id, name, votes) {
-        this.id = id;
-        this.name = name;
-        this.votes = votes;
-      }
-}
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=BlockchainPoll.js.map
