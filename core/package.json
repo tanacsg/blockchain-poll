@@ -4,10 +4,14 @@
   "description": "Core module for Blockchain Poll",
   "main": "BlockChainPollService.js",
   "scripts": {
-    "test": "node test/PollBlockchainServiceTest.js"
+    "test": "jest"
   },
   "license": "ISC",
   "dependencies": {
     "sha256": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "jest": "^26.6.3"
   }
 }
