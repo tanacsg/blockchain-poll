@@ -2,25 +2,33 @@ import { PollBlockchainService } from "../PollBlockchainService"
 import { PollBlockchain } from "../PollBlockchain";
 import {describe, expect, it, test } from '@jest/globals'
 
-test('adds 1 + 2 to equal 3', () => {
+const pollBlockchainService = new PollBlockchainService();
+
+test('adds votes and create new block', () => {
     const poll = new PollBlockchain(1, "Employee Survey", ["Very satisfied", "Not satisfied"])
 
 
-    const pollBlockchainService = new PollBlockchainService();
-
-    const hash = pollBlockchainService.hashBlock("alma", { "vote": "First" });
 
     pollBlockchainService.createNewBlock(poll);
 
     poll.pendingVotes.push("Banan")
     poll.pendingVotes.push("Narancs")
 
-    console.log(JSON.stringify(poll));
+    // console.log(JSON.stringify(poll));
+    expect(poll.chain.length).toEqual(2);
+
+    expect(poll.pendingVotes).toEqual(expect.arrayContaining(["Banan", "Narancs"]));
 
     pollBlockchainService.createNewBlock(poll);
+    
+    expect(poll.chain.length).toEqual(3);
 
+    const block = poll.chain[poll.chain.length-1]
 
-    console.log(JSON.stringify(poll));
+    expect(poll.pendingVotes).toEqual([]);
+    expect(block.votes).toEqual(expect.arrayContaining(["Banan", "Narancs"]));
+
+    
 
 });
 
