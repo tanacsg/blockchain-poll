@@ -20,4 +20,4 @@ globals_1.describe('PollBlockchainService works correctly', function () {
         globals_1.expect(block.votes).toEqual(globals_1.expect.arrayContaining(["Banan", "Narancs"]));
     });
 });
-//# sourceMappingURL=PollBlockchainServiceTest2.test.js.map
+//# sourceMappingURL=PollBlockchainService.test.js.map
