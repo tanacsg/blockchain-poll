@@ -16,7 +16,7 @@ export class PollBlockchainService{
       let length = p.chain.length;
       let lastBlock : PollBlock = p.chain[length - 1] 
       let blockHash = sha256(JSON.stringify(pollBlockchain.pendingVotes) + lastBlock.hash)
-      let pollBlock = new PollBlock(lastBlock.id +1, pollBlockchain.name, pollBlockchain.pendingVotes, blockHash, lastBlock.hash)
+      let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.pendingVotes, blockHash, lastBlock.hash)
       pollBlockchain.chain.push(pollBlock);
       pollBlockchain.pendingVotes = []
   }

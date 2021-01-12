@@ -9,7 +9,7 @@ describe('PollBlockchainService works correctly', () => {
 
 
     it('adds votes and create new block', () => {
-        const poll = new PollBlockchain(1, "Employee Survey", ["Very satisfied", "Not satisfied"])
+        const poll = new PollBlockchain("1", "Employee Survey", ["Very satisfied", "Not satisfied"])
 
 
 

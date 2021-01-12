@@ -45,7 +45,7 @@ app.get('/insert', function(req, res) {
 
 	const pollBlockchainService = app.locals.pollBlockchainService;
 
-	const poll = new PollBlockchain.PollBlockchain(1, "Employee Survey", ["Very satisfied", "Not satisfied"])
+	const poll = new PollBlockchain.PollBlockchain("101", "Employee Survey", ["Very satisfied", "Not satisfied"])
 	pollBlockchainService.createNewBlock(poll);
 
 	poll.pendingVotes.push("Banan")
