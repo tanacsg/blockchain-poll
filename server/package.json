@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Blockchain Poll Node.js server component",
   "scripts": {
-    "node": "nodemon --watch dev -e js serverNode.js 3000 http://localhost:3000"
+    "node": "node serverNode.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",

@@ -6,7 +6,9 @@ const bodyParser = require('body-parser');
 const uuid = require('uuid/v1');
 const rp = require('request-promise');
 const cors = require("cors");
-const BlockchainPoll = require('../core/BlockchainPoll.js')
+const PollBlockchain = require('../core/PollBlockchain')
+const PollBlockchainService = require('../core/PollBlockchainService')
+
 const { static } = require('express');
 
 
@@ -22,7 +24,8 @@ const corsOptions = {
 
 const app = express();
 
-const port = process.argv[2];
+const PORT = process.env.port||'3000';
+
 const staticRoot = __dirname + '/dist/blockchain-poll-frontend';
 
 app.use(bodyParser.json());
@@ -39,9 +42,20 @@ app.get('/', function(req, res) {
 app.get('/insert', function(req, res) {
 	const db = req.app.locals.db;
 	const dbo = db.db("mydb");
-	let bp = new BlockchainPoll('21', 'First Poll', ['1','2']) 
 
-	dbo.collection("polls").insertOne(bp, function(err, result) {
+	const pollBlockchainService = app.locals.pollBlockchainService;
+
+	const poll = new PollBlockchain.PollBlockchain(1, "Employee Survey", ["Very satisfied", "Not satisfied"])
+	pollBlockchainService.createNewBlock(poll);
+
+	poll.pendingVotes.push("Banan")
+	poll.pendingVotes.push("Narancs")
+
+
+	pollBlockchainService.createNewBlock(poll);
+
+
+	dbo.collection("polls").insertOne(poll, function(err, result) {
 		if (err) throw err;
         console.log("Inserted.");
 		res.send('Inserted');
@@ -52,12 +66,13 @@ app.post('/vote', function(req, res) {
 	const pollId = req.body.pollId;
 	const votes = req.body.votes;
 	const db = req.app.locals.db;
+	const pollBlockchainService = app.locals.pollBlockchainService;
+
 	const dbo = db.db("mydb");
 
 	const query = { id: pollId };
 
-	const newvalues = { $push: {votes: votes } };
-
+	const newvalues = { $push: {pendingVotes: votes } };	
 
 	dbo.collection("polls").updateOne(query, newvalues, function(err, result) {
 		if (err) throw err;
@@ -106,8 +121,11 @@ MongoClient.connect(url, function(err, db) {
 	}
 	const dbo = db.db("mydb");
 	app.locals.db = db;
-	app.listen(port, function() {
-		console.log(`Listening on port ${port}...`);
+
+	app.locals.pollBlockchainService = new PollBlockchainService.PollBlockchainService();
+
+	app.listen(PORT, function() {
+		console.log(`Listening on port ${PORT}...`);
 	});	
 
 });	
