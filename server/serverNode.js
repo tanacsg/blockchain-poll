@@ -81,6 +81,35 @@ app.post('/vote', function(req, res) {
 	 });	
 });	
 
+app.get('/initiateconsensus', function(req, res) {
+	// const pollId = req.body.pollId;
+	const db = req.app.locals.db;
+	const pollBlockchainService = app.locals.pollBlockchainService;
+
+	const dbo = db.db("mydb");
+
+	// const query = { id: pollId };
+
+	const query = { id: req.query.id };
+
+
+
+	dbo.collection("polls").find(query).toArray(function(err, pollBlockchainArray) {
+		if (err) throw err;
+
+		const pollBlockchain = pollBlockchainArray[0]
+		pollBlockchainService.createNewBlock(pollBlockchain)
+		
+		dbo.collection("polls").replaceOne(query, pollBlockchain, function(err, pollBlockchain) {
+			if (err) throw err;
+			console.log("Voted - Updated.");
+			res.send(pollBlockchain);
+		 });		
+	});	
+
+
+});	
+
 app.get('/query', function(req, res) {
 
 	    const db = req.app.locals.db;	
