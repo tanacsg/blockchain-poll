@@ -100,10 +100,9 @@ app.get('/initiateconsensus', function(req, res) {
 		const pollBlockchain = pollBlockchainArray[0]
 		pollBlockchainService.createNewBlock(pollBlockchain)
 		
-		dbo.collection("polls").replaceOne(query, pollBlockchain, function(err, pollBlockchain) {
-			if (err) throw err;
-			console.log("Voted - Updated.");
-			res.send(pollBlockchain);
+		dbo.collection("polls").replaceOne(query, pollBlockchain, function(err, pollBlockchainResult) {
+			if (err) throw err;			
+			res.send(pollBlockchainResult.ops[0]);
 		 });		
 	});	
 
