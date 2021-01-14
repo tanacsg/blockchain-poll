@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { PollComponent } from './poll/poll.component';
 import { HttpClientModule } from '@angular/common/http';
 import { VoteComponent } from './vote/vote.component';
+import { PollEditComponent } from './poll-edit/poll-edit/poll-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PollComponent,
-    VoteComponent
+    VoteComponent,
+    PollEditComponent
   ],
   imports: [
     BrowserModule,

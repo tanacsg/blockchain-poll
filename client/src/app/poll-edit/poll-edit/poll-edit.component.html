@@ -1,0 +1,14 @@
+<h2>Edit Poll</h2>
+
+<div>
+    <label>Poll Name:
+      <input [(ngModel)]="poll.name"/>
+    </label>
+    <label>Poll Id:
+        <input [(ngModel)]="poll.id"/>
+      </label>
+  </div>
+  <button (click)="save()">Save</button>
+  <pre>
+      {{poll}}
+  </pre>
