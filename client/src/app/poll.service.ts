@@ -43,7 +43,7 @@ export class PollService {
       return this.http.post<any>(this.pollUrl + '/vote', vote, this.httpOptions);      
   }
 
-  mine(id: number): Observable<any> {
+  mine(id: string): Observable<any> {
     return this.http.get<any>(this.pollUrl + '/initiateconsensus?id=' + id, this.httpOptions);      
   }
 

@@ -30,6 +30,7 @@ export class VoteComponent implements OnInit {
       .subscribe(poll => {
         this.poll = poll;
         this.pollJSON = JSON.stringify(poll, undefined, 2)
+        localStorage.setItem("BLOCKCHAIN_POLL_"+ id, this.pollJSON);
       });
   }
   
