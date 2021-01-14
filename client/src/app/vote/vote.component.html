@@ -10,9 +10,13 @@
     <div>
       <label>My Vote:
         <input [(ngModel)]="currentVote"/>
-        {{currentVote}}
       </label>
     </div>
     <button (click)="vote()">Vote</button>
+    <button (click)="mine()">Mine</button>
+    <h2>Poll Blockchain:</h2>
+    <pre>{{pollJSON}}
+    </pre>
   </div>
+  
   

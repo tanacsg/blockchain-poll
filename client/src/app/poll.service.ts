@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { BlockchainPoll } from '../../../core/BlockchainPoll';
+import { PollBlockchain } from '../../../core/PollBlockchain';
 
 
 @Injectable({
@@ -30,17 +30,21 @@ export class PollService {
   }
 
     /** GET polls from the server */
-  getPoll(id: string): Observable<BlockchainPoll> {
-      return this.http.get<BlockchainPoll>(this.pollUrl + '/poll/' + id)
+  getPoll(id: string): Observable<PollBlockchain> {
+      return this.http.get<PollBlockchain>(this.pollUrl + '/poll/' + id)
         .pipe(
           tap(_ => this.log('fetched poll')),
-          catchError(this.handleError<BlockchainPoll>('getPoll', null))
+          catchError(this.handleError<PollBlockchain>('getPoll', null))
         );
   }
 
-    /** POST: add a new hero to the server */
+    /** POST: vote */
   vote(vote: any): Observable<any> {
       return this.http.post<any>(this.pollUrl + '/vote', vote, this.httpOptions);      
+  }
+
+  mine(id: number): Observable<any> {
+    return this.http.get<any>(this.pollUrl + '/initiateconsensus?id=' + id, this.httpOptions);      
   }
 
     /**
