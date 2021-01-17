@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
 import { PollBlockchain } from '../../../../core/PollBlockchain';
 import { FormsModule } from '@angular/forms';
+import sha256 from 'crypto-js/sha256'
 
 
 @Component({
@@ -33,8 +34,8 @@ export class VoteComponent implements OnInit {
         localStorage.setItem("BLOCKCHAIN_POLL_"+ id, this.pollJSON);
       });
   }
-  
-  vote(): void {    
+
+  vote(): void {
     this.pollService.vote({'pollId': this.poll.id , 'votes': [this.currentVote]}).subscribe(
       r => this.getPoll()
     )
@@ -44,6 +45,11 @@ export class VoteComponent implements OnInit {
     this.pollService.mine(this.poll.id).subscribe(
       r => this.getPoll()
     )
+  }
+
+  validate(): void {
+    const hashDigest = sha256(this.pollJSON);
+    alert(hashDigest)
   }
 
 }
