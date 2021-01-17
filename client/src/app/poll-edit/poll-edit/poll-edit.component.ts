@@ -11,6 +11,7 @@ export class PollEditComponent implements OnInit {
 
   poll: PollBlockchain;
   serverMessage: string;
+  confirmedPollId: string
 
   constructor(private pollService: PollService) { }
 
@@ -21,10 +22,12 @@ export class PollEditComponent implements OnInit {
 
   save(): void {
 
+    this.confirmedPollId = null
     this.pollService.create(this.poll).subscribe(o => {
 
       console.log(o.message);
       this.serverMessage = o.message;
+      this.confirmedPollId = o.id
     }, err => {
       this.serverMessage = err.error.message;
       console.log(err)
