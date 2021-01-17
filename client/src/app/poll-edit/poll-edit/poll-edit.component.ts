@@ -26,6 +26,7 @@ export class PollEditComponent implements OnInit {
       console.log(o.message);
       this.serverMessage = o.message;
     }, err => {
+      this.serverMessage = err.error.message;
       console.log(err)
     });
 

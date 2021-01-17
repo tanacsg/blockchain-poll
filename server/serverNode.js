@@ -139,24 +139,35 @@ app.get('/poll/:id', function(req, res) {
 });
 
 
-app.post('/poll', function(req, res) {
-	const pollId  = req.body.id;
-	const pollName = req.body.name;
+app.post('/poll', async function (req, res) {
+  const pollId = req.body.id;
+  const pollName = req.body.name;
   const db = req.app.locals.db;
   const dbo = db.db("mydb");
 
   const poll = new PollBlockchain.PollBlockchain(pollId, pollName, [])
 
+  const query = { id: pollId };
 
-	const pollBlockchainService = app.locals.pollBlockchainService;
+  const pollBlockchainService = app.locals.pollBlockchainService;
 
-
-  dbo.collection("polls").insertOne(poll, function(err, result) {
-    if (err) throw err;
+  try {
+    let result0 = await dbo.collection("polls").find(query)
+    let polls = await result0.toArray()
+    if (polls.length > 0) {
+      res.status(400).send({ "message": "Id already in use: " + pollId, "id": pollId });
+      return;
+    }
+    let result = await dbo.collection("polls").insertOne(poll)
     const m = 'PollBlockchain created with id: ' + pollId;
     console.log(m);
-    res.status(201).send( {"message":  m, "id": pollId });
-	 });
+
+    res.status(201).send({ "message": m, "id": pollId });
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).send(error)
+  }
 });
 
 
