@@ -11,8 +11,8 @@ import { PollBlockchain } from '../../../core/PollBlockchain';
 })
 export class PollService {
 
-  private pollUrl = 'http://localhost:3000';  
-  
+  private pollUrl = 'http://localhost:3000';
+
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -40,13 +40,16 @@ export class PollService {
 
     /** POST: vote */
   vote(vote: any): Observable<any> {
-      return this.http.post<any>(this.pollUrl + '/vote', vote, this.httpOptions);      
+      return this.http.post<any>(this.pollUrl + '/vote', vote, this.httpOptions);
   }
 
   mine(id: string): Observable<any> {
-    return this.http.get<any>(this.pollUrl + '/initiateconsensus?id=' + id, this.httpOptions);      
+    return this.http.get<any>(this.pollUrl + '/initiateconsensus?id=' + id, this.httpOptions);
   }
 
+  create(pollBlockchain: PollBlockchain): Observable<any> {
+    return this.http.post<string>(this.pollUrl + '/poll/', pollBlockchain , this.httpOptions);
+  }
     /**
    * Handle Http operation that failed.
    * Let the app continue.

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PollService } from 'src/app/poll.service';
 import { PollBlockchain } from '../../../../../core/PollBlockchain';
 
 @Component({
@@ -9,16 +10,25 @@ import { PollBlockchain } from '../../../../../core/PollBlockchain';
 export class PollEditComponent implements OnInit {
 
   poll: PollBlockchain;
-  
-  constructor() { }
+  serverMessage: string;
+
+  constructor(private pollService: PollService) { }
 
   ngOnInit(): void {
-      this.poll = new PollBlockchain("", "", []);
-  
+    this.poll = new PollBlockchain("", "", []);
+
   }
+
   save(): void {
 
-    alert(JSON.stringify(this.poll));
-  } 
+    this.pollService.create(this.poll).subscribe(o => {
+
+      console.log(o.message);
+      this.serverMessage = o.message;
+    }, err => {
+      console.log(err)
+    });
+
+  }
 
 }

@@ -19,8 +19,8 @@ const corsOptions = {
 	//origin: "http://localhost:8081"
 	origin: "*"
   };
-  
-  
+
+
 
 const app = express();
 
@@ -59,8 +59,8 @@ app.get('/insert', function(req, res) {
 		if (err) throw err;
         console.log("Inserted.");
 		res.send('Inserted');
-	 });	
-});	
+	 });
+});
 
 app.post('/vote', function(req, res) {
 	const pollId = req.body.pollId;
@@ -72,14 +72,14 @@ app.post('/vote', function(req, res) {
 
 	const query = { id: pollId };
 
-	const newvalues = { $push: {pendingVotes: votes } };	
+	const newvalues = { $push: {pendingVotes: votes } };
 
 	dbo.collection("polls").updateOne(query, newvalues, function(err, result) {
 		if (err) throw err;
         console.log("Voted - Updated.");
 		res.send({'status': 'Voted - Updated.'});
-	 });	
-});	
+	 });
+});
 
 app.get('/initiateconsensus', function(req, res) {
 	// const pollId = req.body.pollId;
@@ -99,31 +99,31 @@ app.get('/initiateconsensus', function(req, res) {
 
 		const pollBlockchain = pollBlockchainArray[0]
 		pollBlockchainService.createNewBlock(pollBlockchain)
-		
+
 		dbo.collection("polls").replaceOne(query, pollBlockchain, function(err, pollBlockchainResult) {
-			if (err) throw err;			
+			if (err) throw err;
 			res.send(pollBlockchainResult.ops[0]);
-		 });		
-	});	
+		 });
+	});
 
 
-});	
+});
 
 app.get('/query', function(req, res) {
 
-	    const db = req.app.locals.db;	
+	    const db = req.app.locals.db;
 		const dbo = db.db("mydb");
 
 		dbo.collection("polls").find({}).toArray(function(err, result) {
 			if (err) throw err;
 			console.log(result);
 			res.send(result);
-		});		 
+		});
 });
 
 app.get('/poll/:id', function(req, res) {
 
-	const db = req.app.locals.db;	
+	const db = req.app.locals.db;
 	const dbo = db.db("mydb");
 	const query = { id: req.params.id };
 
@@ -131,11 +131,32 @@ app.get('/poll/:id', function(req, res) {
 		if (err) throw err;
 		console.log(result);
 		if (result.length && result.length > 0) {
-			res.send(result[0]);	
+			res.send(result[0]);
 		} else {
 			res.send(null);
-		}		
-	});		 
+		}
+	});
+});
+
+
+app.post('/poll', function(req, res) {
+	const pollId  = req.body.id;
+	const pollName = req.body.name;
+  const db = req.app.locals.db;
+  const dbo = db.db("mydb");
+
+  const poll = new PollBlockchain.PollBlockchain(pollId, pollName, [])
+
+
+	const pollBlockchainService = app.locals.pollBlockchainService;
+
+
+  dbo.collection("polls").insertOne(poll, function(err, result) {
+    if (err) throw err;
+    const m = 'PollBlockchain created with id: ' + pollId;
+    console.log(m);
+    res.status(201).send( {"message":  m, "id": pollId });
+	 });
 });
 
 
@@ -154,9 +175,9 @@ MongoClient.connect(url, function(err, db) {
 
 	app.listen(PORT, function() {
 		console.log(`Listening on port ${PORT}...`);
-	});	
+	});
 
-});	
+});
 
 
 

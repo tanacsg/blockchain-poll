@@ -2,13 +2,18 @@
 
 <div>
     <label>Poll Name:
-      <input [(ngModel)]="poll.name"/>
+        <input [(ngModel)]="poll.name" />
     </label>
+</div>
+<div>
     <label>Poll Id:
-        <input [(ngModel)]="poll.id"/>
-      </label>
-  </div>
-  <button (click)="save()">Save</button>
-  <pre>
-      {{poll}}
-  </pre>
+        <input [(ngModel)]="poll.id" />
+    </label>
+</div>
+<button (click)="save()">Save</button>
+<div>
+  {{serverMessage}}
+</div>
+<pre>
+{{poll | json}}
+</pre>
