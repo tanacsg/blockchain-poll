@@ -1,24 +1,38 @@
 <div *ngIf="poll">
-    <h2>Vote on poll: {{poll.name }} -- {{poll.id}} </h2>
-    <div>
-        <ul>
-            <li *ngFor="let vote of poll.votes">
-                {{vote}}
-            </li>
-        </ul>
-    </div>
-    <div>
-      <label>My Vote:
-        <input [(ngModel)]="currentVote"/>
-      </label>
-    </div>
-    <button (click)="vote()">Vote</button>
-    <button (click)="mine()">Mine</button>
-    <button (click)="validate()">Validate</button>
-
-    <h2>Poll Blockchain:</h2>
-    <pre>{{pollJSON}}
-    </pre>
+  <h2>Vote on poll: {{poll.name }} -- {{poll.id}} </h2>
+  <div>
+    <ul>
+      <li *ngFor="let vote of poll.votes">
+        {{vote}}
+      </li>
+    </ul>
   </div>
+  <div>
+    <label>My Vote:
+      <input [(ngModel)]="currentVote" />
+    </label>
+  </div>
+  <button (click)="vote()">Vote</button>
+  <button (click)="mine()">Mine</button>
 
-
+  <h2>Validate:</h2>
+  <div>
+    <label for="textToCalculateHash">Votes</label>
+    <textarea id="textToCalculateHash" rows="10" cols="50" [(ngModel)]="textToCalculateHash">
+    </textarea>
+  </div>
+  <div>
+    <label for="previousHash">Previous Hash</label>
+    <input id="previousHash" [(ngModel)]="previousHash" />
+  </div>
+  <div>
+    {{textToCalculateHashNormalized}}
+  </div>
+  <button (click)="validate()">Validate Hash</button>
+  <div>
+    {{calculatedHash}}
+  </div>
+  <h2>Poll Blockchain:</h2>
+  <pre>{{pollJSON}}
+    </pre>
+</div>

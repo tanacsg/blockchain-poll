@@ -15,6 +15,10 @@ export class VoteComponent implements OnInit {
   poll: PollBlockchain;
   pollJSON: string;
   currentVote: string;
+  textToCalculateHash: string;
+  previousHash: string;
+  textToCalculateHashNormalized: string;
+  calculatedHash: string
 
   constructor(
     private pollService: PollService,
@@ -48,8 +52,8 @@ export class VoteComponent implements OnInit {
   }
 
   validate(): void {
-    const hashDigest = sha256(this.pollJSON);
-    alert(hashDigest)
+    this.textToCalculateHashNormalized = JSON.stringify(JSON.parse(this.textToCalculateHash));
+    this.calculatedHash = sha256(this.textToCalculateHashNormalized+ this.previousHash);
   }
 
 }
