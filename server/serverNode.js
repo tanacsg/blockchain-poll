@@ -13,7 +13,6 @@ const { static } = require('express');
 
 
 const MongoClient = mongo.MongoClient;
-const url = "mongodb://root:example@localhost:27017/mydb?authSource=admin";
 
 const corsOptions = {
 	//origin: "http://localhost:8081"
@@ -23,6 +22,10 @@ const corsOptions = {
 
 
 const app = express();
+
+const DB_NAME = process.env.bc_db_name  ||  "mydb";
+const DB_URL = "mongodb://root:example@localhost:27017/"+ DB_NAME + "?authSource=admin";
+
 
 const PORT = process.env.port||'3000';
 
@@ -41,7 +44,7 @@ app.get('/', function(req, res) {
 
 app.get('/insert', function(req, res) {
 	const db = req.app.locals.db;
-	const dbo = db.db("mydb");
+	const dbo = db.db(DB_NAME);
 
 	const pollBlockchainService = app.locals.pollBlockchainService;
 
@@ -62,23 +65,27 @@ app.get('/insert', function(req, res) {
 	 });
 });
 
-app.post('/vote', function(req, res) {
-	const pollId = req.body.pollId;
-	const votes = req.body.votes;
-	const db = req.app.locals.db;
-	const pollBlockchainService = app.locals.pollBlockchainService;
+app.post('/vote', async function (req, res) {
+  const pollId = req.body.pollId;
+  const votes = req.body.votes;
+  const db = req.app.locals.db;
+  const pollBlockchainService = app.locals.pollBlockchainService;
 
-	const dbo = db.db("mydb");
+  const dbo = db.db(DB_NAME);
 
-	const query = { id: pollId };
+  const query = { id: pollId };
 
-	const newvalues = { $push: {pendingVotes: votes } };
+  const newvalues = { $push: { pendingVotes: votes } };
 
-	dbo.collection("polls").updateOne(query, newvalues, function(err, result) {
-		if (err) throw err;
-        console.log("Voted - Updated.");
-		res.send({'status': 'Voted - Updated.'});
-	 });
+  try {
+    const result = await dbo.collection("polls").updateOne(query, newvalues)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send(error)
+  }
+
+  res.send({ 'status': 'Voted - Updated.' });
+
 });
 
 app.get('/initiateconsensus', function(req, res) {
@@ -86,7 +93,7 @@ app.get('/initiateconsensus', function(req, res) {
 	const db = req.app.locals.db;
 	const pollBlockchainService = app.locals.pollBlockchainService;
 
-	const dbo = db.db("mydb");
+	const dbo = db.db(DB_NAME);
 
 	// const query = { id: pollId };
 
@@ -112,7 +119,7 @@ app.get('/initiateconsensus', function(req, res) {
 app.get('/query', function(req, res) {
 
 	    const db = req.app.locals.db;
-		const dbo = db.db("mydb");
+		const dbo = db.db(DB_NAME);
 
 		dbo.collection("polls").find({}).toArray(function(err, result) {
 			if (err) throw err;
@@ -124,7 +131,7 @@ app.get('/query', function(req, res) {
 app.get('/poll/:id', function(req, res) {
 
 	const db = req.app.locals.db;
-	const dbo = db.db("mydb");
+	const dbo = db.db(DB_NAME);
 	const query = { id: req.params.id };
 
 	dbo.collection("polls").find(query).toArray(function(err, result) {
@@ -143,7 +150,7 @@ app.post('/poll', async function (req, res) {
   const pollId = req.body.id;
   const pollName = req.body.name;
   const db = req.app.locals.db;
-  const dbo = db.db("mydb");
+  const dbo = db.db(DB_NAME);
 
   const poll = new PollBlockchain.PollBlockchain(pollId, pollName, [])
 
@@ -171,15 +178,14 @@ app.post('/poll', async function (req, res) {
 });
 
 
-
 app.use(express.static(staticRoot));
 
-MongoClient.connect(url, function(err, db) {
+MongoClient.connect(DB_URL, function(err, db) {
 	if (err) {
         console.log(`Failed to connect to the database. ${err.stack}`);
 		throw err;
 	}
-	const dbo = db.db("mydb");
+	const dbo = db.db(DB_NAME);
 	app.locals.db = db;
 
 	app.locals.pollBlockchainService = new PollBlockchainService.PollBlockchainService();
