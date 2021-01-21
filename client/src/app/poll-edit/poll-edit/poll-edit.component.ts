@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from "@angular/forms";
+
 import { PollService } from 'src/app/poll.service';
 import { PollBlockchain } from '../../../../../core/PollBlockchain';
 
@@ -33,6 +35,13 @@ export class PollEditComponent implements OnInit {
       console.log(err)
     });
 
+  }
+
+  onAddPoll(form: NgForm) {
+      console.log(form.value)
+      this.poll.id = form.value.pollId;
+      this.poll.name = form.value.pollName;
+      this.save()
   }
 
 }
