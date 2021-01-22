@@ -1,25 +1,26 @@
-<form #pollForm="ngForm" (submit)="onAddPoll(pollForm)">
+<form #pollForm="ngForm">
 
   <h2>Edit Poll</h2>
 
-  <div>
-    <mat-form-field>
+  <p>
+    <mat-form-field appearance="outline">
       <mat-label>Poll Name:</mat-label>
-      <input ngModel name="pollName" #pollName="ngModel" matInput placeholder="Poll Name" required minlength="5" />
-      <mat-error *ngIf="pollName.invalid">Please enter a valid poll name (min length 5).</mat-error>
+      <input [(ngModel)]="poll.name" name="pollName" #pollName="ngModel" matInput placeholder="Poll Name" required minlength="5" />
 
+      <mat-error *ngIf="pollName.invalid">Please enter a valid poll name (min length 5).</mat-error>
+      <mat-hint>A descriptive name of the poll</mat-hint>
     </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
 
       <mat-label>Poll Id:</mat-label>
-      <input ngModel name="pollId" #pollId="ngModel" matInput placeholder="Poll Id" required minlength="5" />
+      <input [(ngModel)]="poll.id" name="pollId" #pollId="ngModel" matInput placeholder="Poll Id" required minlength="5" />
       <mat-error *ngIf="pollId.invalid">Please enter a valid poll id (min length 5).</mat-error>
-
+      <mat-hint>A unique business id of the</mat-hint>
     </mat-form-field>
-  </div>
-  <button mat-raised-button color="primary" type="submit" [disabled]="pollForm.invalid">Save</button>
+  </p>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
   <div>
     <mat-error>
       {{serverMessage}}

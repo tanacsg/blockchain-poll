@@ -37,11 +37,4 @@ export class PollEditComponent implements OnInit {
 
   }
 
-  onAddPoll(form: NgForm) {
-      console.log(form.value)
-      this.poll.id = form.value.pollId;
-      this.poll.name = form.value.pollName;
-      this.save()
-  }
-
 }
