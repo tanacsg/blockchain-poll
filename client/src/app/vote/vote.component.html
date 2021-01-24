@@ -8,31 +8,36 @@
     </ul>
   </div>
   <div>
-    <label>My Vote:
-      <input [(ngModel)]="currentVote" />
-    </label>
+    <mat-form-field appearance="outline">
+      <mat-label>My Vote:</mat-label>
+      <input [(ngModel)]="currentVote" matInput />
+    </mat-form-field>
   </div>
-  <button (click)="vote()">Vote</button>
-  <button (click)="mine()">Mine</button>
+  <button mat-raised-button color="primary" (click)="vote()">Vote</button>
+  <button mat-raised-button color="warn" (click)="mine()">Mine</button>
 
   <h2>Validate:</h2>
   <div>
-    <label for="textToCalculateHash">Votes</label>
-    <textarea id="textToCalculateHash" rows="10" cols="50" [(ngModel)]="textToCalculateHash">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Votes</mat-label>
+      <textarea id="textToCalculateHash" rows="10" cols="100" [(ngModel)]="textToCalculateHash" matInput>
     </textarea>
+    </mat-form-field>
   </div>
   <div>
-    <label for="previousHash">Previous Hash</label>
-    <input id="previousHash" [(ngModel)]="previousHash" />
+    <mat-form-field appearance="outline">
+      <mat-label>Previous Hash</mat-label>
+      <input id="previousHash" [(ngModel)]="previousHash" matInput />
+    </mat-form-field>
   </div>
   <div>
     {{textToCalculateHashNormalized}}
   </div>
-  <button (click)="validate()">Validate Hash</button>
+  <button (click)="validate()" mat-raised-button color="primary">Validate Hash</button>
   <div>
     {{calculatedHash}}
   </div>
   <h2>Poll Blockchain:</h2>
-  <pre>{{pollJSON}}
-    </pre>
+  <pre>{{pollJSON}}</pre>
 </div>
