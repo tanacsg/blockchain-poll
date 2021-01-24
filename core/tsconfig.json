@@ -1,12 +1,13 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-      "target": "es5",
+      "target": "es6",
       "module": "commonjs",
-      "sourceMap": true
+      "sourceMap": true,
+      "skipLibCheck": true
     },
     "include": ["test/**/*"],
     "exclude": [
-        "node_modules"
+        "core/node_modules/**"
     ]
 }

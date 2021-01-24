@@ -2,6 +2,7 @@ import { PollBlockchainService } from "../PollBlockchainService"
 import { PollBlockchain } from "../PollBlockchain";
 import { describe, expect, it, test } from '@jest/globals'
 
+const sha256 = require( 'sha256' );
 
 describe('PollBlockchainService works correctly', () => {
 
@@ -33,5 +34,24 @@ describe('PollBlockchainService works correctly', () => {
         expect(block.votes).toEqual(expect.arrayContaining(["Banan", "Narancs"]));
 
     });
+
+    it('registers a user', () => {
+      const poll = new PollBlockchain("1", "Employee Survey", ["Very satisfied", "Not satisfied"])
+
+
+
+      pollBlockchainService.createNewBlock(poll);
+
+      expect(poll.pendingBallotCodeHashCodes).toHaveLength(0)
+      expect(poll.pendingRegisteredUserHashCodes).toHaveLength(0)
+      const ballotCode = pollBlockchainService.registerUser("tanacsg", poll);
+
+      expect(ballotCode).not.toBeNull();
+
+      const ballotCodeHash = sha256(ballotCode);
+      expect(poll.pendingBallotCodeHashCodes).toContain(ballotCodeHash)
+      expect(poll.pendingRegisteredUserHashCodes).toContain(sha256("tanacsg"))
+
+  });
 }
 );

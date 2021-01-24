@@ -8,7 +8,8 @@
   },
   "license": "ISC",
   "dependencies": {
-    "sha256": "^0.2.0"
+    "sha256": "^0.2.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

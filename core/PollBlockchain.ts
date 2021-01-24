@@ -1,6 +1,8 @@
 export class PollBlockchain {
     chain: PollBlock[];
-    
+    pendingRegisteredUserHashCodes: string[] = []
+    pendingBallotCodeHashCodes: string[] = []
+
     constructor(public id: string, public name: string, public pendingVotes: string[]) {
         this.id = id;
         this.name = name;
@@ -10,6 +12,10 @@ export class PollBlockchain {
 }
 
 export class PollBlock {
+
+    registeredUserHashCodes: string[] = []
+    ballotCodeHashCodes: string[] = []
+
     constructor(public index: number, public name: string, public votes: string[], public hash: string, public previousHash: string) {
         this.index = index;
         this.name = name;
