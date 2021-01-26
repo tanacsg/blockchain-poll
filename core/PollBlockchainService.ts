@@ -8,7 +8,6 @@ export class PollBlockchainService{
   hashBlock(previousHash, blockData ) {
     const data = previousHash + JSON.stringify(blockData);
     const hash = data;
-    console.log(hash);
     return hash;
   }
 
@@ -17,7 +16,9 @@ export class PollBlockchainService{
       let length = p.chain.length;
       let lastBlock : PollBlock = p.chain[length - 1]
       let blockHash = sha256(JSON.stringify(pollBlockchain.pendingVotes) + lastBlock.hash)
-      let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.pendingVotes, blockHash, lastBlock.hash)
+      let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.pendingVotes,
+        pollBlockchain.pendingRegisteredUserHashCodes, pollBlockchain.pendingBallotCodeHashCodes,
+        pollBlockchain.pendingUsedBallotCodeHashCodes, blockHash, lastBlock.hash)
       pollBlockchain.chain.push(pollBlock);
       pollBlockchain.pendingVotes = []
   }
@@ -26,7 +27,7 @@ export class PollBlockchainService{
 
     const usernameHash = sha256(username)
     if (pollBlockchain.pendingRegisteredUserHashCodes.includes(usernameHash)) {
-      throw new Error("username: " + username + " is already used.")
+      throw new Error("username: " + username + " is already registered.")
     }
 
     const ballotCode = uuidv4()
@@ -35,6 +36,15 @@ export class PollBlockchainService{
     const ballotCodeHash = sha256(ballotCode)
     pollBlockchain.pendingBallotCodeHashCodes.push(ballotCodeHash)
     return ballotCode;
+  }
+
+  vote(ballotCode: string, vote: string, pollBlockchain: PollBlockchain) {
+    const ballotCodeHash = sha256(ballotCode)
+    if (pollBlockchain.pendingUsedBallotCodeHashCodes.includes(ballotCodeHash)){
+      throw new Error("Ballot code: " + ballotCode + " was already used.")
+    }
+    pollBlockchain.pendingBallotCodeHashCodes.push(ballotCodeHash)
+    pollBlockchain.pendingVotes.push(vote)
   }
 
 }

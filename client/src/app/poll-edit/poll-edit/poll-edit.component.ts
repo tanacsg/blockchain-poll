@@ -18,7 +18,7 @@ export class PollEditComponent implements OnInit {
   constructor(private pollService: PollService) { }
 
   ngOnInit(): void {
-    this.poll = new PollBlockchain("", "", []);
+    this.poll = new PollBlockchain("", "");
 
   }
 

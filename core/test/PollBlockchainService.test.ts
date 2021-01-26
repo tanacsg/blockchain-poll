@@ -10,9 +10,7 @@ describe('PollBlockchainService works correctly', () => {
 
 
     it('adds votes and create new block', () => {
-        const poll = new PollBlockchain("1", "Employee Survey", ["Very satisfied", "Not satisfied"])
-
-
+        const poll = new PollBlockchain("1", "Employee Survey")
 
         pollBlockchainService.createNewBlock(poll);
 
@@ -36,9 +34,7 @@ describe('PollBlockchainService works correctly', () => {
     });
 
     it('registers a user', () => {
-      const poll = new PollBlockchain("1", "Employee Survey", ["Very satisfied", "Not satisfied"])
-
-
+      const poll = new PollBlockchain("1", "Employee Survey")
 
       pollBlockchainService.createNewBlock(poll);
 
@@ -52,6 +48,29 @@ describe('PollBlockchainService works correctly', () => {
       expect(poll.pendingBallotCodeHashCodes).toContain(ballotCodeHash)
       expect(poll.pendingRegisteredUserHashCodes).toContain(sha256("tanacsg"))
 
+  });
+
+  it('votes with a ballot code', () => {
+    const poll = new PollBlockchain("1", "Employee Survey")
+
+    pollBlockchainService.createNewBlock(poll);
+
+    expect(poll.pendingBallotCodeHashCodes).toHaveLength(0)
+    expect(poll.pendingRegisteredUserHashCodes).toHaveLength(0)
+    expect(poll.pendingUsedBallotCodeHashCodes).toHaveLength(0)
+    expect(poll.pendingVotes).toHaveLength(0)
+
+    const ballotCode = pollBlockchainService.registerUser("tanacsg", poll);
+
+    expect(ballotCode).not.toBeNull();
+
+    const ballotCodeHash = sha256(ballotCode);
+    expect(poll.pendingBallotCodeHashCodes).toContain(ballotCodeHash)
+    expect(poll.pendingRegisteredUserHashCodes).toContain(sha256("tanacsg"))
+
+    pollBlockchainService.vote(ballotCode, "Dissatisfied", poll)
+    expect(poll.pendingUsedBallotCodeHashCodes).toContain(ballotCodeHash)
+    expect(poll.pendingVotes).toContain("Dissatisfied")
   });
 }
 );

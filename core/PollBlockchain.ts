@@ -1,26 +1,30 @@
 export class PollBlockchain {
-    chain: PollBlock[];
-    pendingRegisteredUserHashCodes: string[] = []
-    pendingBallotCodeHashCodes: string[] = []
+  chain: PollBlock[]
+  pollStatus: PollStatus = PollStatus.Registering
 
-    constructor(public id: string, public name: string, public pendingVotes: string[]) {
-        this.id = id;
-        this.name = name;
-        this.pendingVotes = pendingVotes;
-        this.chain = [new PollBlock(1,name,[], "0", "0")];
-      }
+  pendingRegisteredUserHashCodes: string[] = []
+  pendingBallotCodeHashCodes: string[] = []
+  pendingVotes: string[] = []
+  pendingUsedBallotCodeHashCodes: string []
+
+  constructor(public id: string, public name: string) {
+    this.id = id;
+    this.name = name;
+    this.chain = [new PollBlock(1, name, [], [], [], [], "0", "0")];
+  }
 }
 
 export class PollBlock {
 
-    registeredUserHashCodes: string[] = []
-    ballotCodeHashCodes: string[] = []
 
-    constructor(public index: number, public name: string, public votes: string[], public hash: string, public previousHash: string) {
-        this.index = index;
-        this.name = name;
-        this.votes = votes;
-        this.hash = hash;
-        this.previousHash = previousHash;
-      }
+  constructor(public index: number, public name: string, public votes: string[], registeredUserHashCodes: string[],
+    ballotCodeHashCodes: string[], usedBallotCodeHashCodes: string [], public hash: string, public previousHash: string) {
+  }
+}
+
+export enum PollStatus {
+  Registering,
+  Voting,
+  Closed
+
 }

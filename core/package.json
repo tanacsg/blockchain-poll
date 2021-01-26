@@ -4,7 +4,8 @@
   "description": "Core module for Blockchain Poll",
   "main": "BlockChainPollService.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test-watch": "jest --watch"
   },
   "license": "ISC",
   "dependencies": {
