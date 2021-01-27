@@ -15,12 +15,21 @@ export class PollBlockchainService{
       let p = pollBlockchain;
       let length = p.chain.length;
       let lastBlock : PollBlock = p.chain[length - 1]
-      let blockHash = sha256(JSON.stringify(pollBlockchain.pendingVotes) + lastBlock.hash)
+      let blockContent = JSON.stringify(pollBlockchain.pendingVotes) + JSON.stringify(pollBlockchain.pendingRegisteredUserHashCodes) +
+      JSON.stringify(pollBlockchain.pendingBallotCodeHashCodes) + JSON.stringify( pollBlockchain.pendingUsedBallotCodeHashCodes)
+
+
+      let blockHash = sha256(blockContent + lastBlock.hash)
       let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.pendingVotes,
         pollBlockchain.pendingRegisteredUserHashCodes, pollBlockchain.pendingBallotCodeHashCodes,
         pollBlockchain.pendingUsedBallotCodeHashCodes, blockHash, lastBlock.hash)
+
       pollBlockchain.chain.push(pollBlock);
+
       pollBlockchain.pendingVotes = []
+      pollBlockchain.pendingRegisteredUserHashCodes = []
+      pollBlockchain.pendingBallotCodeHashCodes = []
+      pollBlockchain.pendingUsedBallotCodeHashCodes = []
   }
 
   registerUser(username: string, pollBlockchain: PollBlockchain): string {
@@ -43,7 +52,7 @@ export class PollBlockchainService{
     if (pollBlockchain.pendingUsedBallotCodeHashCodes.includes(ballotCodeHash)){
       throw new Error("Ballot code: " + ballotCode + " was already used.")
     }
-    pollBlockchain.pendingBallotCodeHashCodes.push(ballotCodeHash)
+    pollBlockchain.pendingUsedBallotCodeHashCodes.push(ballotCodeHash)
     pollBlockchain.pendingVotes.push(vote)
   }
 
