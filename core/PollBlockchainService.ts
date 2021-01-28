@@ -66,17 +66,19 @@ export class PollBlockchainService{
     }
     pollBlockchain.pendingUsedBallotCodeHashCodes.push(ballotCodeHash)
     pollBlockchain.pendingVotes.push(vote)
-    return new VoteReturn(pollBlockchain.pendingUsedBallotCodeHashCodes, pollBlockchain.pendingVotes )
+
+  }
+
+  vote2(ballotCode: string, votes: string[]) : VoteReturn {
+    const ballotCodeHash = sha256(ballotCode)
+
+    return new VoteReturn(ballotCodeHash, votes )
   }
 
 }
 
 export class VoteReturn {
-  pendingUsedBallotCodeHashCodes:string[]
-  pendingVotes: string[]
-  constructor(pendingUsedBallotCodeHashCodes:string[], pendingVotes: string[]) {
-    this.pendingVotes = pendingVotes;
-    this.pendingUsedBallotCodeHashCodes = pendingUsedBallotCodeHashCodes;
+  constructor(public pendingUsedBallotCodeHashCodes: string, public pendingVotes: string[]) {
   }
 }
 

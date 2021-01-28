@@ -42,7 +42,7 @@ export class VoteComponent implements OnInit {
   }
 
   vote(): void {
-    this.pollService.vote({'pollId': this.poll.id , 'votes': [this.currentVote]}).subscribe(
+    this.pollService.vote({'pollId': this.poll.id , 'ballotCode': this.ballotCode, 'votes': [this.currentVote]}).subscribe(
       r => this.getPoll()
     )
   }

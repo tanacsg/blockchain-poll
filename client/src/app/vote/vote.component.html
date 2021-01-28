@@ -12,6 +12,10 @@
       <mat-label>My Vote:</mat-label>
       <input [(ngModel)]="currentVote" matInput />
     </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>My Ballot Code:</mat-label>
+      <input [(ngModel)]="ballotCode" matInput />
+    </mat-form-field>
   </div>
   <button mat-raised-button color="primary" (click)="vote()">Vote</button>
   <button mat-raised-button color="warn" (click)="mine()">Mine</button>

@@ -92,25 +92,18 @@ app.post('/vote2', async function (req, res) {
   const pollId = req.body.pollId;
   const votes = req.body.votes;
   const ballotCode = req.body.ballotCode;
-  const ballotCodeHash = sha256(ballotCode)
-
 
   const db = req.app.locals.db;
   const pollBlockchainService = app.locals.pollBlockchainService;
 
-  pollBlockchainService.vote()
+  const vote = pollBlockchainService.vote2(ballotCode, votes )
 
   const dbo = db.db(DB_NAME);
 
   const query = { id: pollId };
 
   const newvalues = {
-    $push:
-    {
-      pendingVotes: votes,
-      pendingUsedBallotCodeHashCodes: ballotCodeHash
-
-    }
+    $push: vote
   };
 
   try {

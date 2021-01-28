@@ -50,14 +50,17 @@ class PollBlockchainService {
         }
         pollBlockchain.pendingUsedBallotCodeHashCodes.push(ballotCodeHash);
         pollBlockchain.pendingVotes.push(vote);
-        return new VoteReturn(pollBlockchain.pendingUsedBallotCodeHashCodes, pollBlockchain.pendingVotes);
+    }
+    vote2(ballotCode, votes) {
+        const ballotCodeHash = sha256(ballotCode);
+        return new VoteReturn(ballotCodeHash, votes);
     }
 }
 exports.PollBlockchainService = PollBlockchainService;
 class VoteReturn {
     constructor(pendingUsedBallotCodeHashCodes, pendingVotes) {
-        this.pendingVotes = pendingVotes;
         this.pendingUsedBallotCodeHashCodes = pendingUsedBallotCodeHashCodes;
+        this.pendingVotes = pendingVotes;
     }
 }
 exports.VoteReturn = VoteReturn;

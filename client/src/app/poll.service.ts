@@ -46,7 +46,7 @@ export class PollService {
 
     /** POST: vote */
   vote(vote: any): Observable<any> {
-      return this.http.post<any>(this.pollUrl + '/vote', vote, this.httpOptions);
+      return this.http.post<any>(this.pollUrl + '/vote2', vote, this.httpOptions);
   }
 
   mine(id: string): Observable<any> {
