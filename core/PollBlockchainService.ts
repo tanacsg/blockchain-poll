@@ -47,6 +47,18 @@ export class PollBlockchainService{
     return ballotCode;
   }
 
+  registerUser2(username: string): RegisterReturn {
+
+    const usernameHash = sha256(username)
+
+    const ballotCode = uuidv4()
+    const ballotCodeHash = sha256(ballotCode)
+
+    const ret = new RegisterReturn(usernameHash,ballotCodeHash,ballotCode)
+
+    return ret;
+  }
+
   vote(ballotCode: string, vote: string, pollBlockchain: PollBlockchain) {
     const ballotCodeHash = sha256(ballotCode)
     if (pollBlockchain.pendingUsedBallotCodeHashCodes.includes(ballotCodeHash)){
@@ -54,7 +66,23 @@ export class PollBlockchainService{
     }
     pollBlockchain.pendingUsedBallotCodeHashCodes.push(ballotCodeHash)
     pollBlockchain.pendingVotes.push(vote)
+    return new VoteReturn(pollBlockchain.pendingUsedBallotCodeHashCodes, pollBlockchain.pendingVotes )
   }
 
+}
+
+export class VoteReturn {
+  pendingUsedBallotCodeHashCodes:string[]
+  pendingVotes: string[]
+  constructor(pendingUsedBallotCodeHashCodes:string[], pendingVotes: string[]) {
+    this.pendingVotes = pendingVotes;
+    this.pendingUsedBallotCodeHashCodes = pendingUsedBallotCodeHashCodes;
+  }
+}
+
+export class RegisterReturn {
+
+  constructor(public pendingRegisteredUserHashCodes: string, public pendingBallotCodeHashCodes: string, public ballotCode: string) {
+  }
 }
 

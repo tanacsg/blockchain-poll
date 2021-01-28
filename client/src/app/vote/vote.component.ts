@@ -15,10 +15,12 @@ export class VoteComponent implements OnInit {
   poll: PollBlockchain;
   pollJSON: string;
   currentVote: string;
+  ballotCode: string;
   textToCalculateHash: string;
   previousHash: string;
   textToCalculateHashNormalized: string;
   calculatedHash: string
+  username: string
 
   constructor(
     private pollService: PollService,
@@ -48,6 +50,16 @@ export class VoteComponent implements OnInit {
   mine(): void {
     this.pollService.mine(this.poll.id).subscribe(
       r => this.getPoll()
+    )
+  }
+
+  register(): void {
+    this.pollService.register(this.poll.id, this.username).subscribe(
+      r => {
+        this.getPoll()
+        this.ballotCode = r.ballotCode
+      }
+
     )
   }
 

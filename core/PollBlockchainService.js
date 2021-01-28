@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PollBlockchainService = void 0;
+exports.RegisterReturn = exports.VoteReturn = exports.PollBlockchainService = void 0;
 const PollBlockchain_1 = require("./PollBlockchain");
 const uuid_1 = require("uuid");
 const sha256 = require('sha256');
@@ -36,6 +36,13 @@ class PollBlockchainService {
         pollBlockchain.pendingBallotCodeHashCodes.push(ballotCodeHash);
         return ballotCode;
     }
+    registerUser2(username) {
+        const usernameHash = sha256(username);
+        const ballotCode = uuid_1.v4();
+        const ballotCodeHash = sha256(ballotCode);
+        const ret = new RegisterReturn(usernameHash, ballotCodeHash, ballotCode);
+        return ret;
+    }
     vote(ballotCode, vote, pollBlockchain) {
         const ballotCodeHash = sha256(ballotCode);
         if (pollBlockchain.pendingUsedBallotCodeHashCodes.includes(ballotCodeHash)) {
@@ -43,7 +50,23 @@ class PollBlockchainService {
         }
         pollBlockchain.pendingUsedBallotCodeHashCodes.push(ballotCodeHash);
         pollBlockchain.pendingVotes.push(vote);
+        return new VoteReturn(pollBlockchain.pendingUsedBallotCodeHashCodes, pollBlockchain.pendingVotes);
     }
 }
 exports.PollBlockchainService = PollBlockchainService;
+class VoteReturn {
+    constructor(pendingUsedBallotCodeHashCodes, pendingVotes) {
+        this.pendingVotes = pendingVotes;
+        this.pendingUsedBallotCodeHashCodes = pendingUsedBallotCodeHashCodes;
+    }
+}
+exports.VoteReturn = VoteReturn;
+class RegisterReturn {
+    constructor(pendingRegisteredUserHashCodes, pendingBallotCodeHashCodes, ballotCode) {
+        this.pendingRegisteredUserHashCodes = pendingRegisteredUserHashCodes;
+        this.pendingBallotCodeHashCodes = pendingBallotCodeHashCodes;
+        this.ballotCode = ballotCode;
+    }
+}
+exports.RegisterReturn = RegisterReturn;
 //# sourceMappingURL=PollBlockchainService.js.map

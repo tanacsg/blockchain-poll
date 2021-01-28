@@ -46,7 +46,7 @@ app.get('/insert', function(req, res) {
 	const db = req.app.locals.db;
 	const dbo = db.db(DB_NAME);
 
-	const pollBlockchainService = app.locals.pollBlockchainService;
+  const pollBlockchainService = app.locals.pollBlockchainService;
 
 	const poll = new PollBlockchain.PollBlockchain("101", "Employee Survey", ["Very satisfied", "Not satisfied"])
 	pollBlockchainService.createNewBlock(poll);
@@ -87,6 +87,75 @@ app.post('/vote', async function (req, res) {
   res.send({ 'status': 'Voted - Updated.' });
 
 });
+
+app.post('/vote2', async function (req, res) {
+  const pollId = req.body.pollId;
+  const votes = req.body.votes;
+  const ballotCode = req.body.ballotCode;
+  const ballotCodeHash = sha256(ballotCode)
+
+
+  const db = req.app.locals.db;
+  const pollBlockchainService = app.locals.pollBlockchainService;
+
+  pollBlockchainService.vote()
+
+  const dbo = db.db(DB_NAME);
+
+  const query = { id: pollId };
+
+  const newvalues = {
+    $push:
+    {
+      pendingVotes: votes,
+      pendingUsedBallotCodeHashCodes: ballotCodeHash
+
+    }
+  };
+
+  try {
+    const result = await dbo.collection("polls").updateOne(query, newvalues)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send(error)
+  }
+
+  res.send({ 'status': 'Voted - Updated.' });
+
+});
+
+
+app.post('/register', async function (req, res) {
+  const pollId = req.body.pollId;
+  const username = req.body.username;
+
+  const db = req.app.locals.db;
+  const pollBlockchainService = app.locals.pollBlockchainService;
+
+  const registerReceipt = pollBlockchainService.registerUser2(username)
+
+  const dbo = db.db(DB_NAME);
+
+  const query = { id: pollId };
+
+  const newvalues = {
+    $push: {
+      "pendingRegisteredUserHashCodes": registerReceipt.pendingRegisteredUserHashCodes,
+      "pendingBallotCodeHashCodes": registerReceipt.pendingBallotCodeHashCodes
+    }
+  };
+
+  try {
+    const result = await dbo.collection("polls").updateOne(query, newvalues)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send(error)
+  }
+
+  res.send({ 'ballotCode': registerReceipt.ballotCode });
+
+});
+
 
 app.get('/initiateconsensus', function(req, res) {
 	// const pollId = req.body.pollId;

@@ -38,6 +38,12 @@ export class PollService {
         );
   }
 
+
+  /** POST: vote */
+  register(id: string, username: string): Observable<any> {
+    return this.http.post<any>(this.pollUrl + '/register' , {"pollId": id, "username": username}, this.httpOptions);
+  }
+
     /** POST: vote */
   vote(vote: any): Observable<any> {
       return this.http.post<any>(this.pollUrl + '/vote', vote, this.httpOptions);
