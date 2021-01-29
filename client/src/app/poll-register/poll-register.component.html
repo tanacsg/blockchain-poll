@@ -1,0 +1,21 @@
+<div>
+  <mat-form-field appearance="outline">
+    <mat-label>Username to register:</mat-label>
+    <input [(ngModel)]="username" matInput />
+  </mat-form-field>
+</div>
+
+<button mat-raised-button color="primary" (click)="register()">Register</button>
+<div *ngIf="ballotCode">
+  Generated unique ballot code for voting: <strong>{{ballotCode}}</strong>
+</div>
+<div>
+  <a routerLink="/poll/{{poll.id}}">
+    Vote on poll
+  </a>
+</div>
+
+<pre>
+  {{poll | json}}
+</pre>
+

@@ -28,9 +28,16 @@
 
   </div>
   <div *ngIf="confirmedPollId">
-    <a routerLink="/poll/{{confirmedPollId}}">
-      Open Vote Screen for poll with id: {{confirmedPollId}}
-    </a>
+    <div>
+      <a routerLink="/poll/register/{{confirmedPollId}}">
+        Register for poll with id: {{confirmedPollId}}
+      </a>
+    </div>
+    <div>
+      <a routerLink="/poll/{{confirmedPollId}}">
+        Vote on poll with id: {{confirmedPollId}}
+      </a>
+    </div>
   </div>
   <pre>
 {{poll | json}}
