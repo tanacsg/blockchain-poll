@@ -42,4 +42,10 @@ export class PollRegisterComponent implements OnInit {
     )
   }
 
+  mine(): void {
+    this.pollService.mine(this.poll.id).subscribe(
+      r => this.getPoll()
+    )
+  }
+
 }

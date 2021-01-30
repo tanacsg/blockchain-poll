@@ -16,9 +16,10 @@ export class PollBlockchain {
 
 export class PollBlock {
 
+  public timestamp: Date = new Date()
 
-  constructor(public index: number, public name: string, public votes: string[], registeredUserHashCodes: string[],
-    ballotCodeHashCodes: string[], usedBallotCodeHashCodes: string [], public hash: string, public previousHash: string) {
+  constructor(public index: number, public name: string, public votes: string[], public registeredUserHashCodes: string[],
+    public ballotCodeHashCodes: string[], public usedBallotCodeHashCodes: string [], public hash: string, public previousHash: string) {
   }
 }
 

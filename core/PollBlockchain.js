@@ -20,8 +20,12 @@ class PollBlock {
         this.index = index;
         this.name = name;
         this.votes = votes;
+        this.registeredUserHashCodes = registeredUserHashCodes;
+        this.ballotCodeHashCodes = ballotCodeHashCodes;
+        this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
         this.hash = hash;
         this.previousHash = previousHash;
+        this.timestamp = new Date();
     }
 }
 exports.PollBlock = PollBlock;
