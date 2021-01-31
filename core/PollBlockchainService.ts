@@ -20,7 +20,7 @@ export class PollBlockchainService{
 
 
       let blockHash = sha256(blockContent + lastBlock.hash)
-      let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.pendingVotes,
+      let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus,  pollBlockchain.pendingVotes,
         pollBlockchain.pendingRegisteredUserHashCodes, pollBlockchain.pendingBallotCodeHashCodes,
         pollBlockchain.pendingUsedBallotCodeHashCodes, blockHash, lastBlock.hash)
 

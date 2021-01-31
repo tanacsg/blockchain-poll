@@ -18,7 +18,7 @@ class PollBlockchainService {
         let blockContent = JSON.stringify(pollBlockchain.pendingVotes) + JSON.stringify(pollBlockchain.pendingRegisteredUserHashCodes) +
             JSON.stringify(pollBlockchain.pendingBallotCodeHashCodes) + JSON.stringify(pollBlockchain.pendingUsedBallotCodeHashCodes);
         let blockHash = sha256(blockContent + lastBlock.hash);
-        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.pendingVotes, pollBlockchain.pendingRegisteredUserHashCodes, pollBlockchain.pendingBallotCodeHashCodes, pollBlockchain.pendingUsedBallotCodeHashCodes, blockHash, lastBlock.hash);
+        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingVotes, pollBlockchain.pendingRegisteredUserHashCodes, pollBlockchain.pendingBallotCodeHashCodes, pollBlockchain.pendingUsedBallotCodeHashCodes, blockHash, lastBlock.hash);
         pollBlockchain.chain.push(pollBlock);
         pollBlockchain.pendingVotes = [];
         pollBlockchain.pendingRegisteredUserHashCodes = [];

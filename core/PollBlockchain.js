@@ -11,14 +11,16 @@ class PollBlockchain {
         this.pendingVotes = [];
         this.id = id;
         this.name = name;
-        this.chain = [new PollBlock(1, name, [], [], [], [], "0", "0")];
+        this.chain = [new PollBlock(1, name, id, PollStatus.Registering, [], [], [], [], "0", "0")];
     }
 }
 exports.PollBlockchain = PollBlockchain;
 class PollBlock {
-    constructor(index, name, votes, registeredUserHashCodes, ballotCodeHashCodes, usedBallotCodeHashCodes, hash, previousHash) {
+    constructor(index, pollName, pollId, pollStatus, votes, registeredUserHashCodes, ballotCodeHashCodes, usedBallotCodeHashCodes, hash, previousHash) {
         this.index = index;
-        this.name = name;
+        this.pollName = pollName;
+        this.pollId = pollId;
+        this.pollStatus = pollStatus;
         this.votes = votes;
         this.registeredUserHashCodes = registeredUserHashCodes;
         this.ballotCodeHashCodes = ballotCodeHashCodes;
@@ -31,8 +33,8 @@ class PollBlock {
 exports.PollBlock = PollBlock;
 var PollStatus;
 (function (PollStatus) {
-    PollStatus[PollStatus["Registering"] = 0] = "Registering";
-    PollStatus[PollStatus["Voting"] = 1] = "Voting";
-    PollStatus[PollStatus["Closed"] = 2] = "Closed";
+    PollStatus["Registering"] = "REGISTERING";
+    PollStatus["Voting"] = "VOTING";
+    PollStatus["Closed"] = "CLOSED";
 })(PollStatus = exports.PollStatus || (exports.PollStatus = {}));
 //# sourceMappingURL=PollBlockchain.js.map
