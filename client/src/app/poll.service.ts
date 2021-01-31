@@ -50,7 +50,7 @@ export class PollService {
   }
 
   mine(id: string): Observable<any> {
-    return this.http.get<any>(this.pollUrl + '/initiateconsensus?id=' + id, this.httpOptions);
+    return this.http.get<any>(this.pollUrl + '/createblock?id=' + id, this.httpOptions);
   }
 
   create(pollBlockchain: PollBlockchain): Observable<any> {

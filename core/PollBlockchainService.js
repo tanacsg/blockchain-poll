@@ -15,25 +15,34 @@ class PollBlockchainService {
         let p = pollBlockchain;
         let length = p.chain.length;
         let lastBlock = p.chain[length - 1];
-        let blockContent = JSON.stringify(pollBlockchain.pendingVotes) + JSON.stringify(pollBlockchain.pendingRegisteredUserHashCodes) +
-            JSON.stringify(pollBlockchain.pendingBallotCodeHashCodes) + JSON.stringify(pollBlockchain.pendingUsedBallotCodeHashCodes);
+        let blockContent = JSON.stringify(pollBlockchain.pendingData.votes) + JSON.stringify(pollBlockchain.pendingData.registeredUserHashCodes) +
+            JSON.stringify(pollBlockchain.pendingData.ballotCodeHashCodes) + JSON.stringify(pollBlockchain.pendingData.usedBallotCodeHashCodes);
         let blockHash = sha256(blockContent + lastBlock.hash);
-        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingVotes, pollBlockchain.pendingRegisteredUserHashCodes, pollBlockchain.pendingBallotCodeHashCodes, pollBlockchain.pendingUsedBallotCodeHashCodes, blockHash, lastBlock.hash);
+        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingData.votes, pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes, pollBlockchain.pendingData.usedBallotCodeHashCodes, "0", lastBlock.hash);
         pollBlockchain.chain.push(pollBlock);
-        pollBlockchain.pendingVotes = [];
-        pollBlockchain.pendingRegisteredUserHashCodes = [];
-        pollBlockchain.pendingBallotCodeHashCodes = [];
-        pollBlockchain.pendingUsedBallotCodeHashCodes = [];
+        pollBlockchain.pendingData.votes = [];
+        pollBlockchain.pendingData.registeredUserHashCodes = [];
+        pollBlockchain.pendingData.ballotCodeHashCodes = [];
+        pollBlockchain.pendingData.usedBallotCodeHashCodes = [];
+    }
+    createNewBlock2(pollBlockchain) {
+        let length = pollBlockchain.chain.length;
+        let lastBlock = pollBlockchain.chain[length - 1];
+        let previousBlockHash = sha256(JSON.stringify(lastBlock));
+        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingData.votes, pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes, pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash);
+        let pollDatakHash = sha256(JSON.stringify(pollBlock.data) + previousBlockHash);
+        pollBlock.hash = pollDatakHash;
+        return pollBlock;
     }
     registerUser(username, pollBlockchain) {
         const usernameHash = sha256(username);
-        if (pollBlockchain.pendingRegisteredUserHashCodes.includes(usernameHash)) {
+        if (pollBlockchain.pendingData.registeredUserHashCodes.includes(usernameHash)) {
             throw new Error("username: " + username + " is already registered.");
         }
         const ballotCode = uuid_1.v4();
-        pollBlockchain.pendingRegisteredUserHashCodes.push(usernameHash);
+        pollBlockchain.pendingData.registeredUserHashCodes.push(usernameHash);
         const ballotCodeHash = sha256(ballotCode);
-        pollBlockchain.pendingBallotCodeHashCodes.push(ballotCodeHash);
+        pollBlockchain.pendingData.ballotCodeHashCodes.push(ballotCodeHash);
         return ballotCode;
     }
     registerUser2(username) {
@@ -45,11 +54,11 @@ class PollBlockchainService {
     }
     vote(ballotCode, vote, pollBlockchain) {
         const ballotCodeHash = sha256(ballotCode);
-        if (pollBlockchain.pendingUsedBallotCodeHashCodes.includes(ballotCodeHash)) {
+        if (pollBlockchain.pendingData.usedBallotCodeHashCodes.includes(ballotCodeHash)) {
             throw new Error("Ballot code: " + ballotCode + " was already used.");
         }
-        pollBlockchain.pendingUsedBallotCodeHashCodes.push(ballotCodeHash);
-        pollBlockchain.pendingVotes.push(vote);
+        pollBlockchain.pendingData.usedBallotCodeHashCodes.push(ballotCodeHash);
+        pollBlockchain.pendingData.votes.push(vote);
     }
     vote2(ballotCode, votes) {
         const ballotCodeHash = sha256(ballotCode);
@@ -58,9 +67,9 @@ class PollBlockchainService {
 }
 exports.PollBlockchainService = PollBlockchainService;
 class VoteReturn {
-    constructor(pendingUsedBallotCodeHashCodes, pendingVotes) {
-        this.pendingUsedBallotCodeHashCodes = pendingUsedBallotCodeHashCodes;
-        this.pendingVotes = pendingVotes;
+    constructor(usedBallotCodeHashCodes, votes) {
+        this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
+        this.votes = votes;
     }
 }
 exports.VoteReturn = VoteReturn;

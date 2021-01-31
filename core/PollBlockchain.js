@@ -1,22 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PollStatus = exports.PollBlock = exports.PollBlockchain = void 0;
+exports.PollStatus = exports.PollData = exports.PollBlock = exports.PollBlockchain = void 0;
 class PollBlockchain {
     constructor(id, name) {
         this.id = id;
         this.name = name;
         this.pollStatus = PollStatus.Registering;
-        this.pendingRegisteredUserHashCodes = [];
-        this.pendingBallotCodeHashCodes = [];
-        this.pendingVotes = [];
+        this.pendingData = new PollData([], [], [], []);
         this.id = id;
         this.name = name;
-        this.chain = [new PollBlock(1, name, id, PollStatus.Registering, [], [], [], [], "0", "0")];
+        this.chain = [new PollBlock(0, name, id, PollStatus.Registering, [], [], [], [], "0", "0")];
     }
 }
 exports.PollBlockchain = PollBlockchain;
 class PollBlock {
-    constructor(index, pollName, pollId, pollStatus, votes, registeredUserHashCodes, ballotCodeHashCodes, usedBallotCodeHashCodes, hash, previousHash) {
+    constructor(index, pollName, pollId, pollStatus, votes, registeredUserHashCodes, ballotCodeHashCodes, usedBallotCodeHashCodes, hash, previousBlockHash) {
         this.index = index;
         this.pollName = pollName;
         this.pollId = pollId;
@@ -26,11 +24,21 @@ class PollBlock {
         this.ballotCodeHashCodes = ballotCodeHashCodes;
         this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
         this.hash = hash;
-        this.previousHash = previousHash;
+        this.previousBlockHash = previousBlockHash;
         this.timestamp = new Date();
+        this.data = new PollData(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes);
     }
 }
 exports.PollBlock = PollBlock;
+class PollData {
+    constructor(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes) {
+        this.registeredUserHashCodes = registeredUserHashCodes;
+        this.ballotCodeHashCodes = ballotCodeHashCodes;
+        this.votes = votes;
+        this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
+    }
+}
+exports.PollData = PollData;
 var PollStatus;
 (function (PollStatus) {
     PollStatus["Registering"] = "REGISTERING";

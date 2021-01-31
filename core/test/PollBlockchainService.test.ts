@@ -14,13 +14,13 @@ describe('PollBlockchainService works correctly', () => {
 
         pollBlockchainService.createNewBlock(poll);
 
-        poll.pendingVotes.push("Banan")
-        poll.pendingVotes.push("Narancs")
+        poll.pendingData.votes.push("Banan")
+        poll.pendingData.votes.push("Narancs")
 
         // console.log(JSON.stringify(poll));
         expect(poll.chain.length).toEqual(2);
 
-        expect(poll.pendingVotes).toEqual(expect.arrayContaining(["Banan", "Narancs"]));
+        expect(poll.pendingData.votes).toEqual(expect.arrayContaining(["Banan", "Narancs"]));
 
         pollBlockchainService.createNewBlock(poll);
 
@@ -28,7 +28,7 @@ describe('PollBlockchainService works correctly', () => {
 
         const block = poll.chain[poll.chain.length - 1]
 
-        expect(poll.pendingVotes).toEqual([]);
+        expect(poll.pendingData.votes).toEqual([]);
         expect(block.votes).toEqual(expect.arrayContaining(["Banan", "Narancs"]));
 
     });
@@ -38,15 +38,15 @@ describe('PollBlockchainService works correctly', () => {
 
       pollBlockchainService.createNewBlock(poll);
 
-      expect(poll.pendingBallotCodeHashCodes).toHaveLength(0)
-      expect(poll.pendingRegisteredUserHashCodes).toHaveLength(0)
+      expect(poll.pendingData.ballotCodeHashCodes).toHaveLength(0)
+      expect(poll.pendingData.registeredUserHashCodes).toHaveLength(0)
       const ballotCode = pollBlockchainService.registerUser("tanacsg", poll);
 
       expect(ballotCode).not.toBeNull();
 
       const ballotCodeHash = sha256(ballotCode);
-      expect(poll.pendingBallotCodeHashCodes).toContain(ballotCodeHash)
-      expect(poll.pendingRegisteredUserHashCodes).toContain(sha256("tanacsg"))
+      expect(poll.pendingData.ballotCodeHashCodes).toContain(ballotCodeHash)
+      expect(poll.pendingData.registeredUserHashCodes).toContain(sha256("tanacsg"))
 
   });
 
@@ -55,22 +55,22 @@ describe('PollBlockchainService works correctly', () => {
 
     pollBlockchainService.createNewBlock(poll);
 
-    expect(poll.pendingBallotCodeHashCodes).toHaveLength(0)
-    expect(poll.pendingRegisteredUserHashCodes).toHaveLength(0)
-    expect(poll.pendingUsedBallotCodeHashCodes).toHaveLength(0)
-    expect(poll.pendingVotes).toHaveLength(0)
+    expect(poll.pendingData.ballotCodeHashCodes).toHaveLength(0)
+    expect(poll.pendingData.registeredUserHashCodes).toHaveLength(0)
+    expect(poll.pendingData.usedBallotCodeHashCodes).toHaveLength(0)
+    expect(poll.pendingData.votes).toHaveLength(0)
 
     const ballotCode = pollBlockchainService.registerUser("tanacsg", poll);
 
     expect(ballotCode).not.toBeNull();
 
     const ballotCodeHash = sha256(ballotCode);
-    expect(poll.pendingBallotCodeHashCodes).toContain(ballotCodeHash)
-    expect(poll.pendingRegisteredUserHashCodes).toContain(sha256("tanacsg"))
+    expect(poll.pendingData.ballotCodeHashCodes).toContain(ballotCodeHash)
+    expect(poll.pendingData.registeredUserHashCodes).toContain(sha256("tanacsg"))
 
     pollBlockchainService.vote(ballotCode, "Dissatisfied", poll)
-    expect(poll.pendingUsedBallotCodeHashCodes).toContain(ballotCodeHash)
-    expect(poll.pendingVotes).toContain("Dissatisfied")
+    expect(poll.pendingData.usedBallotCodeHashCodes).toContain(ballotCodeHash)
+    expect(poll.pendingData.votes).toContain("Dissatisfied")
   });
 }
 );

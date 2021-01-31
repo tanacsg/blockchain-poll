@@ -15,35 +15,53 @@ export class PollBlockchainService{
       let p = pollBlockchain;
       let length = p.chain.length;
       let lastBlock : PollBlock = p.chain[length - 1]
-      let blockContent = JSON.stringify(pollBlockchain.pendingVotes) + JSON.stringify(pollBlockchain.pendingRegisteredUserHashCodes) +
-      JSON.stringify(pollBlockchain.pendingBallotCodeHashCodes) + JSON.stringify( pollBlockchain.pendingUsedBallotCodeHashCodes)
+      let blockContent = JSON.stringify(pollBlockchain.pendingData.votes) + JSON.stringify(pollBlockchain.pendingData.registeredUserHashCodes) +
+      JSON.stringify(pollBlockchain.pendingData.ballotCodeHashCodes) + JSON.stringify( pollBlockchain.pendingData.usedBallotCodeHashCodes)
 
 
       let blockHash = sha256(blockContent + lastBlock.hash)
-      let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus,  pollBlockchain.pendingVotes,
-        pollBlockchain.pendingRegisteredUserHashCodes, pollBlockchain.pendingBallotCodeHashCodes,
-        pollBlockchain.pendingUsedBallotCodeHashCodes, blockHash, lastBlock.hash)
+      let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus,  pollBlockchain.pendingData.votes,
+        pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes,
+        pollBlockchain.pendingData.usedBallotCodeHashCodes, "0", lastBlock.hash)
+
+
 
       pollBlockchain.chain.push(pollBlock);
 
-      pollBlockchain.pendingVotes = []
-      pollBlockchain.pendingRegisteredUserHashCodes = []
-      pollBlockchain.pendingBallotCodeHashCodes = []
-      pollBlockchain.pendingUsedBallotCodeHashCodes = []
+      pollBlockchain.pendingData.votes = []
+      pollBlockchain.pendingData.registeredUserHashCodes = []
+      pollBlockchain.pendingData.ballotCodeHashCodes = []
+      pollBlockchain.pendingData.usedBallotCodeHashCodes = []
   }
+
+  createNewBlock2(pollBlockchain: PollBlockchain): PollBlock {
+    let length = pollBlockchain.chain.length;
+    let lastBlock : PollBlock = pollBlockchain.chain[length - 1]
+
+    let previousBlockHash = sha256(JSON.stringify(lastBlock))
+    let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus,  pollBlockchain.pendingData.votes,
+      pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes,
+      pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash)
+
+    let pollDatakHash = sha256(JSON.stringify(pollBlock.data) + previousBlockHash)
+
+    pollBlock.hash = pollDatakHash
+    return pollBlock
+
+}
 
   registerUser(username: string, pollBlockchain: PollBlockchain): string {
 
     const usernameHash = sha256(username)
-    if (pollBlockchain.pendingRegisteredUserHashCodes.includes(usernameHash)) {
+    if (pollBlockchain.pendingData.registeredUserHashCodes.includes(usernameHash)) {
       throw new Error("username: " + username + " is already registered.")
     }
 
     const ballotCode = uuidv4()
 
-    pollBlockchain.pendingRegisteredUserHashCodes.push(usernameHash)
+    pollBlockchain.pendingData.registeredUserHashCodes.push(usernameHash)
     const ballotCodeHash = sha256(ballotCode)
-    pollBlockchain.pendingBallotCodeHashCodes.push(ballotCodeHash)
+    pollBlockchain.pendingData.ballotCodeHashCodes.push(ballotCodeHash)
     return ballotCode;
   }
 
@@ -61,11 +79,11 @@ export class PollBlockchainService{
 
   vote(ballotCode: string, vote: string, pollBlockchain: PollBlockchain) {
     const ballotCodeHash = sha256(ballotCode)
-    if (pollBlockchain.pendingUsedBallotCodeHashCodes.includes(ballotCodeHash)){
+    if (pollBlockchain.pendingData.usedBallotCodeHashCodes.includes(ballotCodeHash)){
       throw new Error("Ballot code: " + ballotCode + " was already used.")
     }
-    pollBlockchain.pendingUsedBallotCodeHashCodes.push(ballotCodeHash)
-    pollBlockchain.pendingVotes.push(vote)
+    pollBlockchain.pendingData.usedBallotCodeHashCodes.push(ballotCodeHash)
+    pollBlockchain.pendingData.votes.push(vote)
 
   }
 
@@ -78,7 +96,7 @@ export class PollBlockchainService{
 }
 
 export class VoteReturn {
-  constructor(public pendingUsedBallotCodeHashCodes: string, public pendingVotes: string[]) {
+  constructor(public usedBallotCodeHashCodes: string, public votes: string[]) {
   }
 }
 

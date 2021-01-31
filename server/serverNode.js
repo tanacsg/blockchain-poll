@@ -103,7 +103,10 @@ app.post('/vote2', async function (req, res) {
   const query = { id: pollId };
 
   const newvalues = {
-    $push: vote
+    $push: {
+      "pendingData.usedBallotCodeHashCodes": vote.usedBallotCodeHashCodes,
+      "pendingData.votes": vote.votes
+    }
   };
 
   try {
@@ -113,7 +116,7 @@ app.post('/vote2', async function (req, res) {
     res.status(500).send(error)
   }
 
-  res.send({ 'status': 'Voted - Updated.' });
+  res.send({ 'message': 'Vote accepted.' });
 
 });
 
@@ -133,8 +136,8 @@ app.post('/register', async function (req, res) {
 
   const newvalues = {
     $push: {
-      "pendingRegisteredUserHashCodes": registerReceipt.pendingRegisteredUserHashCodes,
-      "pendingBallotCodeHashCodes": registerReceipt.pendingBallotCodeHashCodes
+      "pendingData.registeredUserHashCodes": registerReceipt.pendingRegisteredUserHashCodes,
+      "pendingData.ballotCodeHashCodes": registerReceipt.pendingBallotCodeHashCodes
     }
   };
 
@@ -175,6 +178,39 @@ app.get('/initiateconsensus', function(req, res) {
 		 });
 	});
 
+
+});
+
+app.get('/createblock', async function (req, res) {
+  const db = req.app.locals.db;
+  const pollBlockchainService = app.locals.pollBlockchainService;
+
+  const dbo = db.db(DB_NAME);
+
+  const query = { id: req.query.id };
+
+  try {
+    let pollBlockchain = await dbo.collection("polls").findOne(query)
+
+    let pollBlock = pollBlockchainService.createNewBlock2(pollBlockchain)
+
+    const newvalues = {
+      $push: {
+        "chain": pollBlock
+      },
+      $set: {
+        "pendingData": new PollBlockchain.PollData([], [], [], [])
+      }
+    }
+
+    await dbo.collection("polls").updateOne(query, newvalues)
+
+    res.status(200).json({"message": "Block created with index: " + pollBlock.index })
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).send(error)
+  }
 
 });
 
