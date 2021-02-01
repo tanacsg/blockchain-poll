@@ -42,51 +42,7 @@ app.get('/', function(req, res) {
 	res.sendFile('./dist/blockchain-poll-frontend/index.html', { root: __dirname });
 });
 
-app.get('/insert', function(req, res) {
-	const db = req.app.locals.db;
-	const dbo = db.db(DB_NAME);
 
-  const pollBlockchainService = app.locals.pollBlockchainService;
-
-	const poll = new PollBlockchain.PollBlockchain("101", "Employee Survey", ["Very satisfied", "Not satisfied"])
-	pollBlockchainService.createNewBlock(poll);
-
-	poll.pendingVotes.push("Banan")
-	poll.pendingVotes.push("Narancs")
-
-
-	pollBlockchainService.createNewBlock(poll);
-
-
-	dbo.collection("polls").insertOne(poll, function(err, result) {
-		if (err) throw err;
-        console.log("Inserted.");
-		res.send('Inserted');
-	 });
-});
-
-app.post('/vote', async function (req, res) {
-  const pollId = req.body.pollId;
-  const votes = req.body.votes;
-  const db = req.app.locals.db;
-  const pollBlockchainService = app.locals.pollBlockchainService;
-
-  const dbo = db.db(DB_NAME);
-
-  const query = { id: pollId };
-
-  const newvalues = { $push: { pendingVotes: votes } };
-
-  try {
-    const result = await dbo.collection("polls").updateOne(query, newvalues)
-  } catch (error) {
-    console.log(error)
-    res.status(500).send(error)
-  }
-
-  res.send({ 'status': 'Voted - Updated.' });
-
-});
 
 app.post('/vote2', async function (req, res) {
   const pollId = req.body.pollId;
@@ -152,34 +108,6 @@ app.post('/register', async function (req, res) {
 
 });
 
-
-app.get('/initiateconsensus', function(req, res) {
-	// const pollId = req.body.pollId;
-	const db = req.app.locals.db;
-	const pollBlockchainService = app.locals.pollBlockchainService;
-
-	const dbo = db.db(DB_NAME);
-
-	// const query = { id: pollId };
-
-	const query = { id: req.query.id };
-
-
-
-	dbo.collection("polls").find(query).toArray(function(err, pollBlockchainArray) {
-		if (err) throw err;
-
-		const pollBlockchain = pollBlockchainArray[0]
-		pollBlockchainService.createNewBlock(pollBlockchain)
-
-		dbo.collection("polls").replaceOne(query, pollBlockchain, function(err, pollBlockchainResult) {
-			if (err) throw err;
-			res.send(pollBlockchainResult.ops[0]);
-		 });
-	});
-
-
-});
 
 app.get('/createblock', async function (req, res) {
   const db = req.app.locals.db;
