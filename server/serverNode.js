@@ -116,6 +116,8 @@ app.get('/createblock', async function (req, res) {
 
   const query = { id: req.query.id };
 
+
+  let session
   try {
 
     const cleanPendingData = {
@@ -123,6 +125,9 @@ app.get('/createblock', async function (req, res) {
         "pendingData": new PollBlockchain.PollData([], [], [], [])
       }
     }
+
+    session = db.startSession()
+    session.startTransaction( { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } } );
 
     //TODO make it transactional
     let pollBlockchainResp = await dbo.collection("polls").findOneAndUpdate(query, cleanPendingData, { returnNewDocument: false })
@@ -137,9 +142,13 @@ app.get('/createblock', async function (req, res) {
 
     await dbo.collection("polls").updateOne(query, newPollBlock)
 
+    session.commitTransaction();
+
     res.status(200).json({ "message": "Block created with index: " + pollBlock.index })
 
+
   } catch (error) {
+    session.abortTransaction()
     console.log(error)
     res.status(500).send(error)
   }

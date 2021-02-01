@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PollStatus = exports.PollData = exports.PollBlock = exports.PollBlockchain = void 0;
+exports.PollQuestion = exports.PollStatus = exports.PollData = exports.PollBlock = exports.PollBlockchain = void 0;
 class PollBlockchain {
     constructor(id, name) {
         this.id = id;
         this.name = name;
         this.pollStatus = PollStatus.Registering;
         this.pendingData = new PollData([], [], [], []);
+        this.pollQuestions = [];
         this.id = id;
         this.name = name;
         this.chain = [new PollBlock(0, name, id, PollStatus.Registering, [], [], [], [], "0", "0")];
@@ -45,4 +46,10 @@ var PollStatus;
     PollStatus["Voting"] = "VOTING";
     PollStatus["Closed"] = "CLOSED";
 })(PollStatus = exports.PollStatus || (exports.PollStatus = {}));
+class PollQuestion {
+    constructor(options) {
+        this.options = options;
+    }
+}
+exports.PollQuestion = PollQuestion;
 //# sourceMappingURL=PollBlockchain.js.map
