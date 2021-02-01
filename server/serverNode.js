@@ -2,7 +2,6 @@ const express = require('express');
 const mongo = require('mongodb');
 const path = require('path');
 const fs = require('fs');
-const bodyParser = require('body-parser');
 const uuid = require('uuid/v1');
 const rp = require('request-promise');
 const cors = require("cors");
@@ -31,8 +30,8 @@ const PORT = process.env.port||'3000';
 
 const staticRoot = __dirname + '/dist/blockchain-poll-frontend';
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
 
 app.get('/', function(req, res) {
@@ -44,7 +43,7 @@ app.get('/', function(req, res) {
 
 
 
-app.post('/vote2', async function (req, res) {
+app.post('/vote', async function (req, res) {
   const pollId = req.body.pollId;
   const votes = req.body.votes;
   const ballotCode = req.body.ballotCode;
@@ -118,22 +117,27 @@ app.get('/createblock', async function (req, res) {
   const query = { id: req.query.id };
 
   try {
-    let pollBlockchain = await dbo.collection("polls").findOne(query)
 
-    let pollBlock = pollBlockchainService.createNewBlock2(pollBlockchain)
-
-    const newvalues = {
-      $push: {
-        "chain": pollBlock
-      },
+    const cleanPendingData = {
       $set: {
         "pendingData": new PollBlockchain.PollData([], [], [], [])
       }
     }
 
-    await dbo.collection("polls").updateOne(query, newvalues)
+    //TODO make it transactional
+    let pollBlockchainResp = await dbo.collection("polls").findOneAndUpdate(query, cleanPendingData, { returnNewDocument: false })
 
-    res.status(200).json({"message": "Block created with index: " + pollBlock.index })
+    let pollBlock = pollBlockchainService.createNewBlock2(pollBlockchainResp.value)
+
+    const newPollBlock = {
+      $push: {
+        "chain": pollBlock
+      }
+    }
+
+    await dbo.collection("polls").updateOne(query, newPollBlock)
+
+    res.status(200).json({ "message": "Block created with index: " + pollBlock.index })
 
   } catch (error) {
     console.log(error)
