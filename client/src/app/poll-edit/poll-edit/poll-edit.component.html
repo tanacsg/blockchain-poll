@@ -27,7 +27,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" *ngFor="let option of question.options;let j = index;">
       <mat-label>Option</mat-label>
-      <input [(ngModel)]="question.options[j]" matInput placeholder="Option" name=option{{i}}{{j}} />
+      <input [ngModel]="question.options[j]" (change)="onOptionUpdate($event.target.value, i, j)" matInput placeholder="Option" name=option{{i}}{{j}} />
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="addNewOption(question)">New option</button>
     <button mat-raised-button color="primary" (click)="addNewQuestion()">New question</button>

@@ -191,11 +191,10 @@ app.post('/poll', async function (req, res) {
   const db = req.app.locals.db;
   const dbo = db.db(DB_NAME);
 
-  const poll = new PollBlockchain.PollBlockchain(pollId, pollName, [])
+  const poll = req.body
 
   const query = { id: pollId };
 
-  const pollBlockchainService = app.locals.pollBlockchainService;
 
   try {
     let result0 = await dbo.collection("polls").find(query)
