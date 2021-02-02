@@ -1,0 +1,16 @@
+
+.mat-raised-button {
+  margin: 5px;
+
+}
+
+
+.poll-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.poll-radio-button {
+  margin: 5px;
+}

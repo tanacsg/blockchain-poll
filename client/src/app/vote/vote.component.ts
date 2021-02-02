@@ -15,6 +15,7 @@ export class VoteComponent implements OnInit {
   poll: PollBlockchain;
   pollJSON: string;
   currentVote: string;
+  currentVotes: string[] = [];
   ballotCode: string;
   textToCalculateHash: string;
   previousHash: string;
@@ -36,13 +37,14 @@ export class VoteComponent implements OnInit {
     this.pollService.getPoll(id)
       .subscribe(poll => {
         this.poll = poll;
+        this.currentVotes = new Array(this.poll.pollQuestions.length)
         this.pollJSON = JSON.stringify(poll, undefined, 2)
         localStorage.setItem("BLOCKCHAIN_POLL_"+ id, this.pollJSON);
       });
   }
 
   vote(): void {
-    this.pollService.vote({'pollId': this.poll.id , 'ballotCode': this.ballotCode, 'votes': [this.currentVote]}).subscribe(
+    this.pollService.vote({'pollId': this.poll.id , 'ballotCode': this.ballotCode, 'votes': this.currentVotes}).subscribe(
       r => this.getPoll()
     )
   }
@@ -50,16 +52,6 @@ export class VoteComponent implements OnInit {
   mine(): void {
     this.pollService.mine(this.poll.id).subscribe(
       r => this.getPoll()
-    )
-  }
-
-  register(): void {
-    this.pollService.register(this.poll.id, this.username).subscribe(
-      r => {
-        this.getPoll()
-        this.ballotCode = r.ballotCode
-      }
-
     )
   }
 

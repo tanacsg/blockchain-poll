@@ -8,28 +8,30 @@
     </ul>
   </div>
   <div>
-    <mat-form-field appearance="outline">
+   <!-- <mat-form-field appearance="outline">
       <mat-label>My Vote:</mat-label>
       <input [(ngModel)]="currentVote" matInput />
-    </mat-form-field>
+    </mat-form-field> -->
     <mat-form-field appearance="outline">
-      <mat-label>My Ballot Code:</mat-label>
+      <mat-label>Ballot Code:</mat-label>
       <input [(ngModel)]="ballotCode" matInput />
     </mat-form-field>
   </div>
-  <button mat-raised-button color="primary" (click)="vote()">Vote</button>
-  <button mat-raised-button color="warn" (click)="mine()">Mine</button>
-  <div>
-    <mat-form-field appearance="outline">
-      <mat-label>Username to register:</mat-label>
-      <input [(ngModel)]="username" matInput />
-    </mat-form-field>
-  </div>
-  <button mat-raised-button color="primary" (click)="register()">Register</button>
-  <div *ngIf="ballotCode">
-    Generated unique ballot code for voting: <strong>{{ballotCode}}</strong>
-  </div>
+<div>
+  <div *ngFor="let question of poll.pollQuestions;let i = index;">
 
+    <label class="poll-radio-group">{{question.question}}</label>
+    <mat-radio-group [(ngModel)]="currentVotes[i]">
+      <mat-radio-button *ngFor="let option of question.options" class="poll-radio-button" [value]="option">
+        {{option}}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>
+<button mat-raised-button color="primary" (click)="vote()">Vote</button>
+<button mat-raised-button color="warn" (click)="mine()">Mine</button>
+
+<!--
   <h2>Validate:</h2>
   <div>
 
@@ -52,6 +54,6 @@
   <div>
     {{calculatedHash}}
   </div>
+-->
   <h2>Poll Blockchain:</h2>
   <pre>{{pollJSON}}</pre>
-</div>

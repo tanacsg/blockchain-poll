@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -33,7 +34,8 @@ import { PollRegisterComponent } from './poll-register/poll-register.component';
     MatInputModule,
     MatButtonModule,
     MatExpansionModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]
