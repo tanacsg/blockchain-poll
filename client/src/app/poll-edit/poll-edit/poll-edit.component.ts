@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 
 import { PollService } from 'src/app/poll.service';
-import { PollBlockchain } from '../../../../../core/PollBlockchain';
+import { PollBlockchain, PollQuestion } from '../../../../../core/PollBlockchain';
 
 @Component({
   selector: 'app-poll-edit',
@@ -35,6 +35,14 @@ export class PollEditComponent implements OnInit {
       console.log(err)
     });
 
+  }
+
+  addNewOption(question: PollQuestion): void {
+    question.options.push("")
+  }
+
+  addNewQuestion(): void {
+    this.poll.pollQuestions.push(new PollQuestion("", ["", ""]))
   }
 
 }

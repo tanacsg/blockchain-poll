@@ -7,7 +7,7 @@ class PollBlockchain {
         this.name = name;
         this.pollStatus = PollStatus.Registering;
         this.pendingData = new PollData([], [], [], []);
-        this.pollQuestions = [];
+        this.pollQuestions = [new PollQuestion("", ["", ""])];
         this.id = id;
         this.name = name;
         this.chain = [new PollBlock(0, name, id, PollStatus.Registering, [], [], [], [], "0", "0")];
@@ -47,7 +47,8 @@ var PollStatus;
     PollStatus["Closed"] = "CLOSED";
 })(PollStatus = exports.PollStatus || (exports.PollStatus = {}));
 class PollQuestion {
-    constructor(options) {
+    constructor(question, options) {
+        this.question = question;
         this.options = options;
     }
 }

@@ -2,7 +2,7 @@ export class PollBlockchain {
   chain: PollBlock[]
   pollStatus: PollStatus = PollStatus.Registering
   pendingData: PollData = new PollData([],[],[],[])
-  pollQuestions: PollQuestion[] = []
+  pollQuestions: PollQuestion[] = [new PollQuestion("",["",""])]
 
   constructor(public id: string, public name: string) {
     this.id = id;
@@ -35,5 +35,5 @@ export enum PollStatus {
 }
 
 export class PollQuestion {
-  constructor(public options: string[]) {}
+  constructor(public question: string, public options: string[]) {}
 }

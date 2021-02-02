@@ -4,7 +4,7 @@
 
   <p>
     <mat-form-field appearance="outline">
-      <mat-label>Poll Name:</mat-label>
+      <mat-label>Poll Name</mat-label>
       <input [(ngModel)]="poll.name" name="pollName" #pollName="ngModel" matInput placeholder="Poll Name" required minlength="5" />
 
       <mat-error *ngIf="pollName.invalid">Please enter a valid poll name (min length 5).</mat-error>
@@ -14,12 +14,25 @@
   <p>
     <mat-form-field appearance="outline">
 
-      <mat-label>Poll Id:</mat-label>
+      <mat-label>Poll Id</mat-label>
       <input [(ngModel)]="poll.id" name="pollId" #pollId="ngModel" matInput placeholder="Poll Id" required minlength="5" />
       <mat-error *ngIf="pollId.invalid">Please enter a valid poll id (min length 5).</mat-error>
       <mat-hint>A unique business id of the</mat-hint>
     </mat-form-field>
   </p>
+  <p *ngFor="let question of poll.pollQuestions;let i = index;">
+    <mat-form-field appearance="outline">
+      <mat-label>Poll Question</mat-label>
+      <input [(ngModel)]="poll.pollQuestions[i].question" name=pollQuestion{{i}} matInput placeholder="Question"/>
+    </mat-form-field>
+    <mat-form-field appearance="outline" *ngFor="let option of question.options;let j = index;">
+      <mat-label>Option</mat-label>
+      <input [(ngModel)]="question.options[j]" matInput placeholder="Option" name=option{{i}}{{j}} />
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="addNewOption(question)">New option</button>
+    <button mat-raised-button color="primary" (click)="addNewQuestion()">New question</button>
+  </p>
+
   <button mat-raised-button color="primary" (click)="save()">Save</button>
   <div>
     <mat-error>
