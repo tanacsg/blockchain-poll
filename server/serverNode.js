@@ -173,6 +173,10 @@ app.get('/poll/:id', function(req, res) {
 	const dbo = db.db(DB_NAME);
 	const query = { id: req.params.id };
 
+  dbo.collection("polls").find(query).project({ 'pendingData.usedBallotCodeHashCodes': 1, 'chain.data.usedBallotCodeHashCodes': 1}).toArray(function(err, result) {
+		console.log("usedBallotCodeHashCodes: " +JSON.stringify( result));
+	});
+
 	dbo.collection("polls").find(query).toArray(function(err, result) {
 		if (err) throw err;
 		console.log(result);
