@@ -56,6 +56,10 @@ export class PollService {
   create(pollBlockchain: PollBlockchain): Observable<any> {
     return this.http.post<string>(this.pollUrl + '/poll/', pollBlockchain , this.httpOptions);
   }
+
+  delete(id: string): Observable<any> {
+    return this.http.delete<string>(this.pollUrl + '/poll/' + id, this.httpOptions);
+  }
     /**
    * Handle Http operation that failed.
    * Let the app continue.

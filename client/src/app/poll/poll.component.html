@@ -1,15 +1,43 @@
-<p>poll works!</p>
+<h1>Pools</h1>
 
-<ul>
-    <li *ngFor="let poll of polls;let i = index;">
-        {{poll.id}} -- {{poll.name}}
-        <ul>
-            <li *ngFor="let vote of poll.votes">
-                {{vote}}
-            </li>
-        </ul>
-        {{i}}
-        {{myText[i]}}
-        <button title="Vote" (click)="vote(poll.id, myText[i])">Vote</button>
-    </li>
-</ul>
+<a routerLink="/poll/new">
+  Create new poll
+</a>
+<br/>
+<table>
+  <thead>
+    <tr>
+      <th>Position</th>
+      <th>Poll Id</th>
+      <th>Poll Name</th>
+      <th>Register link</th>
+      <th>Vote link</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let poll of polls;let i = index;">
+      <td>{{i}}.</td>
+      <td>{{poll.id}}</td>
+      <td>{{poll.name}}</td>
+      <td>
+        <a routerLink="/poll/register/{{poll.id}}">
+          Register
+        </a>
+      </td>
+      <td>
+        <a routerLink="/poll/{{poll.id}}">
+          Vote
+        </a>
+      </td>
+      <td>
+        <a (click)="delete(poll.id)" href="">
+          Delete
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="polls.length == 0">
+No polls found.
+</div>

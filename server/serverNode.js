@@ -8,7 +8,7 @@ const cors = require("cors");
 const PollBlockchain = require('../core/PollBlockchain')
 const PollBlockchainService = require('../core/PollBlockchainService')
 
-const { static } = require('express');
+const { static, response } = require('express');
 
 
 const MongoClient = mongo.MongoClient;
@@ -215,6 +215,20 @@ app.post('/poll', async function (req, res) {
   }
 });
 
+app.delete('/poll/:id', async function (req, res) {
+
+  const db = req.app.locals.db;
+  const dbo = db.db(DB_NAME);
+  const query = { id: req.params.id };
+
+  try {
+    await dbo.collection("polls").remove(query, { justOne: true })
+    response.status(202)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send(error)
+  }
+});
 
 app.use(express.static(staticRoot));
 

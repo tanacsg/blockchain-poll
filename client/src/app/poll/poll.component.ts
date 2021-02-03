@@ -9,8 +9,6 @@ import { PollService } from '../poll.service';
 })
 export class PollComponent implements OnInit {
   polls: any[];
-  myText: string[] = ["Alma", "KOrte"];
-  text: any;
 
   constructor(private pollService: PollService) { }
 
@@ -23,14 +21,8 @@ export class PollComponent implements OnInit {
     .subscribe(polls => this.polls = polls);
   }
 
-  vote(pollId: string, votes: string ): void {
-    this.pollService.vote({'pollId': pollId, 'votes': votes.split(',')})
-    .subscribe(o => {
-
-      console.log(o);
-    }, err => {
-      console.log(err)
-    });
+  delete(id: string): void {
+    this.pollService.delete(id)
+    .subscribe(r => console.log(r));
   }
-
 }
