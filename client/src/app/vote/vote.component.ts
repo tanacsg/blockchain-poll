@@ -22,6 +22,7 @@ export class VoteComponent implements OnInit {
   textToCalculateHashNormalized: string;
   calculatedHash: string
   username: string
+  errorMessage: string
 
   constructor(
     private pollService: PollService,
@@ -45,7 +46,8 @@ export class VoteComponent implements OnInit {
 
   vote(): void {
     this.pollService.vote({'pollId': this.poll.id , 'ballotCode': this.ballotCode, 'votes': this.currentVotes}).subscribe(
-      r => this.getPoll()
+      r => this.getPoll(),
+      err => this.errorMessage = err.error.message
     )
   }
 

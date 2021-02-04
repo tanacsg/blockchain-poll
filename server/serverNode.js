@@ -55,6 +55,20 @@ app.post('/vote', async function (req, res) {
 
   const dbo = db.db(DB_NAME);
 
+  let contains = await containsBallotCodeHashCode(pollId, vote.usedBallotCodeHashCodes)
+  console.log("containsBallotCodeHashCode: " + contains)
+  if (!contains) {
+    res.status(400).json({"message": "BallotCode is not registered."})
+    return
+  }
+
+  let contains2 = await containsUsedBallotCodeHashCode(pollId, vote.usedBallotCodeHashCodes)
+  console.log("containsUsedBallotCodeHashCode: "+contains2)
+  if (contains2) {
+    res.status(400).json({"message": "BallotCode has already been used once."})
+    return
+  }
+
   const query = { id: pollId };
 
   const newvalues = {
@@ -173,10 +187,6 @@ app.get('/poll/:id', function(req, res) {
 	const dbo = db.db(DB_NAME);
 	const query = { id: req.params.id };
 
-  dbo.collection("polls").find(query).project({ 'pendingData.usedBallotCodeHashCodes': 1, 'chain.data.usedBallotCodeHashCodes': 1}).toArray(function(err, result) {
-		console.log("usedBallotCodeHashCodes: " +JSON.stringify( result));
-	});
-
 	dbo.collection("polls").find(query).toArray(function(err, result) {
 		if (err) throw err;
 		console.log(result);
@@ -188,6 +198,44 @@ app.get('/poll/:id', function(req, res) {
 	});
 });
 
+async function containsUsedBallotCodeHashCode(pollId, usedBallotCodeHashCode ) {
+	const db = app.locals.db;
+	const dbo = db.db(DB_NAME);
+  const query = { id: pollId };
+
+  let result = await dbo.collection("polls").find(query).project({ _id: 0, 'pendingData.usedBallotCodeHashCodes': 1, 'chain.data.usedBallotCodeHashCodes': 1}).toArray()
+
+  let resutString = JSON.stringify( result)
+  console.log("usedBallotCodeHashCodes: " + resutString);
+  return resutString.includes(usedBallotCodeHashCode)
+
+}
+
+async function containsRegisteredUserHashCode(pollId, registeredUserHashCode ) {
+	const db = app.locals.db;
+	const dbo = db.db(DB_NAME);
+  const query = { id: pollId };
+
+  let result = await dbo.collection("polls").find(query).project({ _id: 0, 'pendingData.registeredUserHashCodes': 1, 'chain.data.registeredUserHashCodes': 1}).toArray()
+
+  let resutString = JSON.stringify( result)
+  console.log("registeredUserHashCodes: " + resutString);
+  return resutString.includes(registeredUserHashCode)
+
+}
+
+async function containsBallotCodeHashCode(pollId, ballotCodeHashCodes ) {
+	const db = app.locals.db;
+	const dbo = db.db(DB_NAME);
+  const query = { id: pollId };
+
+  let result = await dbo.collection("polls").find(query).project({ _id: 0, 'pendingData.ballotCodeHashCodes': 1, 'chain.data.ballotCodeHashCodes': 1}).toArray()
+
+  let resutString = JSON.stringify( result)
+  console.log("ballotCodeHashCodes: " + resutString);
+  return resutString.includes(ballotCodeHashCodes)
+
+}
 
 app.post('/poll', async function (req, res) {
   const pollId = req.body.id;
