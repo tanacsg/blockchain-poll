@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
 import { PollComponent } from './poll/poll.component';
 import { HttpClientModule } from '@angular/common/http';
 import { VoteComponent } from './vote/vote.component';
-import { PollEditComponent } from './poll-edit/poll-edit/poll-edit.component';
+import { PollEditComponent } from './poll-edit/poll-edit.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PollRegisterComponent } from './poll-register/poll-register.component';
 

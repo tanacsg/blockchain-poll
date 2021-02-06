@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 
 import { PollService } from 'src/app/poll.service';
-import { PollBlockchain, PollQuestion } from '../../../../../core/PollBlockchain';
+import { PollBlockchain, PollQuestion } from '../../../../core/PollBlockchain';
 
 @Component({
   selector: 'app-poll-edit',
