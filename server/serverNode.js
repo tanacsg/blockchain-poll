@@ -7,6 +7,7 @@ const rp = require('request-promise');
 const cors = require("cors");
 const PollBlockchain = require('../core/PollBlockchain')
 const PollBlockchainService = require('../core/PollBlockchainService')
+const log = require('simple-node-logger').createSimpleLogger('blockchain-poll.log');
 
 const { static, response } = require('express');
 
@@ -37,8 +38,8 @@ app.use(cors(corsOptions));
 
 app.get('/', function(req, res) {
 
-	console.log(__dirname)
-	console.log(staticRoot)
+	log.info(__dirname)
+	log.info(staticRoot)
 	res.sendFile('./dist/blockchain-poll-frontend/index.html', { root: __dirname });
 });
 
@@ -62,14 +63,14 @@ app.post('/vote', async function (req, res) {
   const dbo = db.db(DB_NAME);
 
   let contains = await containsBallotCodeHashCode(pollId, vote.usedBallotCodeHashCodes)
-  console.log("containsBallotCodeHashCode: " + contains)
+  log.info("containsBallotCodeHashCode: " + contains)
   if (!contains) {
     res.status(400).json({"message": "BallotCode is not registered."})
     return
   }
 
   let contains2 = await containsUsedBallotCodeHashCode(pollId, vote.usedBallotCodeHashCodes)
-  console.log("containsUsedBallotCodeHashCode: "+contains2)
+  log.info("containsUsedBallotCodeHashCode: "+contains2)
   if (contains2) {
     res.status(400).json({"message": "BallotCode has already been used once."})
     return
@@ -87,7 +88,7 @@ app.post('/vote', async function (req, res) {
   try {
     const result = await dbo.collection(COLLECTION_NAME).updateOne(query, newvalues)
   } catch (error) {
-    console.log(error)
+    log.error(error)
     res.status(500).send(error)
   }
 
@@ -119,7 +120,7 @@ app.post('/register', async function (req, res) {
   try {
     const result = await dbo.collection(COLLECTION_NAME).updateOne(query, newvalues)
   } catch (error) {
-    console.log(error)
+    log.error(error)
     res.status(500).send(error)
   }
 
@@ -169,7 +170,7 @@ app.get('/createblock', async function (req, res) {
 
   } catch (error) {
     session.abortTransaction()
-    console.log(error)
+    log.info(error)
     res.status(500).send(error)
   }
 
@@ -182,7 +183,7 @@ app.get('/query', function(req, res) {
 
 		dbo.collection(COLLECTION_NAME).find({}).toArray(function(err, result) {
 			if (err) throw err;
-			console.log(result);
+			log.info(result);
 			res.send(result);
 		});
 });
@@ -195,7 +196,7 @@ app.get('/poll/:id', function(req, res) {
 
 	dbo.collection(COLLECTION_NAME).find(query).toArray(function(err, result) {
 		if (err) throw err;
-		console.log(result);
+		log.info(result);
 		if (result.length && result.length > 0) {
 			res.send(result[0]);
 		} else {
@@ -212,7 +213,7 @@ async function containsUsedBallotCodeHashCode(pollId, usedBallotCodeHashCode ) {
   let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.usedBallotCodeHashCodes': 1, 'chain.data.usedBallotCodeHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
-  console.log("usedBallotCodeHashCodes: " + resutString);
+  log.info("usedBallotCodeHashCodes: " + resutString);
   return resutString.includes(usedBallotCodeHashCode)
 
 }
@@ -225,7 +226,7 @@ async function containsRegisteredUserHashCode(pollId, registeredUserHashCode ) {
   let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.registeredUserHashCodes': 1, 'chain.data.registeredUserHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
-  console.log("registeredUserHashCodes: " + resutString);
+  log.info("registeredUserHashCodes: " + resutString);
   return resutString.includes(registeredUserHashCode)
 
 }
@@ -238,7 +239,7 @@ async function containsBallotCodeHashCode(pollId, ballotCodeHashCodes ) {
   let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.ballotCodeHashCodes': 1, 'chain.data.ballotCodeHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
-  console.log("ballotCodeHashCodes: " + resutString);
+  log.info("ballotCodeHashCodes: " + resutString);
   return resutString.includes(ballotCodeHashCodes)
 
 }
@@ -263,12 +264,12 @@ app.post('/poll', async function (req, res) {
     }
     let result = await dbo.collection(COLLECTION_NAME).insertOne(poll)
     const m = 'PollBlockchain created with id: ' + pollId;
-    console.log(m);
+    log.info(m);
 
     res.status(201).send({ "message": m, "id": pollId });
 
   } catch (error) {
-    console.log(error)
+    log.error(error)
     res.status(500).send(error)
   }
 });
@@ -283,7 +284,7 @@ app.delete('/poll/:id', async function (req, res) {
     await dbo.collection(COLLECTION_NAME).remove(query, { justOne: true })
     response.status(202)
   } catch (error) {
-    console.log(error)
+    log.error(error)
     res.status(500).send(error)
   }
 });
@@ -292,7 +293,7 @@ app.use(express.static(staticRoot));
 
 MongoClient.connect(DB_URL, function(err, db) {
 	if (err) {
-        console.log(`Failed to connect to the database. ${err.stack}`);
+        log.info(`Failed to connect to the database. ${err.stack}`);
 		throw err;
 	}
 	const dbo = db.db(DB_NAME);
@@ -301,7 +302,7 @@ MongoClient.connect(DB_URL, function(err, db) {
 	app.locals.pollBlockchainService = new PollBlockchainService.PollBlockchainService();
 
 	app.listen(PORT, function() {
-		console.log(`Listening on port ${PORT}...`);
+		log.info(`Listening on port ${PORT}...`);
 	});
 
 });
