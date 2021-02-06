@@ -24,6 +24,7 @@ const app = express();
 
 const DB_NAME = process.env.bc_db_name  ||  "mydb";
 const DB_URL = "mongodb://root:example@localhost:27017/"+ DB_NAME + "?authSource=admin";
+const COLLECTION_NAME = process.env.bc_db_collection_name  ||  "polls";
 
 
 const PORT = process.env.port||'3000';
@@ -79,7 +80,7 @@ app.post('/vote', async function (req, res) {
   };
 
   try {
-    const result = await dbo.collection("polls").updateOne(query, newvalues)
+    const result = await dbo.collection(COLLECTION_NAME).updateOne(query, newvalues)
   } catch (error) {
     console.log(error)
     res.status(500).send(error)
@@ -111,7 +112,7 @@ app.post('/register', async function (req, res) {
   };
 
   try {
-    const result = await dbo.collection("polls").updateOne(query, newvalues)
+    const result = await dbo.collection(COLLECTION_NAME).updateOne(query, newvalues)
   } catch (error) {
     console.log(error)
     res.status(500).send(error)
@@ -144,7 +145,7 @@ app.get('/createblock', async function (req, res) {
     session.startTransaction( { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } } );
 
     //TODO make it transactional
-    let pollBlockchainResp = await dbo.collection("polls").findOneAndUpdate(query, cleanPendingData, { returnNewDocument: false })
+    let pollBlockchainResp = await dbo.collection(COLLECTION_NAME).findOneAndUpdate(query, cleanPendingData, { returnNewDocument: false })
 
     let pollBlock = pollBlockchainService.createNewBlock2(pollBlockchainResp.value)
 
@@ -154,7 +155,7 @@ app.get('/createblock', async function (req, res) {
       }
     }
 
-    await dbo.collection("polls").updateOne(query, newPollBlock)
+    await dbo.collection(COLLECTION_NAME).updateOne(query, newPollBlock)
 
     session.commitTransaction();
 
@@ -174,7 +175,7 @@ app.get('/query', function(req, res) {
 	    const db = req.app.locals.db;
 		const dbo = db.db(DB_NAME);
 
-		dbo.collection("polls").find({}).toArray(function(err, result) {
+		dbo.collection(COLLECTION_NAME).find({}).toArray(function(err, result) {
 			if (err) throw err;
 			console.log(result);
 			res.send(result);
@@ -187,7 +188,7 @@ app.get('/poll/:id', function(req, res) {
 	const dbo = db.db(DB_NAME);
 	const query = { id: req.params.id };
 
-	dbo.collection("polls").find(query).toArray(function(err, result) {
+	dbo.collection(COLLECTION_NAME).find(query).toArray(function(err, result) {
 		if (err) throw err;
 		console.log(result);
 		if (result.length && result.length > 0) {
@@ -203,7 +204,7 @@ async function containsUsedBallotCodeHashCode(pollId, usedBallotCodeHashCode ) {
 	const dbo = db.db(DB_NAME);
   const query = { id: pollId };
 
-  let result = await dbo.collection("polls").find(query).project({ _id: 0, 'pendingData.usedBallotCodeHashCodes': 1, 'chain.data.usedBallotCodeHashCodes': 1}).toArray()
+  let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.usedBallotCodeHashCodes': 1, 'chain.data.usedBallotCodeHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
   console.log("usedBallotCodeHashCodes: " + resutString);
@@ -216,7 +217,7 @@ async function containsRegisteredUserHashCode(pollId, registeredUserHashCode ) {
 	const dbo = db.db(DB_NAME);
   const query = { id: pollId };
 
-  let result = await dbo.collection("polls").find(query).project({ _id: 0, 'pendingData.registeredUserHashCodes': 1, 'chain.data.registeredUserHashCodes': 1}).toArray()
+  let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.registeredUserHashCodes': 1, 'chain.data.registeredUserHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
   console.log("registeredUserHashCodes: " + resutString);
@@ -229,7 +230,7 @@ async function containsBallotCodeHashCode(pollId, ballotCodeHashCodes ) {
 	const dbo = db.db(DB_NAME);
   const query = { id: pollId };
 
-  let result = await dbo.collection("polls").find(query).project({ _id: 0, 'pendingData.ballotCodeHashCodes': 1, 'chain.data.ballotCodeHashCodes': 1}).toArray()
+  let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.ballotCodeHashCodes': 1, 'chain.data.ballotCodeHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
   console.log("ballotCodeHashCodes: " + resutString);
@@ -249,13 +250,13 @@ app.post('/poll', async function (req, res) {
 
 
   try {
-    let result0 = await dbo.collection("polls").find(query)
+    let result0 = await dbo.collection(COLLECTION_NAME).find(query)
     let polls = await result0.toArray()
     if (polls.length > 0) {
       res.status(400).send({ "message": "Id already in use: " + pollId, "id": pollId });
       return;
     }
-    let result = await dbo.collection("polls").insertOne(poll)
+    let result = await dbo.collection(COLLECTION_NAME).insertOne(poll)
     const m = 'PollBlockchain created with id: ' + pollId;
     console.log(m);
 
@@ -274,7 +275,7 @@ app.delete('/poll/:id', async function (req, res) {
   const query = { id: req.params.id };
 
   try {
-    await dbo.collection("polls").remove(query, { justOne: true })
+    await dbo.collection(COLLECTION_NAME).remove(query, { justOne: true })
     response.status(202)
   } catch (error) {
     console.log(error)
