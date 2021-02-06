@@ -45,6 +45,7 @@ export class VoteComponent implements OnInit {
   }
 
   vote(): void {
+    this.errorMessage = ""
     this.pollService.vote({'pollId': this.poll.id , 'ballotCode': this.ballotCode, 'votes': this.currentVotes}).subscribe(
       r => this.getPoll(),
       err => this.errorMessage = err.error.message

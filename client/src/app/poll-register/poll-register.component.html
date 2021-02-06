@@ -11,6 +11,7 @@
 <div *ngIf="ballotCode">
   Generated unique ballot code for voting: <strong>{{ballotCode}}</strong>
 </div>
+<mat-error>{{errorMessage}}</mat-error>
 <div>
   <a routerLink="/poll/{{poll.id}}">
     Vote on poll

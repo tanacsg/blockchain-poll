@@ -14,6 +14,7 @@ export class PollRegisterComponent implements OnInit {
   pollJSON: string;
   ballotCode: string;
   username: string;
+  errorMessage: string;
 
   constructor( private pollService: PollService, private route: ActivatedRoute) { }
 
@@ -33,12 +34,14 @@ export class PollRegisterComponent implements OnInit {
   }
 
   register(): void {
+    this.ballotCode = ""
+    this.errorMessage = ""
     this.pollService.register(this.poll.id, this.username).subscribe(
       r => {
         this.getPoll()
         this.ballotCode = r.ballotCode
-      }
-
+      },
+      err => this.errorMessage = err.error.message
     )
   }
 

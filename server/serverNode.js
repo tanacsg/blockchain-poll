@@ -99,12 +99,25 @@ app.post('/vote', async function (req, res) {
 
 app.post('/register', async function (req, res) {
   const pollId = req.body.pollId;
-  const username = req.body.username;
+  let username = req.body.username;
+
+  if (!username || !pollId) {
+    res.status(400).json({ "message": "Required parameters are missing." })
+    return
+  }
+  username = username.trim().toLowerCase();
 
   const db = req.app.locals.db;
   const pollBlockchainService = app.locals.pollBlockchainService;
 
   const registerReceipt = pollBlockchainService.registerUser2(username)
+
+  let usernameHashRegistered = await containsRegisteredUserHashCode(pollId, registerReceipt.pendingRegisteredUserHashCodes)
+  log.info("usernameHashRegistered: " + usernameHashRegistered)
+  if (usernameHashRegistered) {
+    res.status(400).json({ "message": "Username has already been registered." })
+    return
+  }
 
   const dbo = db.db(DB_NAME);
 
