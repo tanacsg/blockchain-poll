@@ -47,7 +47,12 @@ app.get('/', function(req, res) {
 app.post('/vote', async function (req, res) {
   const pollId = req.body.pollId;
   const votes = req.body.votes;
-  const ballotCode = req.body.ballotCode;
+  let ballotCode = req.body.ballotCode;
+  if (!ballotCode || !pollId || !votes ) {
+    res.status(400).json({"message": "Required parameters are missing."})
+    return
+  }
+  ballotCode = ballotCode.trim()
 
   const db = req.app.locals.db;
   const pollBlockchainService = app.locals.pollBlockchainService;
