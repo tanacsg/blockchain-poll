@@ -11,7 +11,7 @@ import { PollBlockchain } from '../../../core/PollBlockchain';
 })
 export class PollService {
 
-  private pollUrl = 'http://localhost:3000';
+  private pollUrl = 'http://localhost:3000/api';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

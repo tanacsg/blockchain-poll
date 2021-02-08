@@ -45,7 +45,7 @@ app.get('/', function(req, res) {
 
 
 
-app.post('/vote', async function (req, res) {
+app.post('/api/vote', async function (req, res) {
   const pollId = req.body.pollId;
   const votes = req.body.votes;
   let ballotCode = req.body.ballotCode;
@@ -97,7 +97,7 @@ app.post('/vote', async function (req, res) {
 });
 
 
-app.post('/register', async function (req, res) {
+app.post('/api/register', async function (req, res) {
   const pollId = req.body.pollId;
   let username = req.body.username;
 
@@ -142,7 +142,7 @@ app.post('/register', async function (req, res) {
 });
 
 
-app.get('/createblock', async function (req, res) {
+app.get('/api/createblock', async function (req, res) {
   const db = req.app.locals.db;
   const pollBlockchainService = app.locals.pollBlockchainService;
 
@@ -189,7 +189,7 @@ app.get('/createblock', async function (req, res) {
 
 });
 
-app.get('/query', function(req, res) {
+app.get('/api/query', function(req, res) {
 
 	    const db = req.app.locals.db;
 		const dbo = db.db(DB_NAME);
@@ -201,7 +201,7 @@ app.get('/query', function(req, res) {
 		});
 });
 
-app.get('/poll/:id', function(req, res) {
+app.get('/api/poll/:id', function(req, res) {
 
 	const db = req.app.locals.db;
 	const dbo = db.db(DB_NAME);
@@ -257,7 +257,7 @@ async function containsBallotCodeHashCode(pollId, ballotCodeHashCodes ) {
 
 }
 
-app.post('/poll', async function (req, res) {
+app.post('/api/poll', async function (req, res) {
   const pollId = req.body.id;
   const pollName = req.body.name;
   const db = req.app.locals.db;
@@ -287,7 +287,7 @@ app.post('/poll', async function (req, res) {
   }
 });
 
-app.delete('/poll/:id', async function (req, res) {
+app.delete('/api/poll/:id', async function (req, res) {
 
   const db = req.app.locals.db;
   const dbo = db.db(DB_NAME);
