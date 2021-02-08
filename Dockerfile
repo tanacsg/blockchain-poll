@@ -10,6 +10,7 @@ COPY server server
 
 RUN npm --prefix server install
 
+COPY client/dist server/dist
 
 EXPOSE 3000
 
