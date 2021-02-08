@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
 import { PollBlockchain } from '../../../../core/PollBlockchain';
-import { FormsModule } from '@angular/forms';
-import sha256 from 'crypto-js/sha256'
-
 
 @Component({
   selector: 'app-vote',
@@ -60,7 +57,7 @@ export class VoteComponent implements OnInit {
 
   validate(): void {
     this.textToCalculateHashNormalized = JSON.stringify(JSON.parse(this.textToCalculateHash));
-    this.calculatedHash = sha256(this.textToCalculateHashNormalized+ this.previousHash);
+    // this.calculatedHash = sha256(this.textToCalculateHashNormalized+ this.previousHash);
   }
 
 }
