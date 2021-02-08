@@ -8,6 +8,8 @@ const cors = require("cors");
 const PollBlockchain = require('../core/PollBlockchain')
 const PollBlockchainService = require('../core/PollBlockchainService')
 const log = require('simple-node-logger').createSimpleLogger('blockchain-poll.log');
+const serveIndex = require('serve-index')
+
 
 const { static, response } = require('express');
 
@@ -35,6 +37,11 @@ const staticRoot = __dirname + '/dist/blockchain-poll-frontend';
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
+app.use(express.static(staticRoot));
+
+//server everything from the folder, to make it fully open source
+const parentDir = path.join(__dirname, '../')
+app.use('/sources', express.static(parentDir ), serveIndex(parentDir, {'icons': true} ));
 
 app.get('/', function(req, res) {
 
@@ -302,7 +309,6 @@ app.delete('/api/poll/:id', async function (req, res) {
   }
 });
 
-app.use(express.static(staticRoot));
 
 MongoClient.connect(DB_URL, function(err, db) {
 	if (err) {

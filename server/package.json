@@ -13,6 +13,7 @@
     "nodemon": "^1.17.3",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
+    "serve-index": "^1.9.1",
     "sha256": "^0.2.0",
     "simple-node-logger": "^18.12.24",
     "uuid": "^3.2.1"
