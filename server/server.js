@@ -99,7 +99,7 @@ app.post('/api/vote', async function (req, res) {
     res.status(500).send(error)
   }
 
-  res.send({ 'message': 'Vote accepted.' });
+  res.send({ 'message': 'Vote accepted.' , 'receipt' : votes[votes.length-1] });
 
 });
 

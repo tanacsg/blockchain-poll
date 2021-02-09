@@ -44,7 +44,10 @@ export class VoteComponent implements OnInit {
   vote(): void {
     this.errorMessage = ""
     this.pollService.vote({'pollId': this.poll.id , 'ballotCode': this.ballotCode, 'votes': this.currentVotes}).subscribe(
-      r => this.getPoll(),
+      r => {
+        this.errorMessage ="Your vote has been casted. Receipt: " +  r.receipt
+        this.getPoll()
+      },
       err => this.errorMessage = err.error.message
     )
   }

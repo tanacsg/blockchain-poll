@@ -62,6 +62,9 @@ class PollBlockchainService {
     }
     vote2(ballotCode, votes) {
         const ballotCodeHash = sha256(ballotCode);
+        const votesString = JSON.stringify(votes);
+        const receipt = sha256(ballotCode + votesString);
+        votes.push(receipt);
         return new VoteReturn(ballotCodeHash, votes);
     }
 }
