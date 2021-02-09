@@ -1,21 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PollQuestion = exports.PollStatus = exports.PollData = exports.PollBlock = exports.PollBlockchain = void 0;
+exports.PollQuestion = exports.PollStatus = exports.PendingPollData = exports.PollData = exports.PollBlock = exports.PollBlockchain = void 0;
 class PollBlockchain {
     constructor(id, name) {
         this.id = id;
         this.name = name;
         this.pollStatus = PollStatus.Registering;
-        this.pendingData = new PollData([], [], [], []);
         this.pollQuestions = [new PollQuestion("", ["", ""])];
+        this.pendingData = new PendingPollData([], [], [], []);
         this.id = id;
         this.name = name;
-        this.chain = [new PollBlock(0, name, id, PollStatus.Registering, [], [], [], [], "0", "0")];
+        this.chain = [new PollBlock(0, name, id, PollStatus.Registering, [], [], [], [], "0", "0", this.pollQuestions)];
     }
 }
 exports.PollBlockchain = PollBlockchain;
 class PollBlock {
-    constructor(index, pollName, pollId, pollStatus, votes, registeredUserHashCodes, ballotCodeHashCodes, usedBallotCodeHashCodes, hash, previousBlockHash) {
+    constructor(index, pollName, pollId, pollStatus, votes, registeredUserHashCodes, ballotCodeHashCodes, usedBallotCodeHashCodes, hash, previousBlockHash, pollQuestions) {
         this.index = index;
         this.pollName = pollName;
         this.pollId = pollId;
@@ -26,12 +26,24 @@ class PollBlock {
         this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
         this.hash = hash;
         this.previousBlockHash = previousBlockHash;
+        this.pollQuestions = pollQuestions;
         this.timestamp = new Date();
-        this.data = new PollData(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes);
+        this.data = new PollData(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes, pollQuestions, pollStatus);
     }
 }
 exports.PollBlock = PollBlock;
 class PollData {
+    constructor(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes, pollQuestions, pollStatus) {
+        this.registeredUserHashCodes = registeredUserHashCodes;
+        this.ballotCodeHashCodes = ballotCodeHashCodes;
+        this.votes = votes;
+        this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
+        this.pollQuestions = pollQuestions;
+        this.pollStatus = pollStatus;
+    }
+}
+exports.PollData = PollData;
+class PendingPollData {
     constructor(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes) {
         this.registeredUserHashCodes = registeredUserHashCodes;
         this.ballotCodeHashCodes = ballotCodeHashCodes;
@@ -39,7 +51,7 @@ class PollData {
         this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
     }
 }
-exports.PollData = PollData;
+exports.PendingPollData = PendingPollData;
 var PollStatus;
 (function (PollStatus) {
     PollStatus["Registering"] = "REGISTERING";

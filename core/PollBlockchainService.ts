@@ -22,7 +22,7 @@ export class PollBlockchainService{
       let blockHash = sha256(blockContent + lastBlock.hash)
       let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus,  pollBlockchain.pendingData.votes,
         pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes,
-        pollBlockchain.pendingData.usedBallotCodeHashCodes, "0", lastBlock.hash)
+        pollBlockchain.pendingData.usedBallotCodeHashCodes, "0", lastBlock.hash, pollBlockchain.pollQuestions)
 
 
 
@@ -41,7 +41,7 @@ export class PollBlockchainService{
     let previousBlockHash = sha256(JSON.stringify(lastBlock))
     let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus,  pollBlockchain.pendingData.votes,
       pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes,
-      pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash)
+      pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash, pollBlockchain.pollQuestions)
 
     let pollDatakHash = sha256(JSON.stringify(pollBlock.data) + previousBlockHash)
 

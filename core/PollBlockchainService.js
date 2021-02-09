@@ -18,7 +18,7 @@ class PollBlockchainService {
         let blockContent = JSON.stringify(pollBlockchain.pendingData.votes) + JSON.stringify(pollBlockchain.pendingData.registeredUserHashCodes) +
             JSON.stringify(pollBlockchain.pendingData.ballotCodeHashCodes) + JSON.stringify(pollBlockchain.pendingData.usedBallotCodeHashCodes);
         let blockHash = sha256(blockContent + lastBlock.hash);
-        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingData.votes, pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes, pollBlockchain.pendingData.usedBallotCodeHashCodes, "0", lastBlock.hash);
+        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingData.votes, pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes, pollBlockchain.pendingData.usedBallotCodeHashCodes, "0", lastBlock.hash, pollBlockchain.pollQuestions);
         pollBlockchain.chain.push(pollBlock);
         pollBlockchain.pendingData.votes = [];
         pollBlockchain.pendingData.registeredUserHashCodes = [];
@@ -29,7 +29,7 @@ class PollBlockchainService {
         let length = pollBlockchain.chain.length;
         let lastBlock = pollBlockchain.chain[length - 1];
         let previousBlockHash = sha256(JSON.stringify(lastBlock));
-        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingData.votes, pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes, pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash);
+        let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingData.votes, pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes, pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash, pollBlockchain.pollQuestions);
         let pollDatakHash = sha256(JSON.stringify(pollBlock.data) + previousBlockHash);
         pollBlock.hash = pollDatakHash;
         return pollBlock;

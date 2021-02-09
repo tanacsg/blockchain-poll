@@ -266,7 +266,6 @@ async function containsBallotCodeHashCode(pollId, ballotCodeHashCodes ) {
 
 app.post('/api/poll', async function (req, res) {
   const pollId = req.body.id;
-  const pollName = req.body.name;
   const db = req.app.locals.db;
   const dbo = db.db(DB_NAME);
 
