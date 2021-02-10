@@ -20,13 +20,8 @@ class PollBlock {
         this.pollName = pollName;
         this.pollId = pollId;
         this.pollStatus = pollStatus;
-        this.votes = votes;
-        this.registeredUserHashCodes = registeredUserHashCodes;
-        this.ballotCodeHashCodes = ballotCodeHashCodes;
-        this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
         this.hash = hash;
         this.previousBlockHash = previousBlockHash;
-        this.pollQuestions = pollQuestions;
         this.timestamp = new Date();
         this.data = new PollData(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes, pollQuestions, pollStatus);
     }

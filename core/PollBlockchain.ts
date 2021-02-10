@@ -17,8 +17,8 @@ export class PollBlock {
   public timestamp: Date = new Date()
   public data: PollData;
 
-  constructor(public index: number, public pollName: string, public pollId: string, public pollStatus: PollStatus, public votes: string[], public registeredUserHashCodes: string[],
-    public ballotCodeHashCodes: string[], public usedBallotCodeHashCodes: string [], public hash: string, public previousBlockHash: string, public pollQuestions: PollQuestion[]) {
+  constructor(public index: number, public pollName: string, public pollId: string, public pollStatus: PollStatus, votes: string[], registeredUserHashCodes: string[],
+    ballotCodeHashCodes: string[], usedBallotCodeHashCodes: string [], public hash: string, public previousBlockHash: string, pollQuestions: PollQuestion[]) {
       this.data = new PollData(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes, pollQuestions, pollStatus)
   }
 }
