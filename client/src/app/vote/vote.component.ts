@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
 import { PollBlockchain } from '../../../../core/PollBlockchain';
 
+const sha256 = require( 'sha256' );
+
 @Component({
   selector: 'app-vote',
   templateUrl: './vote.component.html',
@@ -59,8 +61,11 @@ export class VoteComponent implements OnInit {
   }
 
   validate(): void {
-    this.textToCalculateHashNormalized = JSON.stringify(JSON.parse(this.textToCalculateHash));
-    // this.calculatedHash = sha256(this.textToCalculateHashNormalized+ this.previousHash);
+     this.calculatedHash = sha256(this.textToCalculateHash+ this.previousHash);
+  }
+
+  normalize(): void {
+    this.textToCalculateHash = JSON.stringify(JSON.parse(this.textToCalculateHash));
   }
 
 }

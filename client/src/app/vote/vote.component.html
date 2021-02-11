@@ -26,18 +26,18 @@
 
 <mat-error>{{errorMessage}}</mat-error>
 
-<!--
-  <h2>Validate:</h2>
+
+  <h2>Validate</h2>
   <div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Votes</mat-label>
-      <textarea id="textToCalculateHash" rows="10" cols="100" [(ngModel)]="textToCalculateHash" matInput>
+    <mat-form-field appearance="outline" class="textToCalculateHash">
+      <mat-label>Data</mat-label>
+      <textarea id="textToCalculateHash" rows="15" cols="200" [(ngModel)]="textToCalculateHash" matInput>
     </textarea>
     </mat-form-field>
   </div>
   <div>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="textToCalculateHash">
       <mat-label>Previous Hash</mat-label>
       <input id="previousHash" [(ngModel)]="previousHash" matInput />
     </mat-form-field>
@@ -45,10 +45,12 @@
   <div>
     {{textToCalculateHashNormalized}}
   </div>
-  <button (click)="validate()" mat-raised-button color="primary">Validate Hash</button>
+  <button (click)="normalize()" mat-raised-button color="primary">Normalize</button>
+  <button (click)="validate()" mat-raised-button color="primary">Calculate Hash</button>
+
   <div>
     {{calculatedHash}}
   </div>
--->
+
   <h2>Poll Blockchain:</h2>
   <pre>{{pollJSON}}</pre>
