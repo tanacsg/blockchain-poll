@@ -18,7 +18,6 @@ export class VoteComponent implements OnInit {
   ballotCode: string;
   textToCalculateHash: string;
   previousHash: string;
-  textToCalculateHashNormalized: string;
   calculatedHash: string
   username: string
   errorMessage: string

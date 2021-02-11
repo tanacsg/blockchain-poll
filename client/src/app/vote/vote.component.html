@@ -29,23 +29,19 @@
 
   <h2>Validate</h2>
   <div>
-
     <mat-form-field appearance="outline" class="textToCalculateHash">
-      <mat-label>Data</mat-label>
+      <mat-label>Json Data</mat-label>
       <textarea id="textToCalculateHash" rows="15" cols="200" [(ngModel)]="textToCalculateHash" matInput>
     </textarea>
     </mat-form-field>
   </div>
+  <button (click)="normalize()" mat-raised-button color="primary">Normalize</button>
   <div>
     <mat-form-field appearance="outline" class="textToCalculateHash">
-      <mat-label>Previous Hash</mat-label>
+      <mat-label>Text</mat-label>
       <input id="previousHash" [(ngModel)]="previousHash" matInput />
     </mat-form-field>
   </div>
-  <div>
-    {{textToCalculateHashNormalized}}
-  </div>
-  <button (click)="normalize()" mat-raised-button color="primary">Normalize</button>
   <button (click)="validate()" mat-raised-button color="primary">Calculate Hash</button>
 
   <div>
