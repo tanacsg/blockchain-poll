@@ -30,9 +30,12 @@ class PollBlockchainService {
         let lastBlock = pollBlockchain.chain[length - 1];
         let previousBlockHash = sha256(JSON.stringify(lastBlock));
         let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingData.votes, pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes, pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash, pollBlockchain.pollQuestions);
-        let pollDatakHash = sha256(JSON.stringify(pollBlock.data) + previousBlockHash);
-        pollBlock.hash = pollDatakHash;
+        let pollDataHash = this.hashBlockData(pollBlock.data, previousBlockHash);
+        pollBlock.hash = pollDataHash;
         return pollBlock;
+    }
+    hashBlockData(pollData, previousBlockHash) {
+        return sha256(JSON.stringify(pollData) + previousBlockHash);
     }
     registerUser(username, pollBlockchain) {
         const usernameHash = sha256(username);

@@ -1,4 +1,4 @@
-import { PollBlock, PollBlockchain } from "./PollBlockchain";
+import { PollBlock, PollBlockchain, PollData } from "./PollBlockchain";
 import { v4 as uuidv4 } from 'uuid';
 const sha256 = require( 'sha256' );
 
@@ -43,12 +43,16 @@ export class PollBlockchainService{
       pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes,
       pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash, pollBlockchain.pollQuestions)
 
-    let pollDatakHash = sha256(JSON.stringify(pollBlock.data) + previousBlockHash)
+    let pollDataHash = this.hashBlockData(pollBlock.data, previousBlockHash)
 
-    pollBlock.hash = pollDatakHash
+    pollBlock.hash = pollDataHash
     return pollBlock
 
 }
+
+  hashBlockData(pollData: PollData, previousBlockHash: string): string {
+    return sha256(JSON.stringify(pollData) + previousBlockHash)
+  }
 
   registerUser(username: string, pollBlockchain: PollBlockchain): string {
 

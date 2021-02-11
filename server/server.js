@@ -275,12 +275,15 @@ app.post('/api/poll', async function (req, res) {
 
 
   try {
-    let result0 = await dbo.collection(COLLECTION_NAME).find(query)
-    let polls = await result0.toArray()
-    if (polls.length > 0) {
+    let count = await dbo.collection(COLLECTION_NAME).count(query)
+    if (count > 0) {
       res.status(400).send({ "message": "Id already in use: " + pollId, "id": pollId });
       return;
     }
+    let blockHash = app.locals.pollBlockchainService.hashBlockData(poll.chain[0].data, "0");
+
+    poll.chain[0].hash = blockHash
+
     let result = await dbo.collection(COLLECTION_NAME).insertOne(poll)
     const m = 'PollBlockchain created with id: ' + pollId;
     log.info(m);

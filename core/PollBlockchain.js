@@ -10,31 +10,30 @@ class PollBlockchain {
         this.pendingData = new PendingPollData([], [], [], []);
         this.id = id;
         this.name = name;
-        this.chain = [new PollBlock(0, name, id, PollStatus.Registering, [], [], [], [], "0", "0", this.pollQuestions)];
+        this.chain = [new PollBlock(0, name, id, this.pollStatus, [], [], [], [], "0", "0", this.pollQuestions)];
     }
 }
 exports.PollBlockchain = PollBlockchain;
 class PollBlock {
     constructor(index, pollName, pollId, pollStatus, votes, registeredUserHashCodes, ballotCodeHashCodes, usedBallotCodeHashCodes, hash, previousBlockHash, pollQuestions) {
         this.index = index;
-        this.pollName = pollName;
-        this.pollId = pollId;
-        this.pollStatus = pollStatus;
         this.hash = hash;
         this.previousBlockHash = previousBlockHash;
         this.timestamp = new Date();
-        this.data = new PollData(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes, pollQuestions, pollStatus);
+        this.data = new PollData(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes, pollQuestions, pollStatus, pollId, pollName);
     }
 }
 exports.PollBlock = PollBlock;
 class PollData {
-    constructor(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes, pollQuestions, pollStatus) {
+    constructor(registeredUserHashCodes, ballotCodeHashCodes, votes, usedBallotCodeHashCodes, pollQuestions, pollStatus, pollId, pollName) {
         this.registeredUserHashCodes = registeredUserHashCodes;
         this.ballotCodeHashCodes = ballotCodeHashCodes;
         this.votes = votes;
         this.usedBallotCodeHashCodes = usedBallotCodeHashCodes;
         this.pollQuestions = pollQuestions;
         this.pollStatus = pollStatus;
+        this.pollId = pollId;
+        this.pollName = pollName;
     }
 }
 exports.PollData = PollData;
