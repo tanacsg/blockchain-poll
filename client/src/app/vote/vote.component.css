@@ -27,3 +27,7 @@
 .poll-advanced-section {
   margin-top: 20px;
 }
+
+.hash-calculator {
+  display: flex;
+}

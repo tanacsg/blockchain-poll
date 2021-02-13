@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
 import { PollBlockchain } from '../../../../core/PollBlockchain';
 
-const sha256 = require( 'sha256' );
+const sha256 = require('sha256');
 
 @Component({
   selector: 'app-vote',
@@ -16,8 +16,9 @@ export class VoteComponent implements OnInit {
   currentVote: string;
   currentVotes: string[] = [];
   ballotCode: string;
-  textToCalculateHash: string;
-  previousHash: string;
+  textToNormalize: string;
+  textToHash: string;
+  normalizationError: string
   calculatedHash: string
   username: string
   errorMessage: string
@@ -40,7 +41,7 @@ export class VoteComponent implements OnInit {
         this.poll = poll;
         this.currentVotes = new Array(this.poll.pollQuestions.length)
         this.pollJSON = JSON.stringify(poll, undefined, 2)
-        localStorage.setItem("BLOCKCHAIN_POLL_"+ id, this.pollJSON);
+        localStorage.setItem("BLOCKCHAIN_POLL_" + id, this.pollJSON);
       });
   }
 
@@ -48,9 +49,9 @@ export class VoteComponent implements OnInit {
     this.errorMessage = ""
     this.successMessage = ""
     this.voteReceipt = ""
-    this.pollService.vote({'pollId': this.poll.id , 'ballotCode': this.ballotCode, 'votes': this.currentVotes}).subscribe(
+    this.pollService.vote({ 'pollId': this.poll.id, 'ballotCode': this.ballotCode, 'votes': this.currentVotes }).subscribe(
       r => {
-        this.successMessage ="Your vote has been casted. Your receipt is technically sha256(ballotCode + stringified votes array)), with that you can verify that your vote is counted. Your receipt:"
+        this.successMessage = "Your vote has been casted. Your receipt is technically sha256(ballotCode + stringified votes array)), with that you can verify that your vote is counted. Your receipt:"
         this.voteReceipt = r.receipt
         this.getPoll()
       },
@@ -65,12 +66,17 @@ export class VoteComponent implements OnInit {
     )
   }
 
-  validate(): void {
-     this.calculatedHash = sha256(this.textToCalculateHash+ this.previousHash);
+  calculateHash(): void {
+    this.calculatedHash = sha256(this.textToHash);
   }
 
   normalize(): void {
-    this.textToCalculateHash = JSON.stringify(JSON.parse(this.textToCalculateHash));
+    try {
+      this.normalizationError = ""
+      this.textToNormalize = JSON.stringify(JSON.parse(this.textToNormalize));
+    } catch (e) {
+      this.normalizationError = "Invalid JSON"
+    }
   }
 
 }

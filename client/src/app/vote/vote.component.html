@@ -39,29 +39,32 @@
             Verify yourself
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <div style="display: flex;">
+        <div class="hash-calculator">
           <div>
             <div>
               <mat-form-field appearance="outline" class="textToCalculateHash">
                 <mat-label>Json Data</mat-label>
-                <textarea id="textToCalculateHash" rows="15" cols="200" [(ngModel)]="textToCalculateHash" matInput>
+                <textarea rows="20" cols="200" [(ngModel)]="textToNormalize" matInput>
               </textarea>
               </mat-form-field>
             </div>
             <div>
               <button (click)="normalize()" mat-raised-button color="primary">Normalize</button>
             </div>
+            <div>
+              <mat-error>{{normalizationError}}</mat-error>
+            </div>
           </div>
           <div>
             <div>
               <mat-form-field appearance="outline" class="textToCalculateHash">
                 <mat-label>Text</mat-label>
-                <textarea id="previousHash"  rows="15" cols="200" [(ngModel)]="previousHash" matInput>
+                <textarea  rows="20" cols="200" [(ngModel)]="textToHash" matInput>
                 </textarea>
               </mat-form-field>
             </div>
             <div>
-              <button (click)="validate()" mat-raised-button color="primary">Calculate Hash</button>
+              <button (click)="calculateHash()" mat-raised-button color="primary">Calculate SHA 256 Hash</button>
 
               <div>
                 {{calculatedHash}}
