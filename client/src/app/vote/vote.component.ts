@@ -21,6 +21,8 @@ export class VoteComponent implements OnInit {
   calculatedHash: string
   username: string
   errorMessage: string
+  successMessage: string
+  voteReceipt: String
 
   constructor(
     private pollService: PollService,
@@ -44,9 +46,12 @@ export class VoteComponent implements OnInit {
 
   vote(): void {
     this.errorMessage = ""
+    this.successMessage = ""
+    this.voteReceipt = ""
     this.pollService.vote({'pollId': this.poll.id , 'ballotCode': this.ballotCode, 'votes': this.currentVotes}).subscribe(
       r => {
-        this.errorMessage ="Your vote has been casted. Receipt: " +  r.receipt
+        this.successMessage ="Your vote has been casted. Your receipt is technically sha256(ballotCode + stringified votes array)), with that you can verify that your vote is counted. Your receipt:"
+        this.voteReceipt = r.receipt
         this.getPoll()
       },
       err => this.errorMessage = err.error.message
@@ -54,6 +59,7 @@ export class VoteComponent implements OnInit {
   }
 
   mine(): void {
+    this.errorMessage = ""
     this.pollService.mine(this.poll.id).subscribe(
       r => this.getPoll()
     )
