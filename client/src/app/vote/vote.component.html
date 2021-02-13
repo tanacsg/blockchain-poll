@@ -1,52 +1,72 @@
 <div *ngIf="poll">
   <h2>Vote on poll: {{poll.name }} -- {{poll.id}} </h2>
   <div>
-   <!-- <mat-form-field appearance="outline">
+    <!-- <mat-form-field appearance="outline">
       <mat-label>My Vote:</mat-label>
       <input [(ngModel)]="currentVote" matInput />
     </mat-form-field> -->
     <mat-form-field appearance="outline" class="ballot-code">
       <mat-label>Ballot Code</mat-label>
-      <input [(ngModel)]="ballotCode" matInput/>
+      <input [(ngModel)]="ballotCode" matInput />
     </mat-form-field>
   </div>
-<div>
-  <div *ngFor="let question of poll.pollQuestions;let i = index;">
-
-    <label class="poll-radio-group">{{question.question}}</label>
-    <mat-radio-group [(ngModel)]="currentVotes[i]">
-      <mat-radio-button *ngFor="let option of question.options" class="poll-radio-button" [value]="option">
-        {{option}}
-      </mat-radio-button>
-    </mat-radio-group>
-  </div>
-</div>
-<button mat-raised-button color="primary" (click)="vote()">Vote</button>
-<button mat-raised-button color="warn" (click)="mine()">Create Block</button>
-
-<mat-error>{{errorMessage}}</mat-error>
-
-
-  <h2>Validate</h2>
   <div>
-    <mat-form-field appearance="outline" class="textToCalculateHash">
-      <mat-label>Json Data</mat-label>
-      <textarea id="textToCalculateHash" rows="15" cols="200" [(ngModel)]="textToCalculateHash" matInput>
+    <div *ngFor="let question of poll.pollQuestions;let i = index;">
+
+      <label class="poll-radio-group">{{question.question}}</label>
+      <mat-radio-group [(ngModel)]="currentVotes[i]">
+        <mat-radio-button *ngFor="let option of question.options" class="poll-radio-button" [value]="option">
+          {{option}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" (click)="vote()">Vote</button>
+  <button mat-raised-button color="warn" (click)="mine()">Create Block</button>
+
+  <mat-error>{{errorMessage}}</mat-error>
+
+  <div class="poll-advanced-section">
+    <mat-accordion multi>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Validate
+          </mat-panel-title>
+          <mat-panel-description>
+            Verify yourself
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <mat-form-field appearance="outline" class="textToCalculateHash">
+            <mat-label>Json Data</mat-label>
+            <textarea id="textToCalculateHash" rows="15" cols="200" [(ngModel)]="textToCalculateHash" matInput>
     </textarea>
-    </mat-form-field>
-  </div>
-  <button (click)="normalize()" mat-raised-button color="primary">Normalize</button>
-  <div>
-    <mat-form-field appearance="outline" class="textToCalculateHash">
-      <mat-label>Text</mat-label>
-      <input id="previousHash" [(ngModel)]="previousHash" matInput />
-    </mat-form-field>
-  </div>
-  <button (click)="validate()" mat-raised-button color="primary">Calculate Hash</button>
+          </mat-form-field>
+        </div>
+        <button (click)="normalize()" mat-raised-button color="primary">Normalize</button>
+        <div>
+          <mat-form-field appearance="outline" class="textToCalculateHash">
+            <mat-label>Text</mat-label>
+            <input id="previousHash" [(ngModel)]="previousHash" matInput />
+          </mat-form-field>
+        </div>
+        <button (click)="validate()" mat-raised-button color="primary">Calculate Hash</button>
+        <div>
+          {{calculatedHash}}
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Blockchain
+          </mat-panel-title>
+          <mat-panel-description>
+            The raw blockchain json
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <pre>{{pollJSON}}</pre>
 
-  <div>
-    {{calculatedHash}}
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
-
-  <h2>Poll Blockchain:</h2>
-  <pre>{{pollJSON}}</pre>
