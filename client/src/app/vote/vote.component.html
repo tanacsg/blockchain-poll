@@ -39,24 +39,39 @@
             Verify yourself
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <div>
-          <mat-form-field appearance="outline" class="textToCalculateHash">
-            <mat-label>Json Data</mat-label>
-            <textarea id="textToCalculateHash" rows="15" cols="200" [(ngModel)]="textToCalculateHash" matInput>
-    </textarea>
-          </mat-form-field>
+        <div style="display: flex;">
+          <div>
+            <div>
+              <mat-form-field appearance="outline" class="textToCalculateHash">
+                <mat-label>Json Data</mat-label>
+                <textarea id="textToCalculateHash" rows="15" cols="200" [(ngModel)]="textToCalculateHash" matInput>
+              </textarea>
+              </mat-form-field>
+            </div>
+            <div>
+              <button (click)="normalize()" mat-raised-button color="primary">Normalize</button>
+            </div>
+          </div>
+          <div>
+            <div>
+              <mat-form-field appearance="outline" class="textToCalculateHash">
+                <mat-label>Text</mat-label>
+                <textarea id="previousHash"  rows="15" cols="200" [(ngModel)]="previousHash" matInput>
+                </textarea>
+              </mat-form-field>
+            </div>
+            <div>
+              <button (click)="validate()" mat-raised-button color="primary">Calculate Hash</button>
+
+              <div>
+                {{calculatedHash}}
+              </div>
+            </div>
+          </div>
         </div>
-        <button (click)="normalize()" mat-raised-button color="primary">Normalize</button>
-        <div>
-          <mat-form-field appearance="outline" class="textToCalculateHash">
-            <mat-label>Text</mat-label>
-            <input id="previousHash" [(ngModel)]="previousHash" matInput />
-          </mat-form-field>
-        </div>
-        <button (click)="validate()" mat-raised-button color="primary">Calculate Hash</button>
-        <div>
-          {{calculatedHash}}
-        </div>
+
+
+
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
