@@ -85,6 +85,13 @@
             The raw blockchain json
           </mat-panel-description>
         </mat-expansion-panel-header>
+        <section>
+          <div class="example-button-row">
+            <button mat-raised-button (click)="getPoll()" color="primary">Refresh</button>
+            <button mat-raised-button (click)="storePollInBrowser()" color="accent">Store in browser</button>
+            <a mat-raised-button href="/api/poll/{{poll.id}}" target="_blank">Open</a>
+          </div>
+        </section>
         <pre>{{pollJSON}}</pre>
 
       </mat-expansion-panel>
