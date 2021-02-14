@@ -107,9 +107,14 @@
         <section>
           <div class="example-button-row">
             <button mat-raised-button (click)="loadFromBrowser()" color="accent">Load from browser store</button>
-            <button mat-raised-button (click)="uploadLocalBackup()">Upload from local file</button>
+            <button mat-raised-button (click)="uploadFile.click()">Upload from local file</button>
+            <input mat-raised-button #uploadFile type='file' hidden (change)="fileChanged($event)">
+            <button (click)="formatJSONLocalBackup()" mat-raised-button color="primary">Format</button>
+
           </div>
         </section>
+        <mat-error>{{formatJSONLocalBackupError}}</mat-error>
+
         <pre>{{pollJSONLocalBackup}}</pre>
       </mat-expansion-panel>
     </mat-accordion>

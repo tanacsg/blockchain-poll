@@ -25,6 +25,8 @@ export class VoteComponent implements OnInit {
   errorMessage: string
   successMessage: string
   voteReceipt: String
+  file: any;
+  formatJSONLocalBackupError: string
 
   constructor(
     private pollService: PollService,
@@ -42,10 +44,10 @@ export class VoteComponent implements OnInit {
         this.poll = poll;
         this.pollJSON = JSON.stringify(this.poll, undefined, 2)
 
-       });
+      });
   }
 
-  storePollInBrowser(): void{
+  storePollInBrowser(): void {
     localStorage.setItem("BLOCKCHAIN_POLL_" + this.poll.id, this.pollJSON);
   }
 
@@ -54,7 +56,32 @@ export class VoteComponent implements OnInit {
   }
 
   uploadLocalBackup(): void {
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      console.log(fileReader.result);
+      this.pollJSONLocalBackup = fileReader.result.toString()
+    }
+    fileReader.readAsText(this.file);
+  }
 
+  fileChanged(e) {
+    this.file = e.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.onload = (e2) => {
+      console.log(fileReader.result);
+      this.pollJSONLocalBackup = fileReader.result.toString()
+    }
+    fileReader.readAsText(this.file);
+  }
+
+  formatJSONLocalBackup() {
+    this.formatJSONLocalBackupError = ""
+    try {
+      this.pollJSONLocalBackup = JSON.stringify(JSON.parse(this.pollJSONLocalBackup), undefined, 2)
+    } catch (e) {
+      console.log(e)
+      this.formatJSONLocalBackupError = "Invalid JSON"
+    }
   }
 
   vote(): void {
