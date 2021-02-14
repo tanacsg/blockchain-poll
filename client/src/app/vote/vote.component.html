@@ -95,5 +95,22 @@
         <pre>{{pollJSON}}</pre>
 
       </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Blockchain local backup
+          </mat-panel-title>
+          <mat-panel-description>
+            The locally stored raw blockchain json
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <section>
+          <div class="example-button-row">
+            <button mat-raised-button (click)="loadFromBrowser()" color="accent">Load from browser store</button>
+            <button mat-raised-button (click)="uploadLocalBackup()">Upload from local file</button>
+          </div>
+        </section>
+        <pre>{{pollJSONLocalBackup}}</pre>
+      </mat-expansion-panel>
     </mat-accordion>
   </div>

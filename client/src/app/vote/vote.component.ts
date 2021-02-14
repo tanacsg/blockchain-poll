@@ -13,6 +13,7 @@ const sha256 = require('sha256');
 export class VoteComponent implements OnInit {
   poll: PollBlockchain;
   pollJSON: string;
+  pollJSONLocalBackup: string
   currentVote: string;
   currentVotes: string[] = [];
   ballotCode: string;
@@ -46,6 +47,14 @@ export class VoteComponent implements OnInit {
 
   storePollInBrowser(): void{
     localStorage.setItem("BLOCKCHAIN_POLL_" + this.poll.id, this.pollJSON);
+  }
+
+  loadFromBrowser(): void {
+    this.pollJSONLocalBackup = localStorage.getItem("BLOCKCHAIN_POLL_" + this.poll.id);
+  }
+
+  uploadLocalBackup(): void {
+
   }
 
   vote(): void {
