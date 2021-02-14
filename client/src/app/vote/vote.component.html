@@ -110,11 +110,12 @@
             <button mat-raised-button (click)="uploadFile.click()">Upload from local file</button>
             <input mat-raised-button #uploadFile type='file' hidden (change)="fileChanged($event)">
             <button (click)="formatJSONLocalBackup()" mat-raised-button color="primary">Format</button>
+            <button (click)="compareBlocks()" mat-raised-button color="warn">Compare blocks</button>
 
           </div>
         </section>
+        <div><strong>{{blockComparisionStatusMessage}}</strong></div>
         <mat-error>{{formatJSONLocalBackupError}}</mat-error>
-
         <pre>{{pollJSONLocalBackup}}</pre>
       </mat-expansion-panel>
     </mat-accordion>

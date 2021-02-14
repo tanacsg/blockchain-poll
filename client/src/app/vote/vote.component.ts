@@ -27,6 +27,7 @@ export class VoteComponent implements OnInit {
   voteReceipt: String
   file: any;
   formatJSONLocalBackupError: string
+  blockComparisionStatusMessage: string
 
   constructor(
     private pollService: PollService,
@@ -68,7 +69,6 @@ export class VoteComponent implements OnInit {
     this.file = e.target.files[0];
     let fileReader = new FileReader();
     fileReader.onload = (e2) => {
-      console.log(fileReader.result);
       this.pollJSONLocalBackup = fileReader.result.toString()
     }
     fileReader.readAsText(this.file);
@@ -81,6 +81,29 @@ export class VoteComponent implements OnInit {
     } catch (e) {
       console.log(e)
       this.formatJSONLocalBackupError = "Invalid JSON"
+    }
+  }
+
+  compareBlocks() {
+    let pollLocalBackup: PollBlockchain
+    try {
+      pollLocalBackup = JSON.parse(this.pollJSONLocalBackup)
+    } catch (e) {
+      this.blockComparisionStatusMessage = 'Invalid locak blockchain backup'
+      return
+    }
+    let localChainLength = pollLocalBackup.chain.length
+    this.blockComparisionStatusMessage = ''
+
+    for (let i = 0; i < localChainLength; i++) {
+      if (JSON.stringify(pollLocalBackup.chain[i]) != JSON.stringify(this.poll.chain[i])) {
+
+        this.blockComparisionStatusMessage = "Local block with index: " + pollLocalBackup.chain[i].index + " seems to be different, comparision process stopped.";
+        break;
+      }
+    }
+    if (this.blockComparisionStatusMessage === '') {
+      this.blockComparisionStatusMessage = 'Local blocks are all contained identically in the blockchain blocks from the server'
     }
   }
 
