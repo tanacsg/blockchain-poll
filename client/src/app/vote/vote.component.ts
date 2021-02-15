@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
-import { PollBlock, PollBlockchain } from '../../../../core/PollBlockchain';
+import { PollBlock, PollBlockchain, PollQuestion } from '../../../../core/PollBlockchain';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 const sha256 = require('sha256');
@@ -31,26 +31,9 @@ export class VoteComponent implements OnInit {
   blockComparisionStatusMessage: string
   allVotes = []
   allVotesMap = {}
-  allVotesStr: string
   pollDataForDiagram = []
-  single = [
-    {
-      "name": "Germany",
-      "value": 8940000
-    },
-    {
-      "name": "USA",
-      "value": 5000000
-    },
-    {
-      "name": "France",
-      "value": 7200000
-    },
-      {
-      "name": "UK",
-      "value": 6200000
-    }
-  ];
+  pollQuestionsForDiagram = []
+
 
   constructor(
     private pollService: PollService,
@@ -162,7 +145,6 @@ export class VoteComponent implements OnInit {
         this.allVotes.push(votes.slice(0,-1));
       }
     }
-    this.allVotesStr = JSON.stringify(this.allVotes)
     let questionsCount =  this.poll.pollQuestions.length
     for(let i=0;i<questionsCount;i++) {
       let voteCounter = {}
@@ -182,6 +164,10 @@ export class VoteComponent implements OnInit {
       this.pollDataForDiagram.push(voteCounterConverted)
     }
     console.log(JSON.stringify(this.pollDataForDiagram))
+
+    for(let pollQuestion of this.poll.pollQuestions) {
+      this.pollQuestionsForDiagram.push(pollQuestion.question)
+    }
 
   }
 

@@ -28,14 +28,34 @@
   <div>{{successMessage}}</div>
   <div><strong>{{voteReceipt}}</strong></div>
   <div style="display: flex;">
-  <div *ngFor="let item of pollDataForDiagram;">
-  <ngx-charts-pie-chart [view]="[400,400]" [results]="item" [gradient]="true" [legend]="false"
-      [legendPosition]="'below'" [labels]="true" [doughnut]="false">
-    </ngx-charts-pie-chart>
+    <div *ngFor="let item of pollDataForDiagram;index as i; ">
+      <h3>{{pollQuestionsForDiagram[i]}}</h3>
+      <ngx-charts-pie-chart [view]="[400,400]" [results]="item" [gradient]="true" [legend]="false"
+        [legendPosition]="'below'" [labels]="true" [doughnut]="false">
+      </ngx-charts-pie-chart>
+    </div>
   </div>
-</div>
   <div class="poll-advanced-section">
     <mat-accordion multi>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Blockchain
+          </mat-panel-title>
+          <mat-panel-description>
+            The raw blockchain json
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <section>
+          <div class="example-button-row">
+            <button mat-raised-button (click)="getPoll()" color="primary">Refresh</button>
+            <button mat-raised-button (click)="storePollInBrowser()" color="accent">Store in browser</button>
+            <a mat-raised-button href="/api/poll/{{poll.id}}" target="_blank">Open</a>
+            <button mat-raised-button (click)="countVotes()" color="warn">Count Votes</button>
+          </div>
+        </section>
+        <pre>{{pollJSON}}</pre>
+      </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -78,30 +98,6 @@
             </div>
           </div>
         </div>
-
-
-
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Blockchain
-          </mat-panel-title>
-          <mat-panel-description>
-            The raw blockchain json
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <section>
-          <div class="example-button-row">
-            <button mat-raised-button (click)="getPoll()" color="primary">Refresh</button>
-            <button mat-raised-button (click)="storePollInBrowser()" color="accent">Store in browser</button>
-            <a mat-raised-button href="/api/poll/{{poll.id}}" target="_blank">Open</a>
-            <button mat-raised-button (click)="countVotes()" color="warn">Count Votes</button>
-          </div>
-        </section>
-        <div>{{allVotesStr}}</div>
-        <pre>{{pollJSON}}</pre>
-
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
