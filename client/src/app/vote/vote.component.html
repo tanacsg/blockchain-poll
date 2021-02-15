@@ -27,7 +27,13 @@
   <mat-error>{{errorMessage}}</mat-error>
   <div>{{successMessage}}</div>
   <div><strong>{{voteReceipt}}</strong></div>
-
+  <div style="display: flex;">
+  <div *ngFor="let item of pollDataForDiagram;">
+  <ngx-charts-pie-chart [view]="[400,400]" [results]="item" [gradient]="true" [legend]="false"
+      [legendPosition]="'below'" [labels]="true" [doughnut]="false">
+    </ngx-charts-pie-chart>
+  </div>
+</div>
   <div class="poll-advanced-section">
     <mat-accordion multi>
       <mat-expansion-panel>
@@ -59,7 +65,7 @@
             <div>
               <mat-form-field appearance="outline" class="textToCalculateHash">
                 <mat-label>Text</mat-label>
-                <textarea  rows="20" cols="200" [(ngModel)]="textToHash" matInput>
+                <textarea rows="20" cols="200" [(ngModel)]="textToHash" matInput>
                 </textarea>
               </mat-form-field>
             </div>

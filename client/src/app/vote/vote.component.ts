@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
 import { PollBlock, PollBlockchain } from '../../../../core/PollBlockchain';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 const sha256 = require('sha256');
 
@@ -29,7 +30,27 @@ export class VoteComponent implements OnInit {
   formatJSONLocalBackupError: string
   blockComparisionStatusMessage: string
   allVotes = []
+  allVotesMap = {}
   allVotesStr: string
+  pollDataForDiagram = []
+  single = [
+    {
+      "name": "Germany",
+      "value": 8940000
+    },
+    {
+      "name": "USA",
+      "value": 5000000
+    },
+    {
+      "name": "France",
+      "value": 7200000
+    },
+      {
+      "name": "UK",
+      "value": 6200000
+    }
+  ];
 
   constructor(
     private pollService: PollService,
@@ -129,7 +150,8 @@ export class VoteComponent implements OnInit {
     )
   }
 
-  countVotes(): void{
+  countVotes(): void {
+    this.allVotes = []
     for (const pendingVotes of this.poll.pendingData.votes) {
       this.allVotes.push(pendingVotes.slice(0,-1))
     }
@@ -141,6 +163,26 @@ export class VoteComponent implements OnInit {
       }
     }
     this.allVotesStr = JSON.stringify(this.allVotes)
+    let questionsCount =  this.poll.pollQuestions.length
+    for(let i=0;i<questionsCount;i++) {
+      let voteCounter = {}
+      for(const votes of this.allVotes) {
+        if(votes[i] in voteCounter){
+           voteCounter[votes[i]] = voteCounter[votes[i]] + 1
+        } else {
+          voteCounter[votes[i]] = 1
+        }
+      }
+
+      let voteCounterConverted = []
+      for(let key in voteCounter) {
+        voteCounterConverted.push({'name': key,'value': voteCounter[key]})
+      }
+
+      this.pollDataForDiagram.push(voteCounterConverted)
+    }
+    console.log(JSON.stringify(this.pollDataForDiagram))
+
   }
 
   calculateHash(): void {
