@@ -28,6 +28,8 @@ export class VoteComponent implements OnInit {
   file: any;
   formatJSONLocalBackupError: string
   blockComparisionStatusMessage: string
+  allVotes = []
+  allVotesStr: string
 
   constructor(
     private pollService: PollService,
@@ -44,8 +46,6 @@ export class VoteComponent implements OnInit {
       .subscribe(poll => {
         this.poll = poll;
         this.pollJSON = JSON.stringify(this.poll, undefined, 2)
-        this.countVotes()
-
       });
   }
 
@@ -130,13 +130,17 @@ export class VoteComponent implements OnInit {
   }
 
   countVotes(): void{
-    const allVotes = this.poll.pendingData.votes
+    for (const pendingVotes of this.poll.pendingData.votes) {
+      this.allVotes.push(pendingVotes.slice(0,-1))
+    }
+
     for (const pollBlock of this.poll.chain) {
-      for(const vote of pollBlock.data.votes) {
-        allVotes.push(vote);
+
+      for(const votes of pollBlock.data.votes) {
+        this.allVotes.push(votes.slice(0,-1));
       }
     }
-    console.log(allVotes)
+    this.allVotesStr = JSON.stringify(this.allVotes)
   }
 
   calculateHash(): void {
