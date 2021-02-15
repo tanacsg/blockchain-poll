@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
-import { PollBlockchain } from '../../../../core/PollBlockchain';
+import { PollBlock, PollBlockchain } from '../../../../core/PollBlockchain';
 
 const sha256 = require('sha256');
 
@@ -44,6 +44,7 @@ export class VoteComponent implements OnInit {
       .subscribe(poll => {
         this.poll = poll;
         this.pollJSON = JSON.stringify(this.poll, undefined, 2)
+        this.countVotes()
 
       });
   }
@@ -126,6 +127,16 @@ export class VoteComponent implements OnInit {
     this.pollService.mine(this.poll.id).subscribe(
       r => this.getPoll()
     )
+  }
+
+  countVotes(): void{
+    const allVotes = this.poll.pendingData.votes
+    for (const pollBlock of this.poll.chain) {
+      for(const vote of pollBlock.data.votes) {
+        allVotes.push(vote);
+      }
+    }
+    console.log(allVotes)
   }
 
   calculateHash(): void {
