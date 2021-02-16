@@ -140,45 +140,7 @@ export class VoteComponent implements OnInit {
   }
 
   countVotes(): void {
-    const pollBlockchain: PollBlockchain = this.poll
-    const allVotes = []
-    const pollDiagramData = []
-
-    for (const pendingVotes of pollBlockchain.pendingData.votes) {
-      allVotes.push(pendingVotes.slice(0,-1))
-    }
-
-    for (const pollBlock of pollBlockchain.chain) {
-
-      for(const votes of pollBlock.data.votes) {
-        allVotes.push(votes.slice(0,-1));
-      }
-    }
-    let questionsCount =  pollBlockchain.pollQuestions.length
-    for(let i=0;i<questionsCount;i++) {
-      let voteCounter = {}
-      for(const votes of allVotes) {
-        if(votes[i] in voteCounter){
-           voteCounter[votes[i]] = voteCounter[votes[i]] + 1
-        } else {
-          voteCounter[votes[i]] = 1
-        }
-      }
-
-      let voteCounterConverted = []
-      for(let key in voteCounter) {
-        voteCounterConverted.push({'name': key,'value': voteCounter[key]})
-      }
-
-      pollDiagramData.push(voteCounterConverted)
-    }
-
-    for(let pollQuestion of pollBlockchain.pollQuestions) {
-      pollDiagramData.push(pollQuestion.question)
-    }
-
-    this.pollDataForDiagram = pollDiagramData
-
+    this.pollDataForDiagram = this.pollBlockchainService.countVotes(this.poll)
   }
 
   validateBlockChain(): void {
