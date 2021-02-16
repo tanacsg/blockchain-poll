@@ -113,9 +113,6 @@ class PollBlockchainService {
             }
             pollDiagramData.push(voteCounterConverted);
         }
-        for (let pollQuestion of pollBlockchain.pollQuestions) {
-            pollDiagramData.push(pollQuestion.question);
-        }
         return pollDiagramData;
     }
 }

@@ -141,6 +141,14 @@ export class VoteComponent implements OnInit {
 
   countVotes(): void {
     this.pollDataForDiagram = this.pollBlockchainService.countVotes(this.poll)
+
+    this.pollQuestionsForDiagram = []
+    for(let pollQuestion of this.poll.pollQuestions) {
+      this.pollQuestionsForDiagram.push(pollQuestion.question)
+    }
+
+    console.log("Counted votes: " + JSON.stringify(this.pollDataForDiagram))
+    console.log("Poll Questions for votes: " + JSON.stringify(this.pollQuestionsForDiagram))
   }
 
   validateBlockChain(): void {
