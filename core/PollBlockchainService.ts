@@ -38,7 +38,7 @@ export class PollBlockchainService{
     let length = pollBlockchain.chain.length;
     let lastBlock : PollBlock = pollBlockchain.chain[length - 1]
 
-    let previousBlockHash = sha256(JSON.stringify(lastBlock))
+    let previousBlockHash = lastBlock.hash
     let pollBlock = new PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus,  pollBlockchain.pendingData.votes,
       pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes,
       pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash, pollBlockchain.pollQuestions)
@@ -100,6 +100,20 @@ export class PollBlockchainService{
     return new VoteReturn(ballotCodeHash, votes)
   }
 
+  validate(pollBlockchain: PollBlockchain) {
+    let validationMessage=''
+    for (let i = 1; i < pollBlockchain.chain.length; i++) {
+      const currentBlock: PollBlock = pollBlockchain.chain[i];
+      const prevBlock: PollBlock = pollBlockchain.chain[i - 1];
+      const previousBlockHash = pollBlockchain.chain[i].previousBlockHash
+      const blockHashCalculated = this.hashBlockData(currentBlock.data, previousBlockHash)
+      if (currentBlock.hash !== blockHashCalculated || currentBlock.previousBlockHash !== prevBlock.hash) {
+        validationMessage = 'Validation failed at block with index: ' + currentBlock.index
+        return new ValidationResult(false,validationMessage)
+      }
+    };
+    return new ValidationResult(true, "Validatoion of the chain of blocks is completed. No anomalies found." )
+  }
 }
 
 export class VoteReturn {
@@ -110,6 +124,11 @@ export class VoteReturn {
 export class RegisterReturn {
 
   constructor(public pendingRegisteredUserHashCodes: string, public pendingBallotCodeHashCodes: string, public ballotCode: string) {
+  }
+}
+
+export class ValidationResult {
+  constructor(public isValid: boolean, public validationMessage: string) {
   }
 }
 

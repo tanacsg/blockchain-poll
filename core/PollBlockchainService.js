@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterReturn = exports.VoteReturn = exports.PollBlockchainService = void 0;
+exports.ValidationResult = exports.RegisterReturn = exports.VoteReturn = exports.PollBlockchainService = void 0;
 const PollBlockchain_1 = require("./PollBlockchain");
 const uuid_1 = require("uuid");
 const sha256 = require('sha256');
@@ -28,7 +28,7 @@ class PollBlockchainService {
     createNewBlock2(pollBlockchain) {
         let length = pollBlockchain.chain.length;
         let lastBlock = pollBlockchain.chain[length - 1];
-        let previousBlockHash = sha256(JSON.stringify(lastBlock));
+        let previousBlockHash = lastBlock.hash;
         let pollBlock = new PollBlockchain_1.PollBlock(lastBlock.index + 1, pollBlockchain.name, pollBlockchain.id, pollBlockchain.pollStatus, pollBlockchain.pendingData.votes, pollBlockchain.pendingData.registeredUserHashCodes, pollBlockchain.pendingData.ballotCodeHashCodes, pollBlockchain.pendingData.usedBallotCodeHashCodes, "", previousBlockHash, pollBlockchain.pollQuestions);
         let pollDataHash = this.hashBlockData(pollBlock.data, previousBlockHash);
         pollBlock.hash = pollDataHash;
@@ -70,6 +70,21 @@ class PollBlockchainService {
         votes.push(receipt);
         return new VoteReturn(ballotCodeHash, votes);
     }
+    validate(pollBlockchain) {
+        let validationMessage = '';
+        for (let i = 1; i < pollBlockchain.chain.length; i++) {
+            const currentBlock = pollBlockchain.chain[i];
+            const prevBlock = pollBlockchain.chain[i - 1];
+            const previousBlockHash = pollBlockchain.chain[i].previousBlockHash;
+            const blockHashCalculated = this.hashBlockData(currentBlock.data, previousBlockHash);
+            if (currentBlock.hash !== blockHashCalculated || currentBlock.previousBlockHash !== prevBlock.hash) {
+                validationMessage = 'Validation failed at block with index: ' + currentBlock.index;
+                return new ValidationResult(false, validationMessage);
+            }
+        }
+        ;
+        return new ValidationResult(true, "Validatoion of the chain of blocks is completed. No anomalies found.");
+    }
 }
 exports.PollBlockchainService = PollBlockchainService;
 class VoteReturn {
@@ -87,4 +102,11 @@ class RegisterReturn {
     }
 }
 exports.RegisterReturn = RegisterReturn;
+class ValidationResult {
+    constructor(isValid, validationMessage) {
+        this.isValid = isValid;
+        this.validationMessage = validationMessage;
+    }
+}
+exports.ValidationResult = ValidationResult;
 //# sourceMappingURL=PollBlockchainService.js.map

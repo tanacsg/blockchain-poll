@@ -38,6 +38,6 @@
     </tr>
   </tbody>
 </table>
-<div *ngIf="polls.length == 0">
+<div *ngIf="!polls || polls.length === 0">
 No polls found.
 </div>

@@ -52,8 +52,11 @@
             <button mat-raised-button (click)="storePollInBrowser()" color="accent">Store in browser</button>
             <a mat-raised-button href="/api/poll/{{poll.id}}" target="_blank">Open</a>
             <button mat-raised-button (click)="countVotes()" color="warn">Count Votes</button>
+            <button mat-raised-button (click)="validateBlockChain()" color="accent">Validate Blockchain</button>
           </div>
         </section>
+        <div *ngIf="validationResult && validationResult.isValid"><strong>{{validationResult.validationMessage}}</strong></div>
+        <div *ngIf="validationResult && !validationResult.isValid"><mat-error>{{validationResult.validationMessage}}</mat-error></div>
         <pre>{{pollJSON}}</pre>
       </mat-expansion-panel>
       <mat-expansion-panel>

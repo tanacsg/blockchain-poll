@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PollService } from '../poll.service';
 import { PollBlock, PollBlockchain, PollQuestion } from '../../../../core/PollBlockchain';
+import { PollBlockchainService, ValidationResult } from '../../../../core/PollBlockchainService';
+
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 const sha256 = require('sha256');
@@ -12,6 +14,8 @@ const sha256 = require('sha256');
   styleUrls: ['./vote.component.css']
 })
 export class VoteComponent implements OnInit {
+
+  private pollBlockchainService: PollBlockchainService
   poll: PollBlockchain;
   pollJSON: string;
   pollJSONLocalBackup: string
@@ -29,6 +33,7 @@ export class VoteComponent implements OnInit {
   file: any;
   formatJSONLocalBackupError: string
   blockComparisionStatusMessage: string
+  validationResult: ValidationResult
   allVotes = []
   allVotesMap = {}
   pollDataForDiagram = []
@@ -41,6 +46,7 @@ export class VoteComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.pollBlockchainService = new PollBlockchainService()
     this.getPoll()
   }
 
@@ -169,6 +175,10 @@ export class VoteComponent implements OnInit {
       this.pollQuestionsForDiagram.push(pollQuestion.question)
     }
 
+  }
+
+  validateBlockChain(): void {
+    this.validationResult = this.pollBlockchainService.validate(this.poll)
   }
 
   calculateHash(): void {
