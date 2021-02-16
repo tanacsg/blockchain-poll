@@ -51,6 +51,7 @@ export class VoteComponent implements OnInit {
   }
 
   getPoll(): void {
+    this.validationResult = null
     const id = this.route.snapshot.paramMap.get('id');
     this.pollService.getPoll(id)
       .subscribe(poll => {
@@ -64,10 +65,12 @@ export class VoteComponent implements OnInit {
   }
 
   loadFromBrowser(): void {
+    this.blockComparisionStatusMessage = ''
     this.pollJSONLocalBackup = localStorage.getItem("BLOCKCHAIN_POLL_" + this.poll.id);
   }
 
   uploadLocalBackup(): void {
+    this.blockComparisionStatusMessage = ''
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       console.log(fileReader.result);

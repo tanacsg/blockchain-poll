@@ -83,7 +83,7 @@ class PollBlockchainService {
             }
         }
         ;
-        return new ValidationResult(true, "Validatoion of the chain of blocks is completed. No anomalies found.");
+        return new ValidationResult(true, "Validation of the chain of blocks is completed. No anomalies found.");
     }
     countVotes(pollBlockchain) {
         const allVotes = [];
