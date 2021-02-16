@@ -1,5 +1,5 @@
 # blockchain-poll
-A simple web application to use blockchain for polling/voting using the MEAN stack (MongoDB, Express.js, Node.js, Angular) with  Angular Material components.
+A simple web application to use blockchain for polling/voting using the MEAN stack (MongoDB, Express.js, Node.js, Angular).
 
 Under construction.
 
