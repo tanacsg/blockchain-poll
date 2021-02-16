@@ -140,21 +140,24 @@ export class VoteComponent implements OnInit {
   }
 
   countVotes(): void {
-    this.allVotes = []
-    for (const pendingVotes of this.poll.pendingData.votes) {
-      this.allVotes.push(pendingVotes.slice(0,-1))
+    const pollBlockchain: PollBlockchain = this.poll
+    const allVotes = []
+    const pollDiagramData = []
+
+    for (const pendingVotes of pollBlockchain.pendingData.votes) {
+      allVotes.push(pendingVotes.slice(0,-1))
     }
 
-    for (const pollBlock of this.poll.chain) {
+    for (const pollBlock of pollBlockchain.chain) {
 
       for(const votes of pollBlock.data.votes) {
-        this.allVotes.push(votes.slice(0,-1));
+        allVotes.push(votes.slice(0,-1));
       }
     }
-    let questionsCount =  this.poll.pollQuestions.length
+    let questionsCount =  pollBlockchain.pollQuestions.length
     for(let i=0;i<questionsCount;i++) {
       let voteCounter = {}
-      for(const votes of this.allVotes) {
+      for(const votes of allVotes) {
         if(votes[i] in voteCounter){
            voteCounter[votes[i]] = voteCounter[votes[i]] + 1
         } else {
@@ -167,13 +170,14 @@ export class VoteComponent implements OnInit {
         voteCounterConverted.push({'name': key,'value': voteCounter[key]})
       }
 
-      this.pollDataForDiagram.push(voteCounterConverted)
+      pollDiagramData.push(voteCounterConverted)
     }
-    console.log(JSON.stringify(this.pollDataForDiagram))
 
-    for(let pollQuestion of this.poll.pollQuestions) {
-      this.pollQuestionsForDiagram.push(pollQuestion.question)
+    for(let pollQuestion of pollBlockchain.pollQuestions) {
+      pollDiagramData.push(pollQuestion.question)
     }
+
+    this.pollDataForDiagram = pollDiagramData
 
   }
 
