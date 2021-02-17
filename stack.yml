@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   poll-blockchain:
-    image: tanacsg/blockchain-poll:0.31
+    image: tanacsg/blockchain-poll:latest
     restart: always
     ports:
       - 3000:3000
