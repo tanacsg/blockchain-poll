@@ -1,1 +1,1 @@
-docker build -t tanacsg/blockchain-poll:0.3 .
+docker build -t tanacsg/blockchain-poll:0.31 .

@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../environments/environment';
+
 import { PollBlockchain } from '../../../core/PollBlockchain';
 
 
@@ -11,7 +13,7 @@ import { PollBlockchain } from '../../../core/PollBlockchain';
 })
 export class PollService {
 
-  private pollUrl = 'http://localhost:3000/api';
+  private pollUrl = environment.apiUrl + '/api';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
