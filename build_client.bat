@@ -1,1 +1,1 @@
-npm --prefix=client run build
+npm --prefix=client run build_prod
