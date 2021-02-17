@@ -1,6 +1,15 @@
 version: '3.1'
 
 services:
+  poll-blockchain:
+    image: tanacsg/blockchain-poll:0.3
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      BCP_DB_URL: mongodb://root:example@mongo:27017/mydb?authSource=admin
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo
@@ -10,10 +19,13 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
-
+    volumes:
+      - C:\temp\mongodb:/data/db
   mongo-express:
     image: mongo-express
     restart: always
+    depends_on:
+      - "mongo"
     ports:
       - 8081:8081
     environment:
