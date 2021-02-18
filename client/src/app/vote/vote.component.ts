@@ -19,7 +19,6 @@ export class VoteComponent implements OnInit {
   poll: PollBlockchain;
   pollJSON: string;
   pollJSONLocalBackup: string
-  currentVote: string;
   currentVotes: string[] = [];
   ballotCode: string;
   textToNormalize: string;

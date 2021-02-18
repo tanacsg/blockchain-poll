@@ -1,10 +1,6 @@
 <div *ngIf="poll">
   <h2>Vote on poll: {{poll.name }} -- {{poll.id}} </h2>
   <div>
-    <!-- <mat-form-field appearance="outline">
-      <mat-label>My Vote:</mat-label>
-      <input [(ngModel)]="currentVote" matInput />
-    </mat-form-field> -->
     <mat-form-field appearance="outline" class="ballot-code">
       <mat-label>Ballot Code</mat-label>
       <input [(ngModel)]="ballotCode" matInput />
