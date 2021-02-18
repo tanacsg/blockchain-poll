@@ -43,15 +43,6 @@ app.use(express.static(staticRoot));
 const parentDir = path.join(__dirname, '../')
 app.use('/sources', express.static(parentDir ), serveIndex(parentDir, {'icons': true} ));
 
-app.get('/', function(req, res) {
-
-	log.info(__dirname)
-	log.info(staticRoot)
-	res.sendFile('./dist/blockchain-poll-frontend/index.html', { root: __dirname });
-});
-
-
-
 app.post('/api/vote', async function (req, res) {
   const pollId = req.body.pollId;
   const votes = req.body.votes;
@@ -312,6 +303,10 @@ app.delete('/api/poll/:id', async function (req, res) {
 });
 
 
+app.use(function(req, res) {
+	res.sendFile('./dist/blockchain-poll-frontend/index.html', { root: __dirname });
+});
+
 MongoClient.connect(DB_URL, function(err, db) {
 	if (err) {
         log.info(`Failed to connect to the database. ${err.stack}`);
@@ -323,7 +318,9 @@ MongoClient.connect(DB_URL, function(err, db) {
 	app.locals.pollBlockchainService = new PollBlockchainService.PollBlockchainService();
 
 	app.listen(PORT, function() {
-		log.info(`Listening on port ${PORT}...`);
+    log.info(__dirname)
+    log.info(`Static root: ${staticRoot} ` )
+		log.info(`Blockchain-Poll server is listening on port ${PORT}...`);
 	});
 
 });
