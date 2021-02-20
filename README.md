@@ -17,7 +17,7 @@ Its is designed as an educational application which explains the use case how to
 
 ## Build
 
-Assumption: Node.js 14 is installed and in the subprojects `npm install` has been executed. 
+*Assumption:* Node.js 14 is installed and in the subprojects `npm install` has been executed. 
 
 `build_client.bat` - builds the Angular frontend
 
