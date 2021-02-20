@@ -11,8 +11,18 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    
+    strategy:
+      matrix:
+        node-version: [14.15.1]
+        
     steps:
     - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm --prefix=client install
+    - run: npm --prefix=client run build_prod
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
