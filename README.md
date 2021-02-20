@@ -10,13 +10,14 @@ Its is designed as an educational application which explains the use case how to
 
 ## Components
 
-- **client:** the Angular frotnend application
+- **client:** the Angular frotnend application (a stadard Angular project)
 - **core:** the common Blockchain-related domain classes and service
 - **server:** the Node.js, Express.js server (backend) application
 
 
 ## Build
 
+Assumption: Node.js 14 is installed and in the subprojects `npm install` has been executed. 
 
 `build_client.bat` - builds the Angular frontend
 
@@ -28,3 +29,9 @@ Its is designed as an educational application which explains the use case how to
 `run_docker.bat`
 
 The command starts docker containers of MongoDB, a Mongo Express and the Blockchain-Poll application.  
+
+## Docker Image
+
+Ready prepared Docker images are avaiable:
+
+`docker pull tanacsg/blockchain-poll`
