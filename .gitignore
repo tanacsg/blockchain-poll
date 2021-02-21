@@ -51,3 +51,4 @@ core/node_modules/*
 *.js.map
 server/blockchain-poll.log
 server/core
+core/result.json
