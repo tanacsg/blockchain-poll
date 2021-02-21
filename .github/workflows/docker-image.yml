@@ -22,7 +22,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd client && npm install
+    - run: cd core && npm install && cd ..
+    - run: cd client && npm install && cd ..
     - run: npm --prefix=client run build_prod
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
