@@ -126,7 +126,7 @@ export class VoteComponent implements OnInit {
     this.voteReceipt = ""
     this.pollService.vote({ 'pollId': this.poll.id, 'ballotCode': this.ballotCode, 'votes': this.currentVotes }).subscribe(
       r => {
-        this.successMessage = "Your vote has been casted. Your receipt is technically sha256(ballotCode + stringified votes array)), with that you can verify that your vote is counted. Your receipt:"
+        this.successMessage = "Your vote has been casted. Your receipt is technically sha256(ballotCode + stringified votes array)), with that you can verify that your vote is counted. \n Your receipt:"
         this.voteReceipt = r.receipt
         this.getPoll()
       },

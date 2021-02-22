@@ -7,7 +7,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      BCP_DB_URL: mongodb://root:example@mongo:27017/mydb?authSource=admin
+      BCP_DB_URL: mongodb://root:example@mongo:27017/polldb?authSource=admin
     depends_on:
       - mongo
 

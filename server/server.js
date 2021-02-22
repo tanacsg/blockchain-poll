@@ -26,7 +26,7 @@ const corsOptions = {
 
 const app = express();
 
-const DB_NAME = process.env.BCP_DB_NAME  ||  "mydb";
+const DB_NAME = process.env.BCP_DB_NAME  ||  "polldb";
 const DB_URL = process.env.BCP_DB_URL || "mongodb://root:example@localhost:27017/"+ DB_NAME + "?authSource=admin";
 const COLLECTION_NAME = process.env.BCP_DB_COLLECTION_NAME  ||  "polls";
 const BALLOTCODE_IN_EMAIL = (process.env.BCP_BALLOTCODE_IN_EMAIL  ||  "false") == "true";

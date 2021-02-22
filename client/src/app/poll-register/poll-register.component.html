@@ -1,26 +1,22 @@
 <div *ngIf="poll">
-  <h2>Regoster to vote on poll: {{poll.name }} -- {{poll.id}} </h2>
+  <h2>Register to vote on poll: {{poll.name }} -- {{poll.id}} </h2>
   <div>
     <mat-form-field appearance="outline">
-      <mat-label>Username to register</mat-label>
-      <input [(ngModel)]="username" matInput />
+      <mat-label>Email to register</mat-label>
+      <input  type="email" [(ngModel)]="username" matInput />
     </mat-form-field>
   </div>
 
   <button mat-raised-button color="primary" (click)="register()">Register</button>
   <button mat-raised-button color="warn" (click)="mine()">Create Block</button>
+  <a *ngIf="poll" mat-stroked-button routerLink="/poll/{{poll.id}}">Vote on poll</a>
 
-  <div *ngIf="ballotCode">
+  <div *ngIf="ballotCode" class="alert alert-success" role="alert">
     Generated unique ballot code for voting: <strong>{{ballotCode}}</strong>
   </div>
-  <mat-error>{{errorMessage}}</mat-error>
-  <div *ngIf="poll">
-    <a routerLink="/poll/{{poll.id}}">
-      Vote on poll
-    </a>
-  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
 
   <pre>
   {{poll | json}}
-</pre>
+  </pre>
 </div>
