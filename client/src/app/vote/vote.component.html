@@ -120,7 +120,8 @@
 
           </div>
         </section>
-        <div *ngIf="blockComparisionStatusMessage" class="alert alert-success" role="alert"><strong>{{blockComparisionStatusMessage}}</strong></div>
+        <div *ngIf="blockComparisionStatusMessage && blockComparisionStatusValid" class="alert alert-success" role="alert"><strong>{{blockComparisionStatusMessage}}</strong></div>
+        <div *ngIf="blockComparisionStatusMessage && !blockComparisionStatusValid" class="alert alert-danger" role="alert"><strong>{{blockComparisionStatusMessage}}</strong></div>
         <div *ngIf="formatJSONLocalBackupError" class="alert alert-danger" role="alert">{{formatJSONLocalBackupError}}</div>
         <pre>{{pollJSONLocalBackup}}</pre>
       </mat-expansion-panel>

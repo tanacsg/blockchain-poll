@@ -3,11 +3,11 @@
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Email to register</mat-label>
-      <input  type="email" [(ngModel)]="username" matInput />
+      <input  type="email" email [(ngModel)]="username" #emailToRegister="ngModel" required matInput />
     </mat-form-field>
   </div>
 
-  <button mat-raised-button color="primary" (click)="register()">Register</button>
+  <button mat-raised-button color="primary" [disabled] = "emailToRegister.invalid" (click)="register()">Register</button>
   <button mat-raised-button color="warn" (click)="mine()">Create Block</button>
   <a *ngIf="poll" mat-stroked-button routerLink="/poll/{{poll.id}}">Vote on poll</a>
 

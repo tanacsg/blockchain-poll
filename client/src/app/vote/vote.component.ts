@@ -32,6 +32,7 @@ export class VoteComponent implements OnInit {
   file: any;
   formatJSONLocalBackupError: string
   blockComparisionStatusMessage: string
+  blockComparisionStatusValid: boolean = true
   validationResult: ValidationResult
   allVotes = []
   allVotesMap = {}
@@ -103,20 +104,25 @@ export class VoteComponent implements OnInit {
       pollLocalBackup = JSON.parse(this.pollJSONLocalBackup)
     } catch (e) {
       this.blockComparisionStatusMessage = 'Invalid locak blockchain backup'
+      this.blockComparisionStatusValid = false
       return
     }
     let localChainLength = pollLocalBackup.chain.length
     this.blockComparisionStatusMessage = ''
+    this.blockComparisionStatusValid = true
 
     for (let i = 0; i < localChainLength; i++) {
       if (JSON.stringify(pollLocalBackup.chain[i]) != JSON.stringify(this.poll.chain[i])) {
 
         this.blockComparisionStatusMessage = "Local block with index: " + pollLocalBackup.chain[i].index + " seems to be different, comparision process stopped.";
+        this.blockComparisionStatusValid = false
         break;
       }
     }
     if (this.blockComparisionStatusMessage === '') {
       this.blockComparisionStatusMessage = 'Local blocks are all contained identically in the blockchain blocks from the server'
+      this.blockComparisionStatusValid = true
+
     }
   }
 
