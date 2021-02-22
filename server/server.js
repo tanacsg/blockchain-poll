@@ -9,6 +9,7 @@ const PollBlockchain = require('../core/PollBlockchain')
 const PollBlockchainService = require('../core/PollBlockchainService')
 const log = require('simple-node-logger').createSimpleLogger('blockchain-poll.log');
 const serveIndex = require('serve-index')
+const sendBallotCodeEmail = require('./mailService.js')
 
 
 const { static, response } = require('express');
@@ -28,6 +29,7 @@ const app = express();
 const DB_NAME = process.env.BCP_DB_NAME  ||  "mydb";
 const DB_URL = process.env.BCP_DB_URL || "mongodb://root:example@localhost:27017/"+ DB_NAME + "?authSource=admin";
 const COLLECTION_NAME = process.env.BCP_DB_COLLECTION_NAME  ||  "polls";
+const BALLOTCODE_IN_EMAIL = (process.env.BCP_BALLOTCODE_IN_EMAIL  ||  "false") == "true";
 
 
 const PORT = process.env.port||'3000';
@@ -135,8 +137,16 @@ app.post('/api/register', async function (req, res) {
     res.status(500).send(error)
   }
 
-  res.send({ 'ballotCode': registerReceipt.ballotCode });
-
+  if (BALLOTCODE_IN_EMAIL) {
+    let emailSendingResult =  await sendBallotCodeEmail(username,registerReceipt.ballotCode)
+    if (emailSendingResult === 'SUCCESS' ) {
+      res.send({ 'ballotCode': 'sent by email.' });
+    } else {
+      res.status(500).send(' Sending the ballotcode via email failed.')
+    }
+  } else {
+    res.send({ 'ballotCode': registerReceipt.ballotCode });
+  }
 });
 
 
