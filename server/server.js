@@ -134,7 +134,7 @@ app.post('/api/register', async function (req, res) {
     const result = await dbo.collection(COLLECTION_NAME).updateOne(query, newvalues)
   } catch (error) {
     log.error(error)
-    res.status(500).send(error)
+    res.status(500).json({ "message": error })
   }
 
   if (BALLOTCODE_IN_EMAIL) {
@@ -142,7 +142,7 @@ app.post('/api/register', async function (req, res) {
     if (emailSendingResult === 'SUCCESS' ) {
       res.send({ 'ballotCode': 'sent by email.' });
     } else {
-      res.status(500).send(' Sending the ballotcode via email failed.')
+      res.status(500).json({ "message": "Sending the ballotcode via email failed." })
     }
   } else {
     res.send({ 'ballotCode': registerReceipt.ballotCode });
