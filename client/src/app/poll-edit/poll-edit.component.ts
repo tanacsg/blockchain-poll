@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { NgForm } from "@angular/forms";
 
 import { PollService } from 'src/app/poll.service';
 import { PollBlockchain, PollQuestion } from '../../../../core/PollBlockchain';
+
+import { Location, LocationStrategy, DOCUMENT } from '@angular/common';
+
 
 @Component({
   selector: 'app-poll-edit',
@@ -13,13 +16,16 @@ export class PollEditComponent implements OnInit {
 
   poll: PollBlockchain;
   serverMessage: string;
-  confirmedPollId: string
+  confirmedPollId: string;
+  baseUrl: string
+  registerUrl: string
+  voteUrl: string
 
-  constructor(private pollService: PollService) { }
+  constructor(private pollService: PollService, private location: Location, private locationStrategy: LocationStrategy, @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {
     this.poll = new PollBlockchain("", "");
-
+    this.baseUrl = this.document.location.origin + this.locationStrategy.getBaseHref()
   }
 
   save(): void {
@@ -30,6 +36,11 @@ export class PollEditComponent implements OnInit {
       console.log(o.message);
       this.serverMessage = o.message;
       this.confirmedPollId = o.id
+      this.registerUrl = this.baseUrl + "poll/register/" + this.confirmedPollId
+      console.log("Register URL: " + this.registerUrl)
+      this.voteUrl = this.baseUrl + "poll/" + this.confirmedPollId
+      console.log("Vote URL: " + this.voteUrl)
+
     }, err => {
       this.serverMessage = err.error.message;
       console.log(err)
