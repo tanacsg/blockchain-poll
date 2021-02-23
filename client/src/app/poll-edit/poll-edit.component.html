@@ -5,9 +5,9 @@
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Poll Name</mat-label>
-      <input [(ngModel)]="poll.name" name="pollName" #pollName="ngModel" matInput placeholder="Poll Name" required minlength="5" />
+      <input [(ngModel)]="poll.name" name="pollName" #pollName="ngModel" matInput placeholder="Poll Name" required minlength="10" />
 
-      <mat-error *ngIf="pollName.invalid">Please enter a valid poll name (min length 5).</mat-error>
+      <mat-error *ngIf="pollName.invalid">Please enter a valid poll name (min length 10).</mat-error>
       <mat-hint>A descriptive name of the poll</mat-hint>
     </mat-form-field>
   </p>
@@ -15,8 +15,8 @@
     <mat-form-field appearance="outline">
 
       <mat-label>Poll Id</mat-label>
-      <input [(ngModel)]="poll.id" name="pollId" #pollId="ngModel" matInput placeholder="Poll Id" required minlength="5" />
-      <mat-error *ngIf="pollId.invalid">Please enter a valid poll id (min length 5).</mat-error>
+      <input [(ngModel)]="poll.id" name="pollId" #pollId="ngModel" matInput placeholder="Poll Id" required minlength="8" />
+      <mat-error *ngIf="pollId.invalid">Please enter a valid poll id (min length 8).</mat-error>
       <mat-hint>A unique business id of the</mat-hint>
     </mat-form-field>
   </p>
@@ -42,14 +42,14 @@
   </div>
   <div *ngIf="confirmedPollId">
     <div>
-      <a routerLink="/poll/register/{{confirmedPollId}}">
-        Register for poll with id: {{confirmedPollId}}
+      <a mat-stroked-button routerLink="/poll/register/{{confirmedPollId}}">
+        Register to vote
       </a>
-    </div>
-    <div>
-      <a routerLink="/poll/{{confirmedPollId}}">
-        Vote on poll with id: {{confirmedPollId}}
+      <button mat-stroked-button [cdkCopyToClipboard]="registerUrl">Copy register link to clipboard</button>
+      <a mat-stroked-button routerLink="/poll/{{confirmedPollId}}">
+        Vote on poll
       </a>
+      <button mat-stroked-button [cdkCopyToClipboard]="voteUrl">Copy vote link to clipboard</button>
     </div>
   </div>
   <pre>

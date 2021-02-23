@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +17,7 @@ import { VoteComponent } from './vote/vote.component';
 import { PollEditComponent } from './poll-edit/poll-edit.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PollRegisterComponent } from './poll-register/poll-register.component';
+import { from } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { PollRegisterComponent } from './poll-register/poll-register.component';
     MatNativeDateModule,
     MatRadioModule,
     NgxChartsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ClipboardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

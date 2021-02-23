@@ -16,6 +16,7 @@ const sha256 = require('sha256');
 export class VoteComponent implements OnInit {
 
   private pollBlockchainService: PollBlockchainService
+  pollId: string
   poll: PollBlockchain;
   pollJSON: string;
   pollJSONLocalBackup: string
@@ -46,14 +47,16 @@ export class VoteComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.pollId = this.route.snapshot.paramMap.get('id');
+    console.log("Loading poll: " + this.pollId)
+
     this.pollBlockchainService = new PollBlockchainService()
     this.getPoll()
   }
 
   getPoll(): void {
     this.validationResult = null
-    const id = this.route.snapshot.paramMap.get('id');
-    this.pollService.getPoll(id)
+    this.pollService.getPoll(this.pollId)
       .subscribe(poll => {
         this.poll = poll;
         this.pollJSON = JSON.stringify(this.poll, undefined, 2)

@@ -1,3 +1,7 @@
+<div  *ngIf="!poll">
+  Poll not found with id: {{pollId}}
+</div>
+
 <div *ngIf="poll">
   <h2>Vote on poll: {{poll.name }} -- {{poll.id}} </h2>
   <form #voteForm="ngForm" >
@@ -133,3 +137,4 @@
       </mat-expansion-panel>
     </mat-accordion>
   </div>
+</div>
