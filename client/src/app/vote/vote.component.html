@@ -1,32 +1,33 @@
 <div *ngIf="poll">
   <h2>Vote on poll: {{poll.name }} -- {{poll.id}} </h2>
-  <div>
-    <mat-form-field appearance="outline" class="ballot-code">
-      <mat-label>Ballot Code</mat-label>
-      <input [(ngModel)]="ballotCode" matInput />
-    </mat-form-field>
-  </div>
-  <div>
-    <div *ngFor="let question of poll.pollQuestions;let i = index;">
-
-      <label class="poll-radio-group">{{question.question}}</label>
-      <mat-radio-group [(ngModel)]="currentVotes[i]">
-        <mat-radio-button *ngFor="let option of question.options" class="poll-radio-button" [value]="option">
-          {{option}}
-        </mat-radio-button>
-      </mat-radio-group>
+  <form #voteForm="ngForm" >
+    <div>
+      <mat-form-field appearance="outline" class="ballot-code">
+        <mat-label>Ballot Code</mat-label>
+        <input [(ngModel)]="ballotCode" matInput name="ballotCode" required minlength="5" />
+      </mat-form-field>
     </div>
-  </div>
-  <button mat-raised-button color="primary" (click)="vote()">Vote</button>
-  <button mat-raised-button color="warn" (click)="mine()">Create Block</button>
-  <a mat-stroked-button routerLink="/poll/register/{{poll.id}}">Register to vote</a>
+    <div>
+      <div *ngFor="let question of poll.pollQuestions;let i = index;">
 
-  <div *ngIf="errorMessage" class="alert alert-danger" role="alert" >{{errorMessage}}</div>
-  <div *ngIf="successMessage" class="alert alert-success" role="alert">{{successMessage}}
-    <br>
-    <strong>{{voteReceipt}}</strong>
-  </div>
+        <label class="poll-radio-group">{{question.question}}</label>
+        <mat-radio-group [(ngModel)]="currentVotes[i]" required name=radio{{i}}>
+          <mat-radio-button *ngFor="let option of question.options" class="poll-radio-button" [value]="option">
+            {{option}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <button mat-raised-button color="primary" [disabled]="!voteForm.valid" (click)="vote()">Vote</button>
+    <button mat-raised-button color="warn" (click)="mine()">Create Block</button>
+    <a mat-stroked-button routerLink="/poll/register/{{poll.id}}">Register to vote</a>
 
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
+    <div *ngIf="successMessage" class="alert alert-success" role="alert">{{successMessage}}
+      <br>
+      <strong>{{voteReceipt}}</strong>
+    </div>
+  </form>
   <div style="display: flex;">
     <div *ngFor="let item of pollDataForDiagram;index as i; ">
       <h3>{{pollQuestionsForDiagram[i]}}</h3>
@@ -55,8 +56,10 @@
             <button mat-raised-button (click)="validateBlockChain()" color="accent">Validate Blockchain</button>
           </div>
         </section>
-        <div *ngIf="validationResult && validationResult.isValid" class="alert alert-success" role="alert"><strong>{{validationResult.validationMessage}}</strong></div>
-        <div *ngIf="validationResult && !validationResult.isValid" class="alert alert-danger" role="alert">{{validationResult.validationMessage}}</div>
+        <div *ngIf="validationResult && validationResult.isValid" class="alert alert-success" role="alert">
+          <strong>{{validationResult.validationMessage}}</strong></div>
+        <div *ngIf="validationResult && !validationResult.isValid" class="alert alert-danger" role="alert">
+          {{validationResult.validationMessage}}</div>
         <pre>{{pollJSON}}</pre>
       </mat-expansion-panel>
       <mat-expansion-panel>
@@ -120,9 +123,12 @@
 
           </div>
         </section>
-        <div *ngIf="blockComparisionStatusMessage && blockComparisionStatusValid" class="alert alert-success" role="alert"><strong>{{blockComparisionStatusMessage}}</strong></div>
-        <div *ngIf="blockComparisionStatusMessage && !blockComparisionStatusValid" class="alert alert-danger" role="alert"><strong>{{blockComparisionStatusMessage}}</strong></div>
-        <div *ngIf="formatJSONLocalBackupError" class="alert alert-danger" role="alert">{{formatJSONLocalBackupError}}</div>
+        <div *ngIf="blockComparisionStatusMessage && blockComparisionStatusValid" class="alert alert-success"
+          role="alert"><strong>{{blockComparisionStatusMessage}}</strong></div>
+        <div *ngIf="blockComparisionStatusMessage && !blockComparisionStatusValid" class="alert alert-danger"
+          role="alert"><strong>{{blockComparisionStatusMessage}}</strong></div>
+        <div *ngIf="formatJSONLocalBackupError" class="alert alert-danger" role="alert">{{formatJSONLocalBackupError}}
+        </div>
         <pre>{{pollJSONLocalBackup}}</pre>
       </mat-expansion-panel>
     </mat-accordion>
