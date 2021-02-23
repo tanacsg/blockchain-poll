@@ -35,9 +35,12 @@
 
   <button mat-raised-button color="primary" (click)="save()">Save</button>
   <div>
-    <mat-error>
+    <div *ngIf="serverMessage" class="alert alert-success" role="alert">
       {{serverMessage}}
-    </mat-error>
+    </div>
+    <div *ngIf="serverErrorMessage" class="alert alert-danger" role="alert">
+      {{serverErrorMessage}}
+    </div>
 
   </div>
   <div *ngIf="confirmedPollId">

@@ -16,6 +16,7 @@ export class PollEditComponent implements OnInit {
 
   poll: PollBlockchain;
   serverMessage: string;
+  serverErrorMessage: string;
   confirmedPollId: string;
   baseUrl: string
   registerUrl: string
@@ -31,6 +32,9 @@ export class PollEditComponent implements OnInit {
   save(): void {
 
     this.confirmedPollId = null
+    this.serverMessage = null
+    this.serverErrorMessage = null
+
     this.pollService.create(this.poll).subscribe(o => {
 
       console.log(o.message);
@@ -42,7 +46,7 @@ export class PollEditComponent implements OnInit {
       console.log("Vote URL: " + this.voteUrl)
 
     }, err => {
-      this.serverMessage = err.error.message;
+      this.serverErrorMessage = err.error.message;
       console.log(err)
     });
 
