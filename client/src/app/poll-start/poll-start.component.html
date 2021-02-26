@@ -1,1 +1,21 @@
-<p>poll-start works!</p>
+<h1>Welcome to the Blockchain-Poll polling application!</h1>
+<h2>Register or vote on poll </h2>
+<div>
+  <mat-form-field appearance="outline">
+    <mat-label>Poll Id</mat-label>
+    <input type="text" [(ngModel)]="pollIdToRegister" #pollIdToRegisterInput="ngModel" required matInput
+      minlength="8" />
+    <mat-error *ngIf="pollIdToRegisterInput.invalid">Please enter a valid poll id (min length 8).</mat-error>
+    <mat-hint>The unique business id of the poll</mat-hint>
+  </mat-form-field>
+</div>
+
+<button mat-raised-button color="primary" [disabled]="pollIdToRegisterInput.invalid"
+  (click)="register()">Register</button>
+<button mat-raised-button color="primary" [disabled]="pollIdToRegisterInput.invalid" (click)="vote()">Vote</button>
+<h2>Create a new poll </h2>
+<div>
+  <a mat-stroked-button routerLink="/poll/new">Create new poll</a>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>

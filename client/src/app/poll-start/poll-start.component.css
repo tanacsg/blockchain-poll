@@ -1,0 +1,14 @@
+mat-form-field {
+
+  margin: 5px;
+  width: 300px;
+}
+
+.mat-raised-button {
+  margin: 5px;
+
+}
+
+.mat-stroked-button {
+  margin: 5px;
+}

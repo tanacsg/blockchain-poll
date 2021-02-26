@@ -61,7 +61,6 @@ export class PollEditComponent implements OnInit {
   }
 
   onOptionUpdate(value: string, i: number, j: number): void {
-    alert(value + " " + i+ " "+ j)
     this.poll.pollQuestions[i].options[j] = value
   }
 

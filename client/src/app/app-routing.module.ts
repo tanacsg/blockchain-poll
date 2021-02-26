@@ -7,7 +7,7 @@ import { PollComponent } from './poll/poll.component';
 import { VoteComponent } from './vote/vote.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/start', pathMatch: 'full' },
+  { path: '', component: PollStartComponent },
   { path: 'start', component: PollStartComponent },
   { path: 'list', component: PollComponent },
   { path: 'poll/new', component: PollEditComponent },
