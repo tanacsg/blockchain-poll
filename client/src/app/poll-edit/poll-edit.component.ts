@@ -40,7 +40,7 @@ export class PollEditComponent implements OnInit {
       console.log(o.message);
       this.serverMessage = o.message;
       this.confirmedPollId = o.id
-      this.registerUrl = this.baseUrl + "poll/register/" + this.confirmedPollId
+      this.registerUrl = this.baseUrl + "register/" + this.confirmedPollId
       console.log("Register URL: " + this.registerUrl)
       this.voteUrl = this.baseUrl + "poll/" + this.confirmedPollId
       console.log("Vote URL: " + this.voteUrl)
@@ -61,6 +61,7 @@ export class PollEditComponent implements OnInit {
   }
 
   onOptionUpdate(value: string, i: number, j: number): void {
+    alert(value + " " + i+ " "+ j)
     this.poll.pollQuestions[i].options[j] = value
   }
 

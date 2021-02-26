@@ -24,7 +24,7 @@
     </div>
     <button mat-raised-button color="primary" [disabled]="!voteForm.valid" (click)="vote()">Vote</button>
     <button mat-raised-button color="warn" (click)="mine()">Create Block</button>
-    <a mat-stroked-button routerLink="/poll/register/{{poll.id}}">Register to vote</a>
+    <a mat-stroked-button routerLink="/register/{{poll.id}}">Register to vote</a>
 
     <div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
     <div *ngIf="successMessage" class="alert alert-success" role="alert">{{successMessage}}

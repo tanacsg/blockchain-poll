@@ -18,6 +18,7 @@ import { PollEditComponent } from './poll-edit/poll-edit.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PollRegisterComponent } from './poll-register/poll-register.component';
 import { from } from 'rxjs';
+import { PollStartComponent } from './poll-start/poll-start.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { from } from 'rxjs';
     PollComponent,
     VoteComponent,
     PollEditComponent,
-    PollRegisterComponent
+    PollRegisterComponent,
+    PollStartComponent
   ],
   imports: [
     BrowserModule,
