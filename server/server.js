@@ -1,6 +1,7 @@
 const express = require('express');
 const mongo = require('mongodb');
 const path = require('path');
+const basicAuth = require('express-basic-auth')
 const fs = require('fs');
 const uuid = require('uuid/v1');
 const rp = require('request-promise');
@@ -30,11 +31,17 @@ const DB_NAME = process.env.BCP_DB_NAME  ||  "polldb";
 const DB_URL = process.env.BCP_DB_URL || "mongodb://root:example@localhost:27017/"+ DB_NAME + "?authSource=admin";
 const COLLECTION_NAME = process.env.BCP_DB_COLLECTION_NAME  ||  "polls";
 const BALLOTCODE_IN_EMAIL = (process.env.BCP_BALLOTCODE_IN_EMAIL  ||  "false") == "true";
+const ADMIN_PASSWORD = process.env.BCP_ADMIN_PASSWORD  ||  "admin";
 
 
 const PORT = process.env.port||'3000';
 
 const staticRoot = __dirname + '/dist/blockchain-poll-frontend';
+
+const basicAuthConfig = basicAuth({
+  users: { admin: ADMIN_PASSWORD },
+  challenge: true
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -197,6 +204,9 @@ app.get('/api/createblock', async function (req, res) {
 
 });
 
+
+app.use('/api/query', basicAuthConfig)
+
 app.get('/api/query', function(req, res) {
 
 	    const db = req.app.locals.db;
@@ -297,7 +307,10 @@ app.post('/api/poll', async function (req, res) {
   }
 });
 
-app.delete('/api/poll/:id', async function (req, res) {
+
+app.use('/api/admin/poll', basicAuthConfig)
+
+app.delete('/api/admin/poll/:id', async function (req, res) {
 
   const db = req.app.locals.db;
   const dbo = db.db(DB_NAME);

@@ -22,13 +22,20 @@ export class PollService {
   constructor(
     private http: HttpClient) { }
 
+
+   getHttpOptionsAuth(username:string, password:string) {
+    return {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Authorization': 'Basic ' + btoa(username +':' + password)
+      })
+    }
+  };
+
+
   /** GET polls from the server */
-  getPolls(): Observable<any[]> {
-    return this.http.get<any[]>(this.pollUrl + '/query')
-      .pipe(
-        tap(_ => this.log('fetched polls')),
-        catchError(this.handleError<any[]>('getPolls', []))
-      );
+  getPolls(username:string,password?:string): Observable<any[]> {
+    return this.http.get<any[]>(this.pollUrl + '/query', this.getHttpOptionsAuth(username,password));
   }
 
     /** GET polls from the server */
@@ -52,15 +59,15 @@ export class PollService {
   }
 
   mine(id: string): Observable<any> {
-    return this.http.get<any>(this.pollUrl + '/createblock?id=' + id, this.httpOptions);
+    return this.http.post<any>(this.pollUrl + '/createblock?id=' + id, this.httpOptions);
   }
 
   create(pollBlockchain: PollBlockchain): Observable<any> {
     return this.http.post<string>(this.pollUrl + '/poll/', pollBlockchain , this.httpOptions);
   }
 
-  delete(id: string): Observable<any> {
-    return this.http.delete<string>(this.pollUrl + '/poll/' + id, this.httpOptions);
+  delete(id: string, username: string, password: string): Observable<any> {
+    return this.http.delete<string>(this.pollUrl + '/admin/poll/' + id, this.getHttpOptionsAuth(username,password));
   }
     /**
    * Handle Http operation that failed.

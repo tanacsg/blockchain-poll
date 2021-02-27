@@ -11,3 +11,17 @@ td {
   border: 1px solid black;
   padding: 5px;
 }
+
+mat-form-field {
+
+  margin: 5px;
+}
+
+.mat-raised-button {
+  margin: 5px;
+
+}
+
+.mat-stroked-button {
+  margin: 5px;
+}

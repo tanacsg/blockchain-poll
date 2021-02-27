@@ -1,4 +1,3 @@
-import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { PollService } from '../poll.service';
 
@@ -9,20 +8,45 @@ import { PollService } from '../poll.service';
 })
 export class PollComponent implements OnInit {
   polls: any[];
+  adminPassword: string;
+  errorMessage: string;
 
   constructor(private pollService: PollService) { }
 
   ngOnInit(): void {
-    this.getPolls();
   }
 
   getPolls(): void {
-    this.pollService.getPolls()
-    .subscribe(polls => this.polls = polls);
+    this.errorMessage = ''
+    this.pollService.getPolls('admin',this.adminPassword)
+    .subscribe(polls => this.polls = polls, err => {
+      this.extractErrorMessage(err);
+    });
   }
 
   delete(id: string): void {
-    this.pollService.delete(id)
-    .subscribe(r => console.log(r));
+    this.errorMessage = ''
+    this.pollService.delete(id, 'admin', this.adminPassword)
+    .subscribe(r => {
+      console.log("deleted: "+ r)
+      this.getPolls();
+    }, err => {
+      this.extractErrorMessage(err);
+    });
+  }
+
+  extractErrorMessage(err: any): void {
+    console.log(err)
+
+    if (err.message) {
+      this.errorMessage = err.message
+    }
+
+    if (err.statusText) {
+      this.errorMessage = err.statusText
+    }
+    if (!this.errorMessage) {
+      this.errorMessage = "Error in Server"
+    }
   }
 }

@@ -1,10 +1,20 @@
 <h1>Blockchain-based Polling System</h1>
 <h2>List of existing polls</h2>
+<p>You need to provide a valid admin password to be able to see the list of all blockchains in the system.</p>
 
-<a routerLink="/poll/new">
-  Create new poll
-</a>
+<div>
+  <mat-form-field appearance="outline">
+    <mat-label>Admin Password</mat-label>
+    <input type="password" [(ngModel)]="adminPassword" #adminPasswordInput="ngModel" required matInput
+      minlength="5" />
+    <mat-error *ngIf="adminPasswordInput.invalid">Please enter a valid password.</mat-error>
+  </mat-form-field>
+</div>
+<button mat-raised-button color="primary" [disabled]="adminPasswordInput.invalid"  (click)="getPolls()">Query Polls</button>
+<a mat-stroked-button routerLink="/poll/new">Create new poll</a>
 <br/>
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
+
 <table>
   <thead>
     <tr>
@@ -32,9 +42,9 @@
         </a>
       </td>
       <td>
-        <a (click)="delete(poll.id)" href="">
+        <button mat-stroked-button (click)="delete(poll.id)">
           Delete
-        </a>
+        </button>
       </td>
     </tr>
   </tbody>
