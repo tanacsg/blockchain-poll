@@ -15,8 +15,8 @@
     <mat-form-field appearance="outline">
 
       <mat-label>Poll Id</mat-label>
-      <input [(ngModel)]="poll.id" name="pollId" #pollId="ngModel" matInput placeholder="Poll Id" required minlength="8" />
-      <mat-error *ngIf="pollId.invalid">Please enter a valid poll id (min length 8).</mat-error>
+      <input [(ngModel)]="poll.id" name="pollId" #pollId="ngModel" matInput placeholder="Poll Id" required minlength="8" pattern="[A-Za-z0-9_-]+"  />
+      <mat-error *ngIf="pollId.invalid">Please enter a valid poll id (min length 8) without special characters.</mat-error>
       <mat-hint>A unique business id of the</mat-hint>
     </mat-form-field>
   </p>
