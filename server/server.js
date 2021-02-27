@@ -32,6 +32,7 @@ const DB_URL = process.env.BCP_DB_URL || "mongodb://root:example@localhost:27017
 const COLLECTION_NAME = process.env.BCP_DB_COLLECTION_NAME  ||  "polls";
 const BALLOTCODE_IN_EMAIL = (process.env.BCP_BALLOTCODE_IN_EMAIL  ||  "false") == "true";
 const ADMIN_PASSWORD = process.env.BCP_ADMIN_PASSWORD  ||  "admin";
+const EMAIL_DOMAIN_LIST = process.env.BCP_EMAIL_DOMAIN_LIST ?  process.env.BCP_EMAIL_DOMAIN_LIST.split(",") :  "";
 
 
 const PORT = process.env.port||'3000';
@@ -112,7 +113,24 @@ app.post('/api/register', async function (req, res) {
     res.status(400).json({ "message": "Required parameters are missing." })
     return
   }
+
   username = username.trim().toLowerCase();
+
+  if (EMAIL_DOMAIN_LIST) {
+    let emailDomainMatch = false
+    for (const emailDomain of EMAIL_DOMAIN_LIST) {
+      if(username.endsWith(emailDomain)) {
+        emailDomainMatch =true
+        break;
+      }
+    }
+    if (!emailDomainMatch) {
+      res.status(400).json({ "message": "Email must be from the domain(s): " +  EMAIL_DOMAIN_LIST })
+      return
+    }
+
+  }
+
 
   const db = req.app.locals.db;
   const pollBlockchainService = app.locals.pollBlockchainService;
@@ -319,9 +337,11 @@ app.delete('/api/admin/poll/:id', async function (req, res) {
   try {
     await dbo.collection(COLLECTION_NAME).remove(query, { justOne: true })
     response.status(202)
+    return
   } catch (error) {
     log.error(error)
     res.status(500).send(error)
+    return
   }
 });
 
