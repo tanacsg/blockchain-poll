@@ -8,7 +8,7 @@
   </div>
 
   <button mat-raised-button color="primary" [disabled] = "emailToRegister.invalid" (click)="register()">Register</button>
-  <button mat-raised-button color="warn" (click)="mine()">Create Block</button>
+  <button mat-raised-button color="accent" (click)="mine()">Create Block</button>
   <a *ngIf="poll" mat-stroked-button routerLink="/poll/{{poll.id}}">Vote on poll</a>
 
   <div *ngIf="ballotCode" class="alert alert-success" role="alert">
