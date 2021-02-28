@@ -1,10 +1,12 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { NgForm } from "@angular/forms";
+import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import { PollService } from 'src/app/poll.service';
 import { PollBlockchain, PollQuestion } from '../../../../core/PollBlockchain';
 
 import { Location, LocationStrategy, DOCUMENT } from '@angular/common';
+import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 
 
 @Component({
@@ -22,7 +24,7 @@ export class PollEditComponent implements OnInit {
   registerUrl: string
   voteUrl: string
 
-  constructor(private pollService: PollService, private location: Location, private locationStrategy: LocationStrategy, @Inject(DOCUMENT) private document: Document) { }
+  constructor(private pollService: PollService, private location: Location, private locationStrategy: LocationStrategy, @Inject(DOCUMENT) private document: Document, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.poll = new PollBlockchain("", "");
@@ -64,4 +66,8 @@ export class PollEditComponent implements OnInit {
     this.poll.pollQuestions[i].options[j] = value
   }
 
+
+  help() {
+    this.dialog.open(HelpDialogComponent);
+  }
 }
