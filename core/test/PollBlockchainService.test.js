@@ -31,6 +31,18 @@ globals_1.describe('PollBlockchainService works correctly', () => {
         globals_1.expect(poll.pendingData.ballotCodeHashCodes).toContain(ballotCodeHash);
         globals_1.expect(poll.pendingData.registeredUserHashCodes).toContain(sha256("tanacsg"));
     });
+    globals_1.it('registers a user 2', () => {
+        const poll = new PollBlockchain_1.PollBlockchain("1", "Employee Survey");
+        pollBlockchainService.createNewBlock(poll);
+        globals_1.expect(poll.pendingData.ballotCodeHashCodes).toHaveLength(0);
+        globals_1.expect(poll.pendingData.registeredUserHashCodes).toHaveLength(0);
+        const registerReturn = pollBlockchainService.registerUser2("tg@gmail.com");
+        globals_1.expect(registerReturn).not.toBeNull();
+        const ballotCodeHash = sha256(registerReturn.ballotCode);
+        globals_1.expect(ballotCodeHash).toBe(registerReturn.pendingBallotCodeHashCodes);
+        globals_1.expect(registerReturn.pendingBallotCodeHashCodes).toBe(ballotCodeHash);
+        globals_1.expect(registerReturn.pendingRegisteredUserHashCodes).toContain(sha256("tg@gmail.com"));
+    });
     globals_1.it('votes with a ballot code', () => {
         const poll = new PollBlockchain_1.PollBlockchain("1", "Employee Survey");
         pollBlockchainService.createNewBlock(poll);

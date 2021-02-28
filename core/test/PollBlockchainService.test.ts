@@ -1,4 +1,4 @@
-import { PollBlockchainService } from "../PollBlockchainService"
+import { PollBlockchainService, RegisterReturn } from "../PollBlockchainService"
 import { PollBlockchain } from "../PollBlockchain";
 import { describe, expect, it, test } from '@jest/globals'
 
@@ -49,6 +49,25 @@ describe('PollBlockchainService works correctly', () => {
       expect(poll.pendingData.registeredUserHashCodes).toContain(sha256("tanacsg"))
 
   });
+
+  it('registers a user 2', () => {
+    const poll = new PollBlockchain("1", "Employee Survey")
+
+    pollBlockchainService.createNewBlock(poll);
+
+    expect(poll.pendingData.ballotCodeHashCodes).toHaveLength(0)
+    expect(poll.pendingData.registeredUserHashCodes).toHaveLength(0)
+    const registerReturn : RegisterReturn = pollBlockchainService.registerUser2("tg@gmail.com");
+
+    expect(registerReturn).not.toBeNull();
+
+    const ballotCodeHash = sha256(registerReturn.ballotCode);
+    expect(ballotCodeHash).toBe(registerReturn.pendingBallotCodeHashCodes)
+    expect(registerReturn.pendingBallotCodeHashCodes).toBe(ballotCodeHash)
+    expect(registerReturn.pendingRegisteredUserHashCodes).toContain(sha256("tg@gmail.com"))
+
+});
+
 
   it('votes with a ballot code', () => {
     const poll = new PollBlockchain("1", "Employee Survey")
