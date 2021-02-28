@@ -227,33 +227,36 @@ app.get('/api/createblock', async function (req, res) {
 
 app.use('/api/query', basicAuthConfig)
 
-app.get('/api/query', function(req, res) {
+app.get('/api/query', async function(req, res) {
+    log.info("Query all polls");
 
-	    const db = req.app.locals.db;
+	  const db = req.app.locals.db;
 		const dbo = db.db(DB_NAME);
 
-		dbo.collection(COLLECTION_NAME).find({}).toArray(function(err, result) {
-			if (err) throw err;
-			log.info(result);
-			res.send(result);
-		});
+    try {
+      let result = await dbo.collection(COLLECTION_NAME).find({}).toArray();
+      res.send(result);
+    } catch(error) {
+      log.error(error)
+      res.status(500).send(error)
+    }
 });
 
-app.get('/api/poll/:id', function(req, res) {
+app.get('/api/poll/:id', async function(req, res) {
+  log.info("Getting poll with id: " + req.params.id);
 
 	const db = req.app.locals.db;
 	const dbo = db.db(DB_NAME);
 	const query = { id: req.params.id };
 
-	dbo.collection(COLLECTION_NAME).find(query).toArray(function(err, result) {
-		if (err) throw err;
-		log.info(result);
-		if (result.length && result.length > 0) {
-			res.send(result[0]);
-		} else {
-			res.send(null);
-		}
-	});
+  try {
+	  let result = await dbo.collection(COLLECTION_NAME).findOne(query)
+    res.send(result);
+  } catch(error) {
+    log.error(error)
+    res.status(500).send(error)
+  }
+
 });
 
 async function containsUsedBallotCodeHashCode(pollId, usedBallotCodeHashCode ) {
@@ -264,7 +267,6 @@ async function containsUsedBallotCodeHashCode(pollId, usedBallotCodeHashCode ) {
   let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.usedBallotCodeHashCodes': 1, 'chain.data.usedBallotCodeHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
-  log.info("usedBallotCodeHashCodes: " + resutString);
   return resutString.includes(usedBallotCodeHashCode)
 
 }
@@ -277,7 +279,6 @@ async function containsRegisteredUserHashCode(pollId, registeredUserHashCode ) {
   let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.registeredUserHashCodes': 1, 'chain.data.registeredUserHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
-  log.info("registeredUserHashCodes: " + resutString);
   return resutString.includes(registeredUserHashCode)
 
 }
@@ -290,7 +291,6 @@ async function containsBallotCodeHashCode(pollId, ballotCodeHashCodes ) {
   let result = await dbo.collection(COLLECTION_NAME).find(query).project({ _id: 0, 'pendingData.ballotCodeHashCodes': 1, 'chain.data.ballotCodeHashCodes': 1}).toArray()
 
   let resutString = JSON.stringify( result)
-  log.info("ballotCodeHashCodes: " + resutString);
   return resutString.includes(ballotCodeHashCodes)
 
 }
