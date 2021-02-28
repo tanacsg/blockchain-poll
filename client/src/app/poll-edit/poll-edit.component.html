@@ -7,10 +7,9 @@
 <form #pollForm="ngForm">
 
   <p>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="poll-name">
       <mat-label>Poll Name</mat-label>
       <input [(ngModel)]="poll.name" name="pollName" #pollName="ngModel" matInput placeholder="Poll Name" required minlength="10" />
-
       <mat-error *ngIf="pollName.invalid">Please enter a valid poll name (min length 10).</mat-error>
       <mat-hint>A descriptive name of the poll</mat-hint>
     </mat-form-field>
@@ -24,7 +23,7 @@
       <mat-hint>A unique business id of the</mat-hint>
     </mat-form-field>
   </p>
-  <p *ngFor="let question of poll.pollQuestions;let i = index;">
+  <p *ngFor="let question of poll.pollQuestions;let i = index;" class="poll-question-with-option">
     <mat-form-field appearance="outline" class="poll-question">
       <mat-label>Poll Question</mat-label>
       <input [(ngModel)]="poll.pollQuestions[i].question" name=pollQuestion{{i}} matInput placeholder="Question" required/>

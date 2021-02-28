@@ -20,3 +20,11 @@ mat-form-field {
 .poll-option {
   width: 400px;
 }
+
+.poll-name {
+  width: 400px;
+}
+
+.poll-question-with-option {
+  border-style: dotted;
+}
