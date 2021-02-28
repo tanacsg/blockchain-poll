@@ -34,6 +34,7 @@ const BALLOTCODE_IN_EMAIL = (process.env.BCP_BALLOTCODE_IN_EMAIL  ||  "false") =
 const ADMIN_PASSWORD = process.env.BCP_ADMIN_PASSWORD  ||  "admin";
 const EMAIL_DOMAIN_LIST = process.env.BCP_EMAIL_DOMAIN_LIST ?  process.env.BCP_EMAIL_DOMAIN_LIST.split(",") :  "";
 const NODE_URL = process.env.BCP_NODE_URL  ||  "http://localhost:4200";
+const HEADER_TEXT = process.env.BCP_HEADER_TEXT  ||  "Blockchain-Poll Beta";
 
 
 const PORT = process.env.port||'3000';
@@ -326,6 +327,9 @@ app.post('/api/poll', async function (req, res) {
   }
 });
 
+app.get('/api/info', function(req, res) {
+  res.json({headerText: HEADER_TEXT})
+});
 
 app.use('/api/admin/poll', basicAuthConfig)
 

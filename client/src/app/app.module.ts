@@ -6,6 +6,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
@@ -42,7 +44,8 @@ import { PollStartComponent } from './poll-start/poll-start.component';
     MatRadioModule,
     NgxChartsModule,
     BrowserAnimationsModule,
-    ClipboardModule
+    ClipboardModule,
+    MatToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
