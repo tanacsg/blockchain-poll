@@ -33,6 +33,7 @@ const COLLECTION_NAME = process.env.BCP_DB_COLLECTION_NAME  ||  "polls";
 const BALLOTCODE_IN_EMAIL = (process.env.BCP_BALLOTCODE_IN_EMAIL  ||  "false") == "true";
 const ADMIN_PASSWORD = process.env.BCP_ADMIN_PASSWORD  ||  "admin";
 const EMAIL_DOMAIN_LIST = process.env.BCP_EMAIL_DOMAIN_LIST ?  process.env.BCP_EMAIL_DOMAIN_LIST.split(",") :  "";
+const NODE_URL = process.env.BCP_NODE_URL  ||  "http://localhost:4200";
 
 
 const PORT = process.env.port||'3000';
@@ -163,7 +164,7 @@ app.post('/api/register', async function (req, res) {
   }
 
   if (BALLOTCODE_IN_EMAIL) {
-    let emailSendingResult =  await sendBallotCodeEmail(username,registerReceipt.ballotCode)
+    let emailSendingResult =  await sendBallotCodeEmail(username,registerReceipt.ballotCode, pollId, NODE_URL)
     if (emailSendingResult === 'SUCCESS' ) {
       res.send({ 'ballotCode': 'sent by email.' });
     } else {

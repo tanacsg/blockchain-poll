@@ -27,13 +27,13 @@ const transporter = nodemailer.createTransport({
 });
 
 
-async function sendBallotCodeEmail(recepient, ballotCode) {
+async function sendBallotCodeEmail(recepient, ballotCode, pollId, nodeUrl) {
 
   var mailOptions = {
     from: MAIL_SERVER_FROM,
     to: recepient,
     subject: 'Your ballot code to vote',
-    text: 'You can vote now with the following ballot code: ' + ballotCode
+    text: `You can vote now with the  ballot code: ${ballotCode} on the url ${nodeUrl}/vote/${pollId} `
   };
 
   try {
