@@ -177,7 +177,7 @@ app.post('/api/register', async function (req, res) {
 });
 
 
-app.get('/api/createblock', async function (req, res) {
+app.post('/api/createblock', async function (req, res) {
   const db = req.app.locals.db;
   const pollBlockchainService = app.locals.pollBlockchainService;
 
